@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<div class="sidebar-panel nicescrollbar sidebar-panel-light" th:fragment="sidebarFragment">
+		<ul class="sidebar-menu">
+			<li class="sidebar-header"> 관리자 메뉴 </li>
+			<li>
+				<a href="#">
+					<i class="la la-home"></i> <span>문화재 검색</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a href="index.html"><i class="la la-minus"></i> <span> 문화재 등록 </span> </a></li>
+					<li><a href="/template/index-02.html"><i class="la la-minus"></i> <span> 문화재 종목별 검색 </span> </a></li>
+					<li><a href="/template/index-03.html"><i class="la la-minus"></i> <span> 문화재 지역별 검색 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-envelope"></i> <span> 여행 동행자 모집 </span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a href="/template/email-compose.html"><i class="la la-minus"></i> <span> 동행자 신청 등록 </span> </a></li>
+					<li><a href="/template/email-inbox.html"><i class="la la-minus"></i> <span> 동행자 신청자 리스트 </span> </a></li>
+					<li><a href="/template/email-read.html"><i class="la la-minus"></i> <span> 동행자 모집 공고 등록 </span> </a></li>
+					<li><a href="/template/email-read.html"><i class="la la-minus"></i> <span> 동행자 모집 공고 리스트 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-envelope"></i> <span> 여행일정  </span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/heritage/heritageInsert}"><i class="la la-minus"></i> <span> 여행기록 공유 게시판 등록 </span> </a></li>
+					<li><a th:href="@{/heritage/heritageModify}"><i class="la la-minus"></i> <span> 여행기록 공유 게시판 리스트 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-envelope"></i> <span> 여행 계획 설정 </span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/heritage/heritageSearchListByItem}"><i class="la la-minus"></i> <span> 여행 계획 등록 </span> </a></li>
+					<li><a th:href="@{/heritage/heritageSearchListByRegion}"><i class="la la-minus"></i> <span> 여행 계획 리스트 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+	            <a href="#">
+	               <i class="fa fa-home"></i> <span>숙박업소 관리 </span> <i class="la la-angle-right down-arrow"></i>
+	            </a>
+	            <ul class="sidebar-submenu">
+	               <li><a th:href="@{/accommodation/accommodationInsert}"><i class="la la-minus"></i> <span> 숙박업소 등록 </span> </a></li>
+	               <li><a href="/template/email-compose.html"><i class="la la-minus"></i> <span> 숙박업소 검색 </span> </a></li>
+	               <li><a href="/template/email-inbox.html"><i class="la la-minus"></i> <span> 객실 등록 </span> </a></li>
+	               <li><a href="/template/email-inbox.html"><i class="la la-minus"></i> <span> 객실 검색 </span> </a></li>
+	            </ul>
+         	</li>
+        	<li>
+	            <a href="#">
+	               <i class="fa fa-edit"></i> <span> 1:1 문의게시판 관리 </span> <i class="la la-angle-right down-arrow"></i>
+	            </a>
+	            <ul class="sidebar-submenu">
+	               <li><a href="/template/email-compose.html"><i class="la la-minus"></i> <span> 1:1문의 관리</span> </a></li>
+	               <li><a href="/template/email-compose.html"><i class="la la-minus"></i> <span> 1:1문의 검색</span> </a></li>
+	            </ul>
+        	 </li>
+        	 <li>
+	         <a th:href="@{/commDashboard}">
+	            <i class="la la-wechat"></i><span>커뮤니티</span>
+	            <span class="sidebar-badge"></span>
+	         </a>
+	         </li>
+			<li class="sidebar-header"> Extras </li>
+			<li>
+			<a href="#">
+				<i class="la la-share"></i> <span>Multilevel</span>
+				<i class="la la-angle-right down-arrow"></i>
+			</a>
+			<ul class="sidebar-submenu">
+				<li><a href="#"><i class="la la-minus"></i> <span> Level One </span> </a></li>
+				<li>
+					<a href="#"><i class="la la-minus"></i> <span> Level One </span> <i class="la la-angle-right down-arrow"></i></a>
+					<ul class="sidebar-submenu">
+						<li><a href="#"><i class="la la-minus"></i> <span> Level Two </span> </a></li>
+						<li>
+							<a href="#"><i class="la la-minus"></i> <span> Level Two </span> <i class="la la-angle-right down-arrow"></i></a>
+							<ul class="sidebar-submenu">
+								<li><a href="#"><i class="la la-minus"></i> <span> Level Three </span> </a></li>
+								<li><a href="#"><i class="la la-minus"></i> <span> Level Three </span> </a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li><a href="#"><i class="la la-minus"></i> <span> Level One </span> </a></li>
+			</ul>
+		</li>
+	</ul>
+	</div>
+</html>

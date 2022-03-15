@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="author" content="Infinitysoftway" />
+	<meta name="description" content="statistic charts">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	
+	<!-- Title -->
+	<title>Oxoury - Responsive Admin Dashboard Template</title>
+	
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="img/favicon.ico" />
+	
+	<!-- Google fonts -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,300i,400,400i,500,500i,700,900">
+
+	<!-- Plugins css -->
+	<link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" href="css/fontawesome/all.min.css">
+
+	<!-- Theme Style -->
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ================================================= Header ================================================== -->
+<header class="header">
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+		<a class="navbar-brand" href="#"><img src="img/logo.svg" alt=""></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mx-auto">
+				<li class="nav-item">
+					<a target="_blank" class="nav-link" href="http://infinitysoftway.com/oxoury">Live preview </a>
+				</li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0">
+				<a target="_blank" class="btn btn-primary" href="http://infinitysoftway.com/oxoury">Buy now</a>
+			</form>
+		</div>
+	</nav>
+</header>
+<!-- ================================================= Header ================================================== -->
+ 
+<!-- ================================================= Docs ==================================================== -->
+<section class="bg-white">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-3">
+				<div class="sidebar-nav" id="navbar">
+					<div class="p-5">
+						<h6>Getting Started</h6>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link active" href="#">Getting Started</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-muted" href="#file-structure">Files Structure</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#gulp">Gulp</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#HTML-structure">HTML Structure</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#logo-setting">Logo Setting</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#favicon">Favicon</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#fonts-changing">Fonts Changing</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#header-setting">Header Setting</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#menu-setting">Menu Setting</a>
+							</li>
+							</ul>
+							
+								<ul class="nav flex-column mt-2">
+									<li class="nav-item">
+										<a class="nav-link pl-0" href="#components"> <h6> Components </h6></a>
+									</li>
+								</ul>
+							 
+						
+
+							<ul class="nav flex-column">	
+							<h6 class="mt-3">Sources And Credits</h6>
+							<li class="nav-item">
+								<a class="nav-link" href="#sources-and-credits">Credits</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8">
+				<div class="pl-5" data-spy="scroll" data-target="#navbar">
+					<div class="pt-5">
+						<h1>Welcome on Oxoury. documentation page!</h1>
+						<p class="mt-4 lead">This guide will help you to set up and work with this template.</p>
+						<p>The docs include information to understand how the template is organized, how to customize the source code, and how to compile and extend it to fit your needs.</p>
+					</div>
+					<div class="pt-5">
+						<h3 class="mb-3">Template info</h3>		
+						<p><strong>Template name :</strong> <span>Oxoury admin</span> </p>
+						<p><strong>Template version :</strong> <span>1.0</span> </p>
+						<p><strong>Template author :</strong> <span>Infinity Softway</span> </p>
+					</div>
+					<hr class="my-5" />
+
+					<div id="file-structure" class="mt-5">
+						<h4>Files Structure</h4>
+						<p class="mb-3">Unzip the downloaded file. Within your Template, you’ll find the following directories and files, common grouping resources and providing compiled, transpired and minified distribution files, as well as raw source files.</p>
+						<table class="table table-bordered">
+						  <thead class="thead-light">
+						    <tr>
+						      <th>Path</th>
+						      <th>Description</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr>
+						      <th>├── Documentation</th>
+						      <td>Documentation you are reading now</td>
+						    </tr>
+						    <tr>
+						      <th>├── Template</th>
+						      <td>Main template folder</td>
+						    </tr>
+						    <tr>
+						      <th class="pl-5">── Css</th>
+						      <td>Includes all .css files, used in template</td>
+						    </tr>
+						    <tr>
+						      <th class="pl-5">── Fonts</th>
+						      <td>Font Awesome, feather, line-awesome, Material-Design-Iconic-Font, summernote, WeatherIcons icon fonts</td>
+						    </tr>
+						    <tr>
+						      <th class="pl-5">── Images</th>
+						      <td>Images for demo purposes.</td>
+						    </tr>
+						     <tr>
+						      <th class="pl-5">── Js</th>
+						      <td>Javascript source</td>
+						    </tr>
+						    <tr>
+						      <th class="pl-5">── scss</th>
+						      <td>scss source</td>
+						    </tr>
+						  </tbody>
+						</table>
+					</div>
+					<hr class="my-5" />
+
+
+<!-- Gulp -->
+					<div id="gulp" class="mt-5">
+						<h4>Gulp</h4>
+						<p class="mb-3">To use this theme's development tools, you have to install Node.js and Gulp.js in your system.</p>
+
+							<h6>1. Install Node.js</h6>
+							<p class="text-muted mb-4">If you don't have Node.js already installed in your system, go to <a href="https://nodejs.org/en/download/">Node.js</a> site and installed the appropriate installation for your system.</p>
+
+							<h6 class="mt-4">2. Install Gulp.js globally</h6>
+							<p class="text-muted mb-2">This command will install the latest version of Gulp CLI. If you already have Gulp CLI, you can skip this step.</p>
+							<pre class="language-html"><code class="language-html">npm install gulp-cli -g </code></pre>
+
+							<h6 class="mt-4">3. Install project's dependencies</h6>
+							<p class="text-muted mb-2">This command will install the theme's dependencies, <code>package.json</code> file.</p>
+							<pre class="language-html"><code class="language-html">npm install </code></pre>
+
+							<h6 class="mt-4">4. Run gulp</h6>
+							<p class="text-muted mb-2">Now run this last command for a default task from theme's Gulpfile. you are all set.</p>
+							<pre class="language-html"><code class="language-html">gulp </code></pre>
+
+	 					
+					</div>
+<!-- Gulp -->
+<hr class="my-5" />
+
+					<div id="HTML-structure" class="mt-5">
+						<h4>HTMl structure</h4>
+						<p class="mb-3">Be sure to have your pages set up with the latest design and development standards. That means using an HTML5 doctype and including a viewport meta tag for proper responsive behavior. Put it all tags together and your pages should look like this:</p>
+
+					<pre class="language-html"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+&lt;meta name=&quot;author&quot; content=&quot;Infinitysoftway&quot; /&gt;
+&lt;meta name=&quot;description&quot; content=&quot;statistic charts&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1&quot; /&gt;
+ 
+&lt;!-- TITLE --&gt;
+&lt;title&gt;Oxoury - Responsive Admin Dashboard Template&lt;/title&gt;
+
+&lt;!-- FAVICON --&gt;
+&lt;link rel=&quot;shortcut icon&quot; href=&quot;images/favicon.ico&quot; /&gt;
+
+&lt;!-- All css --&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+
+	&lt;!-- **********  HEADER  ********** --&gt;
+
+	&lt;header class=&quot;header header-fixed header-light&quot;&gt;
+
+	&lt;/header&gt;
+
+	&lt;!-- **********  HEADER  ********** --&gt;
+
+
+	&lt;!-- **********  WRAPPER  ********** --&gt;
+
+	&lt;div class=&quot;wrapper&quot;&gt;
+		&lt;div class=&quot;sidebar-panel nicescrollbar sidebar-panel-light&quot;&gt;
+
+		&lt;/div&gt;
+
+		&lt;!-- **********  main-panel  ********** --&gt;
+
+		&lt;div class=&quot;main-panel&quot;&gt;
+
+		&lt;/div&gt;
+
+		&lt;!-- **********  main-panel  ********** --&gt;
+
+	&lt;/div&gt;
+
+	&lt;!-- **********  WRAPPER  ********** --&gt;
+
+
+	&lt;!-- **********  Javascript  ********** --&gt;
+
+	&lt;!-- All Js --&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+	 
+					</div>
+
+
+<!-- Logo Setting -->
+					<div id="logo-setting" class="mt-5">
+						<h4>Logo Setting</h4>
+						<p class="mb-3">The Logo Container can be found in the header container. To use your own logo, Put your logo in images folder and save it as logo.png</p>
+
+						<pre class="language-html"><code class="language-html">&lt;div class=&quot;logo-middle&quot;&gt;            
+	&lt;a href=&quot;index.html&quot;&gt;&lt;img src=&quot;images/logo.svg&quot; alt=&quot;Logo&quot;&gt;&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+					</div>
+<!-- Logo Setting -->
+
+<!-- Favicon -->
+					<div id="favicon" class="mt-5">
+						<h4>Favicon</h4>
+						<p class="mb-3">To set your own favicon, put your favicon.ico file in images folder.</p>
+
+						<pre class="language-html"><code class="language-html">&lt;!-- FAVICON --&gt;
+&lt;link rel=&quot;shortcut icon&quot; href=&quot;images/favicon.ico&quot; /&gt;</code></pre>
+					</div>
+<!-- Favicon -->
+
+
+<!-- fonts Changing  -->
+					<div id="fonts-changing" class="mt-5">
+						<h4>Fonts Changing</h4>
+						<p>You can add/change the site font, from all fonts used from  <a href="https://fonts.google.com/"> Google font library,</a> with the one that suits you the best. You can file path scss/style.scss files:</p>
+
+						<pre class="language-html"><code class="language-html">@import url(&#39;https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&#39;);</code></pre>
+
+					</div>
+<!-- fonts Changing -->
+
+
+<!-- Header structure  -->
+					<div id="header-setting" class="mt-5">
+						<h4>Header Setting</h4>
+						<p class="mb-3">The Header contains logo, language, setting, messages, notifications, and user-profile.</p>
+
+						<pre class="language-html"><code class="language-html">
+&lt;header class=&quot;header header-fixed header-light&quot;&gt;
+	&lt;div class=&quot;header-middle&quot;&gt;
+		&lt;div class=&quot;logo-color logo-color-light&quot;&gt;
+			&lt;!-- logo --&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+
+	&lt;div class=&quot;header-topbar&quot;&gt;
+		&lt;!-- language, setting, messages, notifications, and user-profile --&gt;
+	&lt;/div&gt;
+&lt;/header&gt;
+</code></pre>
+					</div>
+<!-- Header structure -->
+
+
+<!-- Menu structure  -->
+					<div id="menu-setting" class="mt-5">
+						<h4>Menu Setting</h4>
+						<p class="mb-3">The Menu contains.</p>
+
+						<pre class="language-html"><code class="language-html">
+&lt;div class=&quot;sidebar-panel nicescrollbar sidebar-panel-light&quot;&gt;
+
+	&lt;ul class=&quot;sidebar-menu&quot;&gt;
+
+		&lt;li&gt; &lt;!-- Menu items --&gt; &lt;/li&gt;
+
+	&lt;/ul&gt;
+
+&lt;/div&gt;
+</code></pre>
+					</div>
+<!-- Menu structure -->
+ 
+
+<!-- Components  -->
+					<div id="components" class="mt-5">
+						<h4 class="mb-3">Components </h4>
+				 
+				 <div class="alert alert-success" role="alert">
+					  <p class="mb-0"> <span class="h6">The component is a snippet of HTML code with corresponding CSS classes and JavaScript functionality that is rendered by the browser as an independent website element. They can be combined to create more complex components.</p>
+					</div>
+
+					<p>Along with all Bootstrap 4 components, Oxoury provides more than 50+ components includes introduces new elements you can use across the website.</p>
+
+					<a target="_blank" href="https://getbootstrap.com/docs/4.5/components/alerts/">Bootstrap 4 Components and documentation.</a>
+						<br /><br />
+					<a target="_blank" href="https://infinitysoftway.com/oxoury/ui-accordions.html">List of all Components and their visual reference and code snippets.</a>
+											 
+					</div>
+<!-- Components  -->
+
+					<div id="sources-and-credits" class="mt-5">
+						<h4>Sources And Credits</h4>
+						<p class="mb-3">While making this template we used 3rd party plugins, images, icons, fonts, etc... We really appreciate their hard work and want to thank their creators.</p>
+
+						<table class="table table-bordered">
+						  <thead class="thead-light">
+						    <tr>
+						      <th>Credits</th>
+						      <th>Link</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr>
+						      <th>Images</th>
+						      <td><a target="_blank" href="https://unsplash.com/"> https://unsplash.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Pixel</th>
+						      <td><a target="_blank" href="https://www.pexels.com/"> https://www.pexels.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Jquery</th>
+						      <td><a target="_blank" href="https://jquery.com/">https://jquery.com/ </a></td>
+						    </tr>
+						     <tr>
+						      <th>Bootstrap</th>
+						      <td><a target="_blank" href="https://getbootstrap.com">https://getbootstrap.com </a></td>
+						    </tr>
+						    <tr>
+						      <th>amcharts</th>
+						      <td><a target="_blank" href="https://www.amcharts.com/">https://www.amcharts.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>apexcharts</th>
+						      <td><a target="_blank" href="https://apexcharts.com/">https://apexcharts.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Bootstrap colorpicker</th>
+						      <td><a target="_blank" href="https://itsjavi.com/bootstrap-colorpicker/v2/">https://itsjavi.com/bootstrap-colorpicker/v2/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Bootstrap Duallistbox</th>
+						      <td><a target="_blank" href="https://www.virtuosoft.eu/code/bootstrap-duallistbox/">https://www.virtuosoft.eu/code/bootstrap-duallistbox/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Bootstrap Tagsinput</th>
+						      <td><a target="_blank" href="https://github.com/bootstrap-tagsinput/bootstrap-tagsinput">https://github.com/bootstrap-tagsinput/bootstrap-tagsinput </a></td>
+						    </tr>
+						    <tr>
+						      <th>Bootstrap Touchspin</th>
+						      <td><a target="_blank" href="https://www.virtuosoft.eu/code/bootstrap-touchspin/">https://www.virtuosoft.eu/code/bootstrap-touchspin/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Bootstraptour</th>
+						      <td><a target="_blank" href="http://bootstraptour.com/">http://bootstraptour.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Bootstrap wizard</th>
+						      <td><a target="_blank" href="http://github.com/VinceG/twitter-bootstrap-wizard">http://github.com/VinceG/twitter-bootstrap-wizard </a></td>
+						    </tr>
+						    <tr>
+						      <th>Fullcalendar</th>
+						      <td><a target="_blank" href="https://fullcalendar.io/">https://fullcalendar.io/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Chartjs</th>
+						      <td><a target="_blank" href="http://chartjs.org/">http://chartjs.org/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>Cropperjs</th>
+						      <td><a target="_blank" href="https://fengyuanchen.github.io/cropperjs">https://fengyuanchen.github.io/cropperjs </a></td>
+						    </tr>
+						    <tr>
+						      <th>Datatables</th>
+						      <td><a target="_blank" href="https://datatables.net/download/#bs4/dt-1.10.18">https://datatables.net/download/#bs4/dt-1.10.18 </a></td>
+						    </tr>
+						    <tr>
+						      <th>Daterangepicker</th>
+						      <td><a target="_blank" href="http://www.daterangepicker.com/">http://www.daterangepicker.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>dropzone</th>
+						      <td><a target="_blank" href="http://www.dropzonejs.com">http://www.dropzonejs.com </a></td>
+						    </tr>
+						    <tr>
+						      <th>gmaps</th>
+						      <td><a target="_blank" href="http://hpneo.github.com/gmaps/">http://hpneo.github.com/gmaps/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>jquery.mask</th>
+						      <td><a target="_blank" href="https://github.com/igorescobar/jQuery-Mask-Plugin">https://github.com/igorescobar/jQuery-Mask-Plugin </a></td>
+						    </tr>
+						    <tr>
+						      <th>jquery-jvectormap</th>
+						      <td><a target="_blank" href="https://jvectormap.com/download/">https://jvectormap.com/download/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>jquery-nicescroll</th>
+						      <td><a target="_blank" href="https://nicescroll.areaaperta.com/">https://nicescroll.areaaperta.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>jquery-ui</th>
+						      <td><a target="_blank" href="https://jqueryui.com/">https://jqueryui.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>jquery-validation</th>
+						      <td><a target="_blank" href="https://jqueryvalidation.org/documentation/">https://jqueryvalidation.org/documentation/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>jstree</th>
+						      <td><a target="_blank" href="https://www.jstree.com/">https://www.jstree.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>lobilist</th>
+						      <td><a target="_blank" href="https://lobianijs.com/site/lobilist#examples">https://lobianijs.com/site/lobilist#examples </a></td>
+						    </tr>
+						    <tr>
+						      <th>morris</th>
+						      <td><a target="_blank" href="https://morrisjs.github.io/morris.js/">https://morrisjs.github.io/morris.js/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>nestable	</th>
+						      <td><a target="_blank" href="https://github.com/dbushell/Nestable">https://github.com/dbushell/Nestable </a></td>
+						    </tr>
+						    <tr>
+						      <th>peity</th>
+						      <td><a target="_blank" href="http://benpickles.github.io/peity/">http://benpickles.github.io/peity/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>popper</th>
+						      <td><a target="_blank" href="https://github.com/popperjs/popper-core">https://github.com/popperjs/popper-core </a></td>
+						    </tr>
+						    <tr>
+						      <th>prism</th>
+						      <td><a target="_blank" href="https://prismjs.com/">https://prismjs.com/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>rangelider</th>
+						      <td><a target="_blank" href="http://ionden.com/a/plugins/ion.rangeSlider/start.html">http://ionden.com/a/plugins/ion.rangeSlider/start.html </a></td>
+						    </tr>
+						    <tr>
+						      <th>rating</th>
+						      <td><a target="_blank" href="http://github.com/antennaio/jquery-bar-rating">http://github.com/antennaio/jquery-bar-rating </a></td>
+						    </tr>
+						    <tr>
+						      <th>select2</th>
+						      <td><a target="_blank" href="https://select2.github.io">https://select2.github.io </a></td>
+						    </tr>
+						    <tr>
+						      <th>simplemde</th>
+						      <td><a target="_blank" href="https://github.com/NextStepWebs/simplemde-markdown-editor">https://github.com/NextStepWebs/simplemde-markdown-editor </a></td>
+						    </tr>
+						    <tr>
+						      <th>sparkline</th>
+						      <td><a target="_blank" href="https://omnipotent.net/jquery.sparkline/#s-about">https://omnipotent.net/jquery.sparkline/#s-about </a></td>
+						    </tr>
+						    <tr>
+						      <th>summernote</th>
+						      <td><a target="_blank" href="https://summernote.org/">https://summernote.org/ </a></td>
+						    </tr>
+						    <tr>
+						      <th>sweetalert2</th>
+						      <td><a target="_blank" href="https://github.com/sweetalert2/sweetalert2">https://github.com/sweetalert2/sweetalert2 </a></td>
+						    </tr>
+						    <tr>
+						      <th>toastr</th>
+						      <td><a target="_blank" href="https://github.com/CodeSeven/toastr">https://github.com/CodeSeven/toastr </a></td>
+						    </tr>
+						  </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- ================================================= Docs ================================================== -->
+ 
+<!-- ================================================= Javascript ================================================ -->
+
+<!-- Plugins Js -->
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/bootstrap/bootstrap.min.js"></script>
+
+<script src="js/prism.js"></script>
+
+<script type="text/javascript">
+	  $('#navbar .nav-link').click(function(){    
+	    var divId = $(this).attr('href');
+	     $('html, body').animate({
+	      scrollTop: $(divId).offset().top - 84
+	    }, 100);
+	  });
+</script>
+ 
+</body>
+</html>
