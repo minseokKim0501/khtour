@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/default}">
+	<th:block layout:fragment="customTitle">
+		<title th:text="${title}"></title>
+	</th:block>
+	<th:block layout:fragment="contentsTitle">
+		
+	<!-- 이동경로 확인 (Breadcrumb) -->
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item active" aria-current="page"><a href="#"><i class="la la-home"></i></a></li>
+		</ol>
+	</nav>
+	</th:block>
+
+	<th:block layout:fragment="customContents">	
+		test1
+	</th:block>
+	<th:block layout:fragment="customBodyScript">
+		<!-- PRISM -->
+		<script th:src="@{/js/prism/prism.js}"></script>
+		<!-- custom -->
+		<script th:src="@{/js/custom.js}"></script>
+	</th:block>
+</html>
