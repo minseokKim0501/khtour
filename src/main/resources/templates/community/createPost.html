@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+
+<th:block layout:fragment="customScript">
+	<script>
+		$(function() {
+			$("#commCode").on('change', function(e) {
+						var commCode = $('select[name="commCode"]').val();
+						console.log(commCode);
+							$.ajax({
+								url : '/getTagList',
+								type : 'post',
+								data : {
+									'commCode' : commCode
+								},
+								dataType : 'json',
+								success : function(data) {	
+									console.log(data);						  
+									console.log(data.length);
+									var txt1=''
+										for(var i =0;i<data.length;i++)
+										{
+											txt1 +='<option value="'+data[i].tagCode+'" '	+'>' + data[i].tagName  +"</option>"	
+										}
+										console.log(txt1);
+										$('#tagCodeSpecial select').empty()
+										$('#tagCodeSpecial select').append(txt1);							
+									}	
+							});
+			});
+
+		});
+	</script>
+</th:block>
+
+
+<th:block layout:fragment="customContents">
+	<div class="card">
+		<div class="card-header bg-primary pb-0">
+			<h4 class="card-title text-white">포스트 생성</h4>
+		</div>
+		<div class="card-body">
+			<form class="cmxform" id="form2" method="post" th:action="@{/addCommPost}" enctype="multipart/form-data">	
+				<div class="form-group">
+					<label for="commCode">등록할 커뮤니티</label> 
+				
+					<select class="form-control" id="commCode" name="commCode" th:if="${not #lists.isEmpty(commList)}" required>
+						<option>===커뮤니티 선택===</option>
+						<option th:value="${c.commCode}" th:text="${c.commName}" th:each="c: ${commList}"></option>
+					</select>
+				
+					<div class="form-group" th:if="${#lists.isEmpty(commList)}">
+						<select class="form-control" id="commCode" name="commCode" th:if="${#lists.isEmpty(commList)}">
+							<option id="commCode" th:value="${community.commCode}" th:text="${community.commName}" class="form-control bg-primary text-white" />
+						</select>
+					</div>
+					
+				
+					<div class="form-group" th:if="${#lists.isEmpty(commList)}">
+						<label for="tagCode">등록할 태그</label> 
+						<select class="form-control" id="tagCode" name="tagCode" th:if="${not #lists.isEmpty(tagList)}">
+							<option  th:value="${t.tagCode}" th:text="${t.tagName}" th:each="t: ${tagList}">
+							
+							</option>
+						</select>
+					</div> 
+					
+			
+					<div id="tagCodeSpecial" class="form-group" th:if="${not #lists.isEmpty(commList)}">
+						<label for="tagOptionUpdate">등록할 테그</label> 
+						<select class="form-control" id="tagCode" name="tagCode" >	
+										
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="title">제목</label> 
+					<input id="title" class="form-control" name="title" placeholder="제목">
+					<input type="hidden"  th:value="${session.SID}"  name="memberId" />
+				</div>
+				<div class="form-group">
+					<label for="mainText">본문</label>
+					<textarea id="mainText" name="mainText" class="form-control" rows="10" placeholder="본문내용"></textarea>
+				</div>
+				 <div class="form-group">
+					<input type="file" name="uploadfile" multiple="multiple"/>
+				</div> 
+					<input class="submit btn btn-primary pull-right" type="submit" value="확인"> 
+					<a href="/commDashboard" class="btn btn-primary active pull-right" role="button" aria-pressed="true">취소</a>	
+			</form>
+		</div>
+	</div>
+
+</th:block>
+<!-- summernote -->
+
+
+<th:block layout:fragment="customBodyScript">
+	<!-- jquery mask -->
+	<script src="js/jquery-validation/jquery.validate.min.js"></script>
+	<!-- select2 -->
+	<script src="js/select2/select2.min.js"></script>
+	<script src="js/summernote/summernote.min.js"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

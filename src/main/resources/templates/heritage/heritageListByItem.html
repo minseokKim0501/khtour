@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>문화재 검색(관리자)</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">문화재 검색(관리자)</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+<link th:href="@{https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/datedropper.css}" rel="stylesheet">
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" defer="defer"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script> -->
+<style>
+.custom-control-inline{width:10%;font-size:14px;}
+.btn-outline-danger:hover{background-color:#cb4946 !important;}
+	
+/* datepicker 버튼 색 */
+.btn-outline-warning {
+    color: #F44336 !important;
+    background-color: #fff;
+    background-image: none;
+    border-color: #ed433e !important
+	}
+#addHeritageForm label.error { color: red; }
+      .loginsnsicon{width:20px;height:20px;margin-right:5px;}
+</style>
+	<!-- 첫번째 Row 시작 -->
+	<div class="row justify-content-center">
+		<div class="col-10 col-la-10 col-xl-10">
+			<!-- 문화재 등록 시작 -->
+			<div class="card">
+				<div class="card-title">
+					<h4>문화재 등록</h4>
+				</div>
+					<hr class="my-2">
+					<div class="card-body">
+						<div class="row align-items-start">
+							<div class="col-3">
+								<button type="button" class="btn btn-primary" data-toggle="modal"
+									data-target=".bd-example-modal-lg">
+									<i class="feather icon-plus"></i>문화재 등록
+								</button>
+								<!-- 모달 시작 -->
+								<div class="modal fade bd-example-modal-lg" tabindex="-1"
+									role="dialog" aria-labelledby="exampleModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">
+													<i class="feather icon-plus"></i> 상세정보 등록
+												</h5>
+												<button type="button" class="close" data-dismiss="modal"
+													aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<!-- 문화재 정보 입력 폼 시작-->
+											<div class="modal-body p-5">
+												<form id="addHeritageForm"
+													th:action="@{/heritage/heritageListByItem}" method="post" enctype="multipart/form-data">
+													<div class="form-group">
+														<label for="memberId"> 등록자 아이디 </label> <input
+															type="text" class="form-control" th:value="${session.SID}"
+															name="memberId" readonly="readonly">
+													</div>
+													<div class="form-group">
+														<label for="heritageName"> 문화재 명 </label> <input
+															type="text" class="form-control" id="heritageName"
+															name="heritageName" placeholder="문화재 명" required="">
+															<div class="check_font" id="idCheck"></div>
+													</div>
+													<div class="form-group"
+														th:if="${not #lists.isEmpty(heritageCategory)}">
+														<label for="heritageCategory"> 문화재 대분류 </label> <select
+															class="form-control" id="heritageCategory"
+															name="heritageCategory" required="">
+															<option value="none">:: 문화재 분류 ::</option>
+															<option th:if="${not #lists.isEmpty(heritageCategory)}"
+																th:each="l: ${heritageCategory}"
+																th:value="${l.heritageCategoryNum}">[[${l.heritageCategoryName}]]</option>
+														</select>
+													</div>
+													<div class="form-group">
+														<label for="heritageSubName"> 문화재 한문명 </label> <input
+															type="text" class="form-control" id="heritageSubName"
+															name="heritageSubName" placeholder="문화재 한문명" required="">
+													</div>
+													<div class="form-group">
+														<label for="heritageLocation"> 문화재 소재지 </label> <input
+															type="text" class="form-control" id="heritageLocation"
+															name="heritageLocation" placeholder="소재지" required="">
+													</div>
+													<div class="form-group">
+														<label for="heritageManager"> 문화재 관리자 </label> <input
+															type="text" class="form-control" id="heritageManager"
+															name="heritageManager" placeholder="관리자명" required="">
+													</div>
+													<div class="form-group">
+														<label for="heritageOwner"> 문화재 소유자 </label> <input
+															type="text" class="form-control" id="heritageOwner"
+															name="heritageOwner" placeholder="소유자" required="">
+													</div>
+													<div class="form-group">
+														<label for="heritageEra"> 문화재 시대명 </label> <input
+															type="text" class="form-control" id="heritageEra"
+															name="heritageEra" placeholder="예) 조선 태조 7년(1398)" required="">
+													</div>
+													<div class="form-group">
+														<label for="heritageArea"> 문화재 수량/면적 </label> <input
+															type="text" class="form-control" id="heritageArea"
+															name="heritageArea" placeholder="수량/면적" required="">
+													</div>
+													<div class="form-group">
+														<label for="heritageDesignation"> 등록일자</label>
+														<div class="input-group mb-3">
+															<input id="heritageDesignation" type="text" class="form-control input-text" name="heritageDesignation" required="">
+															<div class="input-group-append">
+																<button class="btn btn-outline-warning btn-lg" type="button">
+																	<i class="fa fa-calendar"></i>
+																</button>
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="heritageClassification"> 중분류 </label> <input
+															type="text" class="form-control"
+															id="heritageClassification" name="heritageClassification" placeholder="예) 유적건조물 / 정치국방 / 성 / 성곽시설"
+															required="">
+													</div>
+													<div class="form-group">
+														<label for="heritageImage">이미지 선택</label> <input
+															type="file" id="heritageImage" class="form-control"
+															name="heritageImageFiles" required="">
+													</div>
+													<div class="form-group">
+														<label for="heritageDetail">문화재 상세 설명 문화재 설명</label>
+														<textarea class="form-control" id="heritageDetail"
+															name="heritageDetail" rows="3" required=""></textarea>
+													</div>
+	
+													<button type="button" id="addHeritageBtn"
+														class="btn btn-primary">등록</button>
+													<button type="button" class="btn btn-danger"
+														data-dismiss="modal">취소</button>
+												</form>
+											</div>
+											<!-- 문화재 정보 입력 폼 종료-->
+										</div>
+									</div>
+								</div>
+								<!-- 모달 끝 -->
+							</div>
+							<!-- 주의사항 표시 시작 -->
+							<div class="col-5">
+								<div
+									class="alert bg-white shadow-sm alert-dismissible fade show mb-0 mt-md-0 mt-3"
+									role="alert">
+									<i class="feather icon-alert-triangle text-primary mr-2"></i> 유형
+									문화재 등록만 가능합니다.
+									<button type="button" class="close" data-dismiss="alert"
+										aria-label="Close">
+										<span aria-hidden="true">×</span>
+									</button>
+								</div>
+							</div>
+							<!-- 주의사항 표시 종료 -->
+						</div>
+					</div>
+			</div>
+			<!-- 문화재 등록 종료 -->
+
+			<!-- 문화재 검색조건 설정 시작 -->
+			<div class="card">
+				<div class="card-title">
+					<h4>검색조건</h4>
+				</div>
+				<hr class="my-2">
+					<div class="card-body">
+						<div th:include="searchMinSeok/search.html :: searchHeritageListFragment"></div>
+						<form>
+							<div class="form row">
+								<div class="form-group col-3 text-right">
+									<h5 style="line-height:1.5;">종목별 검색</h5>
+								</div>
+								<div class="form-group col-9">
+									<div
+										class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" class="custom-control-input " id="customCheck1" name="checkValue"
+											 value="국가등록"> <label
+											class="custom-control-label" for="customCheck1" >국가등록</label>
+									</div>
+									<div
+										class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" class="custom-control-input" id="customCheck2" name="checkValue"
+											 value="국보"> <label
+											class="custom-control-label" for="customCheck2" >국보</label>
+									</div>
+									<div
+										class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" class="custom-control-input" id="customCheck3" name="checkValue"
+											 value="명승"> <label
+											class="custom-control-label" for="customCheck3">명승</label>
+									</div>
+									<div
+										class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" class="custom-control-input" id="customCheck4" name="checkValue"
+											value="자료"> <label class="custom-control-label" for="customCheck4"
+											>자료</label>
+									</div>
+									<div
+										class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" class="custom-control-input" id="customCheck5" name="checkValue"
+											value="보물"> <label class="custom-control-label" for="customCheck5"
+											>보물</label>
+									</div>
+									<div
+										class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" class="custom-control-input" id="customCheck6" name="checkValue"
+											value="사적"> <label
+											class="custom-control-label"  for="customCheck6">사적</label>
+									</div>
+									<div
+										class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" class="custom-control-input" id="customCheck7" name="checkValue" 
+											value="신문"> <label class="custom-control-label" for="customCheck7"
+											>신문</label>
+									</div>
+									<div
+										class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" class="custom-control-input" id="customCheck8" name="checkValue" 
+											value="종이"> <label class="custom-control-label" for="customCheck8"
+											>종이</label>
+									</div>
+								</div>
+							</div>
+							<div class="col text-center">
+								<button class="btn btn-danger itemSearch" id="itemSearchBtn"
+									style="margin-top: 1rem !important;font-size:14px;" onclick="" type="button" >
+									포함 항목 검색</button>
+							</div>
+						</form>
+					</div>
+			</div>
+			<!-- 문화재 검색조건 설정 종료 -->
+
+			<!-- 문화재 검색리스트 시작 -->
+			<div class="card">
+				<div class="card-body" id="heritageCard">
+					<div class="row row-cols-1 row-cols-md-4 g-3">
+						<div class="col" th:if="${not #lists.isEmpty(heritageList)}"
+							th:each="l : ${heritageList}">
+							<div class="card h-80">
+								<div class="embed-responsive embed-responsive-4by3">
+									<img th:src="@{${#strings.isEmpty(l.heritageImagePath) ? '/images/heritage/서울 숭례문.jpg': '/' + #strings.replace(l.heritageImagePath,'\','/')}}"
+										class="card-img-top h-10 embed-responsive-item" alt="...">
+										<a th:href="@{/heritage/heritageDetail(heritageCode=${l.heritageCode})}" class="stretched-link"></a>
+								</div>
+								<div class="card-body">
+									<p class="card-text" th:text="${l.heritageCategory}"></p>
+									<h5 class="card-title">
+										<a
+											th:href="@{/heritage/heritageDetail(heritageCode=${l.heritageCode})}"
+											th:text="${l.heritageName}"></a>
+									</h5>
+									<p class="card-text" th:text="${l.heritageSubName}"></p>
+								</div>
+							</div>
+						</div>
+						<!-- 등록된 문화재 리스트가 없을 시 표시되는 항목 시작 -->
+						<div class="mr-5" id="heritageList"></div>
+						<div th:unless="${not #lists.isEmpty(heritageList)}">
+							<div>등록된 문화재의 정보가 없습니다.</div>
+						</div>
+						<!-- 등록된 문화재 리스트가 없을 시 표시되는 항목 종료 -->
+					</div>
+					<div class="text-center">
+						<!-- 페이징 시작 -->
+						<div id="paging">
+							<nav aria-label="Page navigation example">
+								<ul class="pagination justify-content-center">
+									<li class="page-item"><a class="page-link" href="#">이전</a></li>
+									<li class="page-item"><a class="page-link" href="#">1</a></li>
+									<li class="page-item"><a class="page-link" href="#">2</a></li>
+									<li class="page-item"><a class="page-link" href="#">3</a></li>
+									<li class="page-item"><a class="page-link" href="#">4</a></li>
+									<li class="page-item"><a class="page-link" href="#">5</a></li>
+									<li class="page-item"><a class="page-link" href="#">다음</a></li>
+								</ul>
+							</nav>
+						</div>
+						<!-- 페이징 끝 -->
+					</div>
+
+				</div>
+			</div>
+			<!-- 문화재 검색리스트 종료 -->
+		</div>
+	</div>
+</th:block>
+
+
+<!-- javascript 삽입 시작 -->
+<th:block layout:fragment="customBodyScript">
+	<!-- 등록 버튼 자바스크립트 = 관리자만 등록 가능(유효성 검사) -->
+	<script>
+		function resultHtml(searchHeritageList) {
+			$("#heritageCard").empty();
+			
+			var html = '<div class="row row-cols-1 row-cols-md-4 g-3">';
+			if(searchHeritageList != null && searchHeritageList.length > 0){
+				$.each($(searchHeritageList), function(index, item){
+					html += '<div class="col">';
+					html += '	<div class="card h-80">';
+					html += '		<div class="embed-responsive embed-responsive-4by3">';
+					if(item.heritageImagePath == null){						
+						html += '		<img src="/images/heritage/서울 숭례문.jpg" class="card-img-top h-10 embed-responsive-item" alt="...">';
+					}else{
+						var heritageImagePath = item.heritageImagePath.replace(/\\/gi, '/');
+						html += '		<img src="/'+ heritageImagePath +'" class="card-img-top h-10 embed-responsive-item" alt="...">';
+					}
+					html += '		<a href="/heritage/heritageDetail?heritageCode='+ item.heritageCode +'" class="stretched-link"></a>';					
+					html += '	</div>';
+					html += '		<div class="card-body">';
+					html += '			<p class="card-text">'+ item.heritageCategory +'</p>';
+					html += '				<h5 class="card-title">';
+					html += '					<a href="/heritage/heritageDetail?heritageCode='+ item.heritageCode +'">'+ item.heritageName +'</a>';
+					html += '				</h5>';					
+					html += '			<p class="card-text">' + item.heritageSubName + '</p>';
+					html += '		</div>';
+					html += '	</div>';
+					html += '</div>';
+				});
+			}else{	
+				html += '<div>등록된 문화재의 정보가 없습니다.</div>';	
+			}
+			html += '</div>';
+			
+			$("#heritageCard").append(html);	
+		};
+	</script>
+	<script type="text/javascript" th:inline="javascript">
+		$(function(){
+		/*<![CDATA[*/
+	    var sessionLevel = [[${session.SLEVEL}]];
+	    /*]]>*/
+		
+		function validationCheck(data){
+			if(typeof data == 'undefined' || data == '' || data == null){
+				return false;
+			}
+			return true;
+		}
+
+		$('#addHeritageBtn').click(function() {
+		
+			if(sessionLevel != '관리자'){
+				alert('관리자만 문화재등록이 가능합니다')
+				return false;
+			}
+			
+			var isSubmit = true;
+			var inputObj = $('#addHeritageForm').find('input');
+
+			$.each(inputObj, function() {
+				var inputId = $(this).attr('id');
+				var inputLabel = $('label[for="' + inputId + '"]').text();
+				var inputData = $(this).val();
+				var result = validationCheck(inputData);
+
+				// 사용자가 입력하지 않은 경우
+				if(!result){
+					alert(inputLabel + '을 입력해주세요');
+					$(this).focus();
+					isSubmit = false;
+					return false;
+				}
+			});
+			
+			console.log('유효여부 폼전송할건지?' + isSubmit )
+	
+			if (isSubmit) $('#addHeritageForm').submit();
+		});
+		
+		
+		$('#heritageName').keyup(function(){
+            var heritageName = $('input[name="heritageName"]').val();
+            
+            console.log(heritageName);
+            if(typeof heritageName == 'undefined' || heritageName == '' || heritageName == null){
+               return false;
+            }
+            
+            $.ajax({
+                url: '/heritage/isHeritageNameCheck'
+               ,type: 'POST'
+               ,data: {'heritageName' : heritageName}
+               ,dataType: 'json'
+               ,success: function(data){
+                  console.log(data);
+                  if(data){
+                     $('#heritageName').attr('data-idcheck', true);
+                     $("#idCheck").text("등록되지 않은 문화재 입니다");
+                     $("#idCheck").css("color", "blue");
+                     $("#addHeritageBtn").attr("disabled", false);
+                  }else{
+                     $('#heritageName').attr('data-idcheck', false);
+                     $("#idCheck").text("이미등록 된 문화재 입니다.");
+                     $("#idCheck").css("color", "red");
+                     $("#addHeritageBtn").attr("disabled", true);
+                  }
+               },error: function(xhr, status, errorThrown) {
+                  console.log(xhr);
+                  console.log(errorThrown);
+               }
+            });
+            
+         });
+		
+         $('.itemSearch').click(function(){
+         	var checkArr = [];     // 배열 초기화
+      	    $('input[name="checkValue"]:checked').each(function(i) {
+      	        checkArr.push($(this).val());     // 체크된 것만 값을 뽑아서 배열에 push
+      	    });
+			console.log(checkArr);
+			$.ajax({
+                url: '/heritage/itemSearchHeritageList'
+               ,type: 'POST'
+               ,data: {'checkArr' : checkArr}
+               ,dataType: 'json'
+               ,success: function(data){ resultHtml(data); }
+                  
+               ,error: function(xhr, status, errorThrown) {
+                  console.log(xhr);
+                  console.log(errorThrown);
+               }
+            });
+         	
+         });
+		});
+		
+		
+	</script>
+	<script>
+		$(document).ready(function() {
+			$("#heritageDesignation").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "y-mm-dd",
+				lang : "ko",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold'
+			});
+		});
+	</script>
+		<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<!-- select List -->
+	<script th:src="@{/js/bootstrap-duallistbox/jquery.bootstrap-duallistbox.min.js}"></script>
+	<!-- sweetalert2 -->
+	<script th:src="@{/js/sweetalert2/sweetalert2.min.js}" aria-hidden="true"></script>
+	<!-- sweetalert2 custom -->
+	<script th:src="@{/js/sweetalert2/sweetalert2-custom.js}" aria-hidden="true"></script>	
+	<!-- 등록일 datepciker-->
+	<script th:src="@{/js/kmsJs/datepickerKms.js}"></script>	
+	
+</th:block>
+<!-- javascript 삽입 종료 -->
+</html>

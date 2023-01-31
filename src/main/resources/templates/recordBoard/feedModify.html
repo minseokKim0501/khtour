@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<div class="row justify-content-center">
+		<div class="col-12 col-la-12 col-xl-12">
+			<h2>포스트 등록 페이지</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/traShare/traShareList}">여행일정 공유 리스트</a></li>
+					<li class="breadcrumb-item active" aria-current="page">포스트 등록페이지</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+
+
+<th:block layout:fragment="customContents">
+	<div class="row justify-content-center">
+		<div class="col-12 col-la-10 col-xl-7">
+			<div class="card">
+				<div class="card-title">
+					<div class="card-title-left">
+						<h4 class="card-title-text">게시글 기본 정보</h4>
+					</div>
+				</div>
+				<div class="card-body">
+				<!-- 피드 정보 수정 폼 시작 -->
+					<form>
+						<div class="form-group">
+							<label for="exampleInputEmail1">게시글 메인제목</label> <input
+								type="text" class="form-control" placeholder="게시글 이름을 입력하세요.">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputEmail1">게시글 부제목</label> <input
+								type="text" class="form-control" placeholder="게시글 이름을 입력하세요.">
+						</div>
+						<div class="form-group">
+							<label for="inputAddress">게시글 리뷰 내용</label>
+							<textarea class="form-control" id="heritageDetail"
+								name="heritageDetail" rows="3" required=""></textarea>
+						</div>
+						<div class="form-group">
+							<label for="exampleFormControlSelect1">여행 상태</label> <select
+								class="form-control" id="exampleFormControlSelect1">
+								<option>:: 선택 ::</option>
+								<option>여행전</option>
+								<option>여행후</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleInputEmail1">여행 일자</label> <input type="text"
+								name="dates" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputEmail1">이미지 업로드</label>
+							<div id="wizard-04" class="wizard">
+								<div class="wizard-nav">
+									<ul class="nav nav-fill nav-pills">
+										<li class="nav-item"><a class="nav-link" href="#tabadd1"
+											data-toggle="tab"> <span class="number">첫번째</span> 피드
+										</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tabadd2"
+											data-toggle="tab"> <span class="number">두번째</span> 피드
+										</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tabadd3"
+											data-toggle="tab"> <span class="number">세번째</span> 피드
+										</a></li>
+										<li class="nav-item"><a class="nav-link" href="#tabadd4"
+											data-toggle="tab"> <span class="number">네번째</span> 피드
+										</a></li>
+										<li class="nav-item"><a class="nav-link active"
+											href="#tabadd5" data-toggle="tab"> <span class="number">다섯째</span>
+												피드
+										</a></li>
+									</ul>
+								</div>
+								<div id="bar" class="progress mt-4">
+									<div
+										class="progress-bar progress-bar-striped progress-bar-animated"
+										role="progressbar" aria-valuenow="25" aria-valuemin="0"
+										aria-valuemax="100" style="width: 100%;"></div>
+								</div>
+								<div class="tab-content">
+									<div class="tab-pane" id="tabadd1">
+										<div class="form-group">
+											<label for="exampleInputEmail1">피드 일자</label> <input
+												type="text" name="birthday" value="10/24/1984"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">피드 시간</label>
+											<div class="input-group bootstrap-timepicker timepicker">
+												<input id="timepicker1" type="text"
+													class="form-control input-small"> <span
+													class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+											</div>
+										</div>
+
+
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">이미지선택</label>
+											<div class="custom-file">
+												<input type="file" class="custom-file-input" id="customFile">
+												<label class="custom-file-label" for="customFile">이미지
+													파일</label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="inputAddress">이미지 제목</label> <input type="text"
+												class="form-control" id="inputAddress" placeholder="">
+										</div>
+										<div class="form-group">
+											<label for="heritageDetail">이미지 설명</label>
+											<textarea class="form-control" id="heritageDetail"
+												name="heritageDetail" rows="3" required=""></textarea>
+										</div>
+									</div>
+									<div class="tab-pane" id="tabadd2">
+
+										<div class="form-group">
+											<label for="exampleInputEmail1">피드 일자</label> <input
+												type="text" name="birthday" value="10/24/1984"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail2">피드 시간</label>
+											<div class="input-group bootstrap-timepicker timepicker">
+												<input id="timepicker2" type="text"
+													class="form-control input-small"> <span
+													class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+											</div>
+										</div>
+
+
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">이미지선택</label>
+											<div class="custom-file">
+												<input type="file" class="custom-file-input" id="customFile">
+												<label class="custom-file-label" for="customFile">이미지
+													파일</label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="inputAddress">이미지 제목</label> <input type="text"
+												class="form-control" id="inputAddress" placeholder="">
+										</div>
+										<div class="form-group">
+											<label for="heritageDetail">이미지 설명</label>
+											<textarea class="form-control" id="heritageDetail"
+												name="heritageDetail" rows="3" required=""></textarea>
+										</div>
+									</div>
+									<div class="tab-pane" id="tabadd3">
+
+										<div class="form-group">
+											<label for="exampleInputEmail1">피드 일자</label> <input
+												type="text" name="birthday" value="10/24/1984"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail">피드 시간</label>
+											<div class="input-group bootstrap-timepicker timepicker">
+												<input id="timepicker" type="text"
+													class="form-control input-small"> <span
+													class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+											</div>
+										</div>
+
+
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">이미지선택</label>
+											<div class="custom-file">
+												<input type="file" class="custom-file-input" id="customFile">
+												<label class="custom-file-label" for="customFile">이미지
+													파일</label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="inputAddress">이미지 제목</label> <input type="text"
+												class="form-control" id="inputAddress" placeholder="">
+										</div>
+										<div class="form-group">
+											<label for="heritageDetail">이미지 설명</label>
+											<textarea class="form-control" id="heritageDetail"
+												name="heritageDetail" rows="3" required=""></textarea>
+										</div>
+									</div>
+									<div class="tab-pane" id="tabadd4">
+										<div class="form-group">
+											<label for="exampleInputEmail1">피드 일자</label> <input
+												type="text" name="birthday" value="10/24/1984"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail2">피드 시간</label>
+											<div class="input-group bootstrap-timepicker timepicker">
+												<input id="timepicker2" type="text"
+													class="form-control input-small"> <span
+													class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+											</div>
+										</div>
+
+
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">이미지선택</label>
+											<div class="custom-file">
+												<input type="file" class="custom-file-input" id="customFile">
+												<label class="custom-file-label" for="customFile">이미지
+													파일</label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="inputAddress">이미지 제목</label> <input type="text"
+												class="form-control" id="inputAddress" placeholder="">
+										</div>
+										<div class="form-group">
+											<label for="heritageDetail">이미지 설명</label>
+											<textarea class="form-control" id="heritageDetail"
+												name="heritageDetail" rows="3" required=""></textarea>
+										</div>
+									</div>
+									<div class="tab-pane" id="tabadd5">
+										<div class="form-group">
+											<label for="exampleInputEmail1">피드 일자</label> <input
+												type="text" name="birthday" value="10/24/1984"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail2">피드 시간</label>
+											<div class="input-group bootstrap-timepicker timepicker">
+												<input id="timepicker2" type="text"
+													class="form-control input-small"> <span
+													class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+											</div>
+										</div>
+
+
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">이미지선택</label>
+											<div class="custom-file">
+												<input type="file" class="custom-file-input" id="customFile">
+												<label class="custom-file-label" for="customFile">이미지
+													파일</label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="inputAddress">이미지 제목</label> <input type="text"
+												class="form-control" id="inputAddress" placeholder="">
+										</div>
+										<div class="form-group">
+											<label for="heritageDetail">이미지 설명</label>
+											<textarea class="form-control" id="heritageDetail"
+												name="heritageDetail" rows="3" required=""></textarea>
+										</div>
+									</div>
+
+									<ul class="pager wizard list-unstyled text-right"
+										style="margin-top: 3.1em;">
+										<li class="previous list-inline-item" style="float: left;"><a
+											class="btn btn-primary">이전</a></li>
+										<li class="next list-inline-item disabled"><a
+											class="btn btn-primary">다음</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- 피드 정보 수정 폼 종료 -->
+					<div class="add-new text-center mb-5">
+						<a class="btn btn-primary ftbtn" href="#!"> 등록 </a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- bootstrap wizard-->
+	<script th:src="@{/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+	<script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+
+	<!--  datepicker  -->
+	<script th:src="@{/js/datepicker/daterangepicker.js}"></script>
+	<script th:src="@{/js/datepicker/bootstrap-timepicker.js}"></script>
+
+</th:block>
+</html>

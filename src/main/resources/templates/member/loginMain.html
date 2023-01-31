@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+<th:block layout:fragment="customContents">
+
+	<div class="login bg-white py-5 px-5">
+		<div class="title">
+			<h3 class="text-dark">문화재 관광 플랫폼입니다.</h3>
+			<p class="text-dark">오신 것을 환영합니다, 계정에 로그인하시기 바랍니다</p>
+		</div>
+		<form id="loginForm" th:action="@{/member/loginMain}" method="post">
+			<div class="form-group">
+				<label for="memberId"></label>
+				<input type="text" id="memberId" name="memberId" class="form-control" placeholder="아이디" required="" value="id001">
+			</div>
+			<div class="form-group">
+				<label for="memberPw"></label>
+				<input type="password" id="memberPw" name="memberPw" class="form-control" placeholder="암호" required="" value="pw001">
+			</div>
+			<div class="form-bottom">
+				<div class="custom-control custom-checkbox d-inline-block">
+					<input type="checkbox" class="custom-control-input" name="remember" id="remember"> 
+					<label class="custom-control-label text-dark" for="remember">로그인 기억</label>
+				</div>
+				<div class="forgot-pass">
+					<a th:href="@{/member/memberPwV}"> 암호를 잊어버렸습니다. </a>
+				</div>
+			</div>
+			<button type="button" id="loginBtn" onclick="('포인트가 적립되었습니다.')" class="btn btn-primary">로그인</button>
+			<div th:if="${not #strings.isEmpty(result)}">
+				<p id="resultM" th:text="${result}"></p>
+			</div>
+		</form>
+		<span class="text-dark">계정이 없는가요? 계정을 생성합니다 
+			<a th:href="@{/member/memberInsert}" _istranslated="1"> 가입하기</a>
+		</span>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<script>
+		$(function() {
+			
+			function validationCheck(data) {
+				if (typeof data == 'undefined' || data == '' || data == null) {
+					return false;
+				}
+				return true;
+			}
+			
+			$('#loginBtn').click(function(){
+				var isSubmit = true;
+				var inputObj = $('#loginForm').find('input');
+				
+				$.each(inputObj, function(){
+					var inputId    	=$(this).attr('id');
+					var inputData	=$(this).val();
+					var result		= validationCheck(inputData);
+					
+					if(!result){
+						alert('아이디를 입력해주세요.');
+						$(this).focus();
+						isSumbit = false;
+						return false;
+					}
+				});
+				
+				if(isSubmit) $('#loginForm').submit();
+				
+			});
+			
+		});
+	</script>
+</th:block>
+</html>

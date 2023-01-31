@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>박물관 조회 및 수정</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">박물관 조회 및 수정</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css" th:href="@{/js/datatables/buttons.dataTables.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/js/datatables/select.bootstrap4.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/js/datatables/fixedColumns.bootstrap4.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<div id="List">
+		<!-- **********************************  Start ContentsWrap  ********************************** -->
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<form th:action="@{/mus/musList}" method="get">
+							<div class="input-group mb-3">
+								<select class="custom-select col-3"  name="searchKey">
+									<option value="">:: 선택 ::</option>
+										<option value="musCode">코드</option>
+										<option value="musLargeCateName">카테고리</option>
+										<option value="musName">이름</option>
+										<option value="musAddr">주소</option>
+										<option value="musDisclose">체험활동 유/무</option>
+										<option value="musClose">휴관일</option>
+								</select>
+								<input type="text" class="form-control" placeholder="검색어를 입력하세요." name="searchValue">
+								<button class="btn btn-outline-primary" type="submit">검색</button>
+							</div>
+						</form>
+						<div class="table-responsive">
+							<table id="table-selected" class="table table-striped table-bordered">
+								<thead style="text-align: center;">
+									<tr>
+										<th>코드</th>
+										<th>카테고리</th>
+										<th>이름</th>
+										<th>주소</th>
+										<th>홈페이지</th>
+										<th>전화번호</th>
+										<th>체험활동유/무</th>
+										<th>운영시간</th>
+										<th>휴관일</th>
+										<th style="display: none;">상세설명</th>
+										<th>수정/삭제</th>
+									</tr>
+								</thead>
+								<tbody class="text-center">
+									<tr th:if="${not #lists.isEmpty(musList)}" th:each="l:${musList}">
+										<td th:text="${l.musCode}"></td>
+										<td th:text="${l.musLargeCateName}"></td>
+										<td th:text="${l.musName}"></td>
+										<td th:text="${l.musAddr}"></td>
+										<td th:text="${l.musSite}"></td>
+										<td th:text="${l.musNum}"></td>
+										<td th:text="${l.musDisclose}"></td>
+										<td th:text="|${l.musStart}~ ${l.musEnd}|"></td>
+										<td style="display: none;" th:text="${l.musDetail}"></td>
+										<td th:text="${l.musClose}"></td>
+										<td>
+											<a class="btn btn-primary btn-icon btn-sm mb-1 mr-2 mb-1" th:href="@{/mus/musModify(musCode=${l.musCode})}">
+												<i class="la la-edit"></i>
+											</a>
+											<button class="btn btn-danger btn-icon btn-sm mb-1" id="swal-delete-mus" th:data-musCd="${l.musCode}">
+												<i class="fa fa-trash-o"></i>
+											</button>
+										</td>
+									</tr>
+								</tbody>
+								<tfoot style="text-align: center;">
+									<tr>
+										<th>코드</th>
+										<th>카테고리</th>
+										<th>이름</th>
+										<th>주소</th>
+										<th>홈페이지</th>
+										<th>전화번호</th>
+										<th>체험활동유/무</th>
+										<th>운영시간</th>
+										<th>휴관일</th>
+										<th style="display: none;">상세설명</th>
+										<th>수정/삭제</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- **********************************  End ContentsWrap  ********************************** -->
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<script>
+		$(function(){
+			$(document).on('click','#swal-delete-mus',function(){
+				var musCd = $(this).attr('data-musCd');
+			      const swalWithBootstrapButtons = swal.mixin({
+			          confirmButtonClass: 'btn btn-success',
+			          cancelButtonClass: 'btn btn-danger',
+			          buttonsStyling: false,
+			        });
+
+			        swalWithBootstrapButtons({
+			          title: '정말 삭제 하시겠습니까?',
+			          text: "삭제 클릭시 해당 정보는 복구 할 수 없습니다.",
+			          type: 'warning',
+			          showCancelButton: true,
+			          confirmButtonText: '네',
+			          cancelButtonText: '아니오',
+			          reverseButtons: false
+			        }).then((result) => {
+			          if (result.value) {
+			            swalWithBootstrapButtons(
+			              '삭제완료',
+			              '삭제되었습니다.',
+			              'success'
+			            )
+			            location.href = '/mus/musRemove?musCode=' + musCd;
+			          } else if (
+			            // Read more about handling dismissals
+			            result.dismiss === swal.DismissReason.cancel
+			          ) {
+			            swalWithBootstrapButtons(
+			              '취소',
+			              '삭제가 취소 되었습니다.',
+			              'error'
+			            )
+			          }
+			        });	
+			});
+			
+		});
+	</script>
+	<!-- delbtn -->
+	<script th:src="@{/js/sweetalert2/sweetalert2.min.js}"
+		aria-hidden="true"></script>
+	<script th:src="@{/js/sweetalert2/sweetalert2-custom.js}"
+		aria-hidden="true"></script>
+	<!-- datatables -->
+	<script th:src="@{/js/datatables/datatables.js}"></script>
+	<script th:src="@{/js/datatables/dataTables.buttons.min.js}"></script>
+	<script th:src="@{/js/datatables/buttons.flash.min.js}"></script>
+	<script th:src="@{/js/datatables/jszip.min.js}"></script>
+	<script th:src="@{/js/datatables/pdfmake.min.js}"></script>
+	<script th:src="@{/js/datatables/vfs_fonts.js}"></script>
+	<script th:src="@{/js/datatables/buttons.html5.min.js}"></script>
+	<script th:src="@{/js/datatables/buttons.print.min.js}"></script>
+	<!-- fixedHeader -->
+	<script th:src="@{/js/datatables/dataTables.fixedHeader.min.js}"></script>
+	<!-- dataTables select -->
+	<script th:src="@{/js/datatables/dataTables.select.min.js}"></script>
+	<!-- dataTables.fixedColumns.min -->
+	<script th:src="@{/js/datatables/dataTables.fixedColumns.min.js}"></script>
+	<!-- dataTables.rowGroup.min -->
+	<script th:src="@{/js/datatables/dataTables.rowGroup.min.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

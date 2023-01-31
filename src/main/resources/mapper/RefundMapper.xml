@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.RefundMapper">
+	
+	<!-- 환불신청 resultMap -->
+	
+	<resultMap type="RefundList" id="RefundListMap">
+		<id			column="refund_apply_code"		property="refApplyCode"/> 	<!-- 환불신청 코드 -->
+		<result		column="member_id"				property="memberId"/>		<!-- 환불신청 아이디 -->
+		<result		column="refund_rule_code"		property="refRuleCode"/>	<!-- 환불 규정 코드 -->
+		<result		column="room_pmt_code"			property="pmtCode"/>		<!-- 객실결제 코드 -->
+		<result		column="pmt_way_code"			property="pmtWayCode"/>		<!-- 결제방법 코드 -->
+		<result		column="refund_apply_reason"	property="refApplyReason"/>	<!-- 환불신청 사유 -->
+		<result		column="refund_apply_date"		property="refApplyDate"/>	<!-- 환불신청 날짜 -->
+	</resultMap>
+	
+	<!-- 환불승인 resultMap -->
+	
+	<resultMap type="RefundDetail" id="RefundDetailMap">
+		<id			column="refund_code"			property="refCode"/>		<!-- 결제환불정보 코드 -->
+		<result		column="member_id"				property="memberId"/>		<!-- 환불신청 아이디 -->
+		<result		column="refund_apply_code"		property="refApplyCode"/>	<!-- 환불신청 코드 -->
+		<result		column="refund_ack_date"		property="refAckDate"/>		<!-- 환불승인 날짜 -->
+	</resultMap>
+	
+	<select id="getRefundList" resultMap="RefundListMap">
+	/* 환불신청목록조회 */
+	SELECT
+		 ra.refund_apply_code
+		,ra.member_id
+		,ra.refund_rule_code
+		,ra.room_pmt_code
+		,ra.pmt_way_code
+		,ra.refund_apply_reason
+		,ra.refund_apply_date
+	FROM
+		tb_refund_apply AS ra
+		INNER JOIN 
+		tb_member AS m
+		ON 
+		m.member_id = ra.member_id
+		LEFT JOIN 
+		tb_pmt_way AS pw
+		ON 
+		pw.pmt_way_code = ra.pmt_way_code
+		LEFT JOIN 
+		tb_refund_rule AS ri
+		ON 
+		ri.refund_rule_code = ra.refund_rule_code
+		LEFT JOIN
+		tb_room_pmt AS d
+		ON 
+		d.room_pmt_code = ra.room_pmt_code
+	</select>
+	
+	
+	<select id="getRefundDetail" resultMap="RefundDetailMap">
+	/* 환불승인목록조회 */
+	SELECT
+		 i.refund_code
+		,i.member_id
+		,i.refund_apply_code
+		,i.refund_ack_date
+	FROM 
+		tb_refund_info AS i 
+		INNER JOIN 
+		tb_member AS m
+		ON 
+		m.member_id = i.member_id
+	</select>
+	
+
+</mapper>

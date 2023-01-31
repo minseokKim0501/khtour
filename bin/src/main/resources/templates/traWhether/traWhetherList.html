@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/default}">
+	<th:block layout:fragment="customTitle">
+		<title th:text="${title}"></title>
+	</th:block>
+	<th:block layout:fragment="contentsTitle">
+		<h1>Hello, Oxoury</h1>
+		<p>The best to you each morning.</p>
+	</th:block>
+	
+	<th:block layout:fragment="customContents">	
+		
+	</th:block>
+	<th:block layout:fragment="customBodyScript">
+		<!-- PRISM -->
+		<script th:src="@{/js/prism/prism.js}"></script>
+		<!-- custom -->
+		<script th:src="@{/js/custom.js}"></script>
+	</th:block>
+</html>

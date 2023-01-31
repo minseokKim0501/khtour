@@ -1,0 +1,10 @@
+@charset "UTF-8";
+@import url('style.css');
+@font-face {
+    font-family: 'title';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/GimpoGothicBold00.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+h1,h2,h3,h4,h5,h6,a{font-family:'title';color:#000;}
+a{font-weight:normal;}

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<div class="row justify-content-center">
+		<div class="col-12 col-la-12 col-xl-12">
+			<h2>여행 게시글 수정 페이지</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a
+						th:href="@{/recordBoard/recordBoardList}">여행 게시글 공유 리스트</a></li>
+					<li class="breadcrumb-item active" aria-current="page">여행 게시글 등록
+						페이지</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+	<!-- 페이지 타이틀 시작 -->
+</th:block>
+<th:block layout:fragment="customContents">
+<link th:href="@{https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/datedropper.css}" rel="stylesheet">
+<style>
+		/* datedrapper 버튼 색 */
+		.btn-outline-warning {
+		    color: #F44336 !important;
+		    background-color: #fff;
+		    background-image: none;
+		    border-color: #ed433e !important
+</style>
+	<div class="row justify-content-center">
+		<div class="col-12 col-la-10 col-xl-7">
+			<div class="card">
+				<div class="card-title">
+					<div class="card-title-left">
+						<h4 class="card-title-text">게시글 기본 정보</h4>
+					</div>
+				</div>
+				<div class="card-body">
+					<!-- 여행 게시글 수정 폼 시작 -->
+					<form id="modifyRecordBoardForm"
+						th:action="@{/recordBoard/recordBoardModify}" method="post">
+						<input type="hidden" class="form-control" id="planCode"
+							name="recordBoardCode" th:value="${recordBoard.recordBoardCode}">
+						
+						
+						<div class="form-group">
+							<label for="recordBoardName">게시글 제목</label> <input type="text"
+								class="form-control" placeholder="게시글 이름을 입력하세요."
+								id="recordBoardName" name="recordBoardName" th:value="${recordBoard.recordBoardName}">
+						</div>
+						<div class="form-group">
+							<label for="recordBoardSubName">게시글 부제목</label> <input type="text"
+								class="form-control" placeholder="게시글 이름을 입력하세요."
+								id="recordBoardSubName" name="recordBoardSubName" th:value="${recordBoard.recordBoardSubName}">
+						</div>
+						<div class="form-group">
+							<label for="content">게시글 내용</label>
+							<textarea class="form-control" rows="3" id="content" th:text="${recordBoard.content}"
+								name="content"></textarea>
+						</div>
+
+						<div class="form-group">
+							<label for="heritageCategory"> 여행 스타일 </label>
+								<div class="input-group">
+									<select class="custom-select" name="travelStyle" onchange="change(this.selectedIndex);" th:value="${recordBoard.travelStyle}"> 
+										<option th:selected="${recordBoard.travelStyle=='전체'}">:: 선택 :: </option>
+										<option th:selected="${recordBoard.travelStyle=='나홀로 여행'}">나홀로 여행</option>
+										<option th:selected="${recordBoard.travelStyle=='79친구'}">79친구</option>
+										<option th:selected="${recordBoard.travelStyle=='가족여행'}">가족여행</option>
+										<option th:selected="${recordBoard.travelStyle=='패키지여행'}">패키지여행</option>
+									</select>
+								</div>
+						</div>
+											<div class="form-group">
+							<label for="startDate"> 여행 시작 </label>
+							<div class="input-group mb-3">
+								<input id="startDate" type="text" class="form-control input-text">
+								<div class="input-group-append">
+									<button class="btn btn-outline-warning btn-lg" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="endDate"> 여행 종료</label>
+							<div class="input-group mb-3">
+								<input id="endDate" type="text" class="form-control input-text">
+								<div class="input-group-append">
+									<button class="btn btn-outline-warning btn-lg" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="form-group text-center">
+						<button type="submit" class="btn btn-primary">정보수정 완료	</button>
+						<a type="button" class="btn btn-danger"
+							th:href="@{/recordBoard/recordBoardListSt}">취소</a>
+						</div>	
+					</form>
+					<!-- 여행 게시글 수정 폼 종료 -->
+
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- bootstrap wizard-->
+	<script th:src="@{/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+	<script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+
+	<!--  datepicker  -->
+	<script th:src="@{/js/datepicker/daterangepicker.js}"></script>
+	<script th:src="@{/js/datepicker/bootstrap-timepicker.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+		$('#modifyRecordBoardBtn').click(function() {
+
+			var isSubmit = true;
+			var inputObj = $('#modifyRecordBoardForm').find('input');
+
+			$.each(inputObj, function() {
+				var inputId = $(this).attr('id');
+				var inputLabel = $('label[for="' + inputId + '"]').text();
+				var inputData = $(this).val();
+
+				// 사용자가 입력하지 않은 경우
+			});
+
+			if (isSubmit)
+				$('#modifyRecordBoardForm').submit();
+		});
+	</script>
+		<!-- 등록 버튼 자바스크립트 시작 -->
+	<script type="text/javascript" th:inline="javascript">
+		$('#addPlanBtn').click(function() {
+
+			var isSubmit = true;
+			var inputObj = $('#addPlanForm').find('input');
+
+			$.each(inputObj, function() {
+				var inputId = $(this).attr('id');
+				var inputLabel = $('label[for="' + inputId + '"]').text();
+				var inputData = $(this).val();
+
+				// 사용자가 입력하지 않은 경우
+			});
+
+			if (isSubmit)
+				$('#addPlanForm').submit();
+		});
+	</script>
+		<!-- 등록 버튼 자바스크립트 종료 -->
+	<script th:src="@{https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/datedropper.js}"></script>
+	<!-- 출발 날짜 datepciker 자바스크립트 시작 -->
+	<script>
+		$(document).ready(function() {
+
+			$("#startDate").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "m/d/Y",
+				lang : "en",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold'
+			});
+		});
+	</script>
+	<!-- 출발 날짜 datepciker 자바스크립트 종료 -->
+	<!-- 도착 날짜 datepciker 자바스크립트 시작 -->
+	<script>
+		$(document).ready(function() {
+
+			$("#endDate").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "m/d/Y",
+				lang : "en",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold'
+			});
+		});
+	</script>
+	<!-- 도착 날짜 datepciker 자바스크립트 종료 -->
+</th:block>
+</html>

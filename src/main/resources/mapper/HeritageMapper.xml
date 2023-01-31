@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.HeritageMapper">
+
+   <resultMap type="Heritage" id="heritageResultMap">
+      <id column="heritage_code"                property="heritageCode"/>            <!-- 문화재 코드 -->
+      <result column="member_id"                property="memberId"/>               <!-- 등록자 아이디 -->
+      <result column="heritage_name"             property="heritageName"/>            <!-- 문화재 명 -->
+      <result column="heritage_sub_name"          property="heritageSubName"/>         <!-- 문화재 한문명 -->
+      <result column="heritage_location"          property="heritageLocation"/>         <!-- 문화재 소재지 -->
+      <result column="heritage_era"             property="heritageEra"/>            <!-- 문화재 시대명 -->
+      <result column="heritage_designation"       property="heritageDesignation"/>      <!-- 문화재 지정일 -->
+      <result column="heritage_classification"    property="heritageClassification"/>      <!-- 문화재 분류 -->
+      <result column="file_path"                property="heritageImagePath"/>         <!-- 문화재 이미지 -->
+      <result column="heritage_detail"          property="heritageDetail"/>            <!-- 문화재 부가설명 -->
+      <result column="heritage_owner"          property="heritageOwner"/>            <!-- 문화재 소유자 -->
+      <result column="heritage_manager"          property="heritageManager"/>         <!-- 문화재 관리자 -->
+      <result column="heritage_category"          property="heritageCategory"/>         <!-- 문화재 중분류 -->
+      <result column="heritage_area"             property="heritageArea"/>            <!-- 문화재 수량/면적 -->
+   </resultMap> 
+   
+   <select id="fileInfoByFileIdx" resultType="FileDto">
+      SELECT
+          f.file_idx            AS fileIdx
+         ,f.file_new_name      AS fileNewName
+         ,f.file_original_name   AS fileOriginalName
+         ,f.file_path         AS filePath
+         ,f.file_size         AS fileSize
+      FROM
+         tb_heritage_detail AS h
+         LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         h.heritage_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f   
+         ON 
+         f.file_idx = fc.file_idx
+      WHERE
+         h.heritage_code = #{heritageCode};
+   </select>
+   
+   
+   <!-- 문화재 분류 목록 조회 SQL -->
+   <select id="getHeritageCategoryList" resultType="HeritageCategory">
+      SELECT
+          h.heritage_category_num      AS HeritageCategoryNum
+         ,h.heritage_category_name     AS HeritageCategoryName
+      FROM 
+         tb_heritage_category AS h;
+   </select>
+   
+   <!-- 문화재 항목 종류별 목록 조회 SQL -->
+   <select id="getHeritageByItem" resultMap="heritageResultMap">
+   SELECT
+	 h.heritage_code
+         ,h.member_id
+         ,h.heritage_name
+         ,h.heritage_sub_name     
+         ,h.heritage_location     
+         ,h.heritage_era
+         ,h.heritage_designation   
+         ,h.heritage_classification   
+         ,h.heritage_detail
+         ,h.heritage_owner
+         ,h.heritage_manager
+         ,h.heritage_category
+         ,h.heritage_area
+         ,f.file_path   
+	FROM
+		tb_heritage_detail AS h
+		INNER JOIN 
+         tb_member AS m
+         ON 
+         h.member_id = m.member_id
+         LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         h.heritage_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f
+         ON 
+         fc.file_idx = f.file_idx
+		WHERE
+		h.heritage_category IN
+		 <foreach item="item" collection="list"
+	      open="(" separator="," close=")">
+	        #{item}
+	 	 </foreach>
+	 	ORDER BY h.heritage_code;  
+   </select>
+   
+   
+   <!-- 문화재 목록 조회 SQL -->
+   <select id="getHeritageList"  resultMap="heritageResultMap">
+      SELECT
+         h.heritage_code
+         ,h.member_id
+         ,h.heritage_name
+         ,h.heritage_sub_name     
+         ,h.heritage_location     
+         ,h.heritage_era
+         ,h.heritage_designation   
+         ,h.heritage_classification   
+         ,h.heritage_detail
+         ,h.heritage_owner
+         ,h.heritage_manager
+         ,h.heritage_category
+         ,h.heritage_area
+         ,f.file_path   
+      FROM
+         tb_heritage_detail AS h
+         INNER JOIN 
+         tb_member AS m
+         ON 
+         h.member_id = m.member_id
+         LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         h.heritage_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f
+         ON 
+         fc.file_idx = f.file_idx
+      <trim prefix="WHERE" prefixOverrides="AND |OR ">
+         <if test="memberId != null and memberId != ''">
+            h.member_id = #{memberId}
+         </if>
+         <if test="searchKey != null and searchKey != '' and searchValue != ''">
+             AND ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+          </if>
+      </trim>
+      ORDER BY h.heritage_code;   
+   </select>
+   
+   <!-- 코드에 따른 문화재 조회 SQL -->
+   <select id="getHeritageByCode" parameterType="String" resultMap="heritageResultMap">
+      SELECT
+         h.heritage_code
+         ,h.member_id
+         ,h.heritage_name
+         ,h.heritage_sub_name     
+         ,h.heritage_location     
+         ,h.heritage_era
+         ,h.heritage_designation   
+         ,h.heritage_classification   
+         ,h.heritage_detail
+         ,h.heritage_owner
+         ,h.heritage_manager
+         ,h.heritage_category
+         ,h.heritage_area 
+         ,f.file_path   
+      FROM
+         tb_heritage_detail AS h
+         INNER JOIN 
+         tb_member AS m
+         ON 
+         h.member_id = m.member_id
+         LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         h.heritage_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f
+         ON 
+         fc.file_idx = f.file_idx
+      WHERE
+         heritage_code = #{heritageCode};
+   
+   </select>
+   
+   <!-- 문화재 등록 SQL -->
+   <insert id="addHeritage" parameterType="Heritage">
+      <selectKey resultType="string" keyProperty="heritageCode" order="BEFORE">
+         SELECT sf_new_heritage_code() as heritageCode
+      </selectKey>
+      INSERT INTO tb_heritage_detail
+      (   heritage_code
+         ,member_id
+         ,heritage_name
+         ,heritage_sub_name     
+         ,heritage_location     
+         ,heritage_era
+         ,heritage_designation   
+         ,heritage_classification   
+         ,heritage_detail
+         ,heritage_owner
+         ,heritage_manager
+         ,heritage_category
+         ,heritage_area     
+      ) VALUES (
+          #{heritageCode}
+         ,#{memberId}
+         ,#{heritageName}
+         ,#{heritageSubName}
+         ,#{heritageLocation}
+         ,#{heritageEra}
+         ,#{heritageDesignation}
+         ,#{heritageClassification}
+         ,#{heritageDetail}
+         ,#{heritageOwner}
+         ,#{heritageManager}
+         ,#{heritageCategory}
+         ,#{heritageArea}
+      );
+   
+   </insert>
+   
+   <!-- 문화재 명 중복 체크 -->
+   <select id="isHeritageNameCheck" parameterType="String" resultType="boolean">
+      SELECT
+         IF(COUNT(1) = 1, 0, 1)
+      FROM 
+         tb_heritage_detail AS h
+      WHERE 
+         h.heritage_name = #{heritageName};
+   </select>
+   
+   <!-- 문화재 수정 SQL -->
+      <update id="modifyHeritage" parameterType="Heritage">
+      UPDATE tb_heritage_detail
+      <trim prefix="SET" suffixOverrides=",">
+         <if test="heritageName != null and heritageName != ''">
+            heritage_name = #{heritageName},
+         </if>
+         <if test="heritageSubName != null and heritageSubName != ''">
+            heritage_sub_name = #{heritageSubName},
+         </if>
+         <if test="heritageLocation != null and heritageLocation != ''">
+            heritage_location = #{heritageLocation},
+         </if>
+         <if test="heritageEra != null and heritageEra != ''">
+            heritage_era = #{heritageEra},
+         </if>
+         <if test="heritageDesignation != null and heritageDesignation != ''">
+            heritage_designation = #{heritageDesignation},
+         </if>
+         <if test="heritageClassification != null and heritageClassification != ''">
+            heritage_classification = #{heritageClassification},
+         </if>         
+         <if test="heritageDetail != null and heritageDetail != ''">
+            heritage_detail = #{heritageDetail},
+         </if>      
+         <if test="heritageCategory != null and heritageCategory != ''">
+            heritage_category = #{heritageCategory},
+         </if>      
+         <if test="heritageManager != null and heritageManager != ''">
+            heritage_manager = #{heritageManager},
+         </if>      
+         <if test="heritageOwner != null and heritageOwner != ''">
+            heritage_owner = #{heritageOwner},
+         </if>      
+         <if test="heritageArea != null and heritageArea != ''">
+            heritage_area = #{heritageArea},
+         </if>      
+      </trim>
+      WHERE
+         heritage_code = #{heritageCode};
+   </update>
+   
+   <!-- 문화재 정보 삭제 SQL -->
+   <delete id="removeHeritage" parameterType="String">
+      DELETE
+      FROM
+         tb_heritage_detail
+      WHERE
+         heritage_code = #{heritageCode};
+   </delete>
+</mapper>

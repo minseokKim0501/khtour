@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>객실정보 등록</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">객실정보 등록</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<style>
+.form-group {
+	float: left;
+}
+
+.filebox input[type="file"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.filebox label {
+	display: inline-block;
+	padding: 0.7rem 0.75rem;
+	color: #53cad8;
+	font-size: inherit;
+	line-height: normal;
+	vertical-align: middle;
+	background-color: #f8f9fa;
+	cursor: pointer;
+	border: 1px solid #53cad8;
+	border-bottom-color: #53cad8;
+	border-radius: .25em;
+}
+
+/* named upload */
+.filebox .upload-name {
+	display: inline-block;
+	padding: 0.7em 3.75rem; /* label의 패딩값과 일치 */
+	font-size: inherit;
+	font-family: inherit;
+	line-height: normal;
+	vertical-align: middle;
+	background-color: #f5f5f5;
+	border: 1px solid #ebebeb;
+	border-bottom-color: #e2e2e2;
+	border-radius: .25em;
+	-webkit-appearance: none; /* 네이티브 외형 감추기 */
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.filebox input[type="file"] { /* 파일 필드 숨기기 */
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.filebox .upload-display { /* 이미지가 표시될 지역 */
+	margin-bottom: 5px;
+}
+
+@media ( min-width : 768px) {
+	.filebox .upload-display {
+		display: inline-block;
+		margin-right: 5px;
+		margin-bottom: 0;
+	}
+}
+
+.filebox .upload-thumb-wrap { /* 추가될 이미지를 감싸는 요소 */
+	display: inline-block;
+	width: 73px;
+	padding: 2px;
+	vertical-align: middle;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+.filebox .upload-display img { /* 추가될 이미지 */
+	display: block;
+	max-width: 100%;
+	width: 100% \9;
+	height: auto;
+}
+</style>
+
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/datepicker/daterangepicker.css}">
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="card-title">
+						<form id="addRoom"
+							th:action="@{/room/roomInsert}" method="post" enctype="multipart/form-data">
+							<div class="card-title-left">
+								<h4 class="card-title-text">등록 정보 입력</h4>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="ldgCode">숙박업소 이름</label> <input
+										type="text" class="form-control" th:value="${ldgName}" readonly="readonly">
+									<input type="hidden" class="form-control" name="ldgCode" th:value="${ldgCode}" readonly="readonly">
+								</div>
+								<label class="form-group col-12 col-md-12 col-lg-12"
+									style="margin-top: 0.5rem">객실 사진등록</label>
+								<div class="filebox preview-image col-12 col-md-12 col-lg-12"
+									style="margin-bottom: 1rem;">
+									<input class="upload-name" value="파일선택" disabled="disabled">
+									<label for="roomImg" style="margin-bottom: 0;">업로드</label> <input
+										type="file" id="roomImg" class="upload-hidden" name="roomImageFiles">
+								</div>
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="roomName">객실 이름</label> <input
+										type="text" class="form-control" name="roomName">
+								</div>
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="roomExplain">객실 상세설명</label> <input type="text"
+										class="form-control" name="roomExplain">
+								</div>
+								<div class="form-group col-12 col-md-4 col-lg-4">
+									<label for="roomPersonnel">객실 기준인원</label> 
+									<select class="form-control border border-secondary"
+										id="exampleFormControlSelect1" name="roomPersonnel">
+										<option value="기준 2명 / 최대 2명">기준 2명 / 최대 2명</option>
+										<option value="기준 2명 / 최대 3명">기준 2명 / 최대 3명</option>
+										<option value="기준 2명 / 최대 4명">기준 2명 / 최대 4명</option>
+										<option value="기준 2명 / 최대 6명">기준 2명 / 최대 6명</option>
+										<option value="기준 2명 / 최대 8명">기준 2명 / 최대 8명</option>
+										<option value="기준 2명 / 최대 10명">기준 2명 / 최대10명</option>
+										<option value="기준 2명 / 최대 12명">기준 2명 / 최대 12명</option>
+									</select>
+								</div>
+								<div class="form-group col-12 col-md-4 col-lg-4">
+									<label for="roomType">객실 타입</label> 
+									<select class="form-control border border-secondary"
+										id="exampleFormControlSelect1" name="roomType">
+										<option value="숙박">숙박</option>
+										<option value="대실">대실</option>
+									</select>
+								</div>
+								<div class="form-group col-12 col-md-4 col-lg-4">
+									<label for="roomCheckin">입실 시간</label> 
+									<select class="form-control border border-secondary"
+										id="exampleFormControlSelect1" name="roomCheckin">
+										<option value="13:00">13:00</option>
+										<option value="14:00">14:00</option>
+										<option value="15:00">15:00</option>
+										<option value="16:00">16:00</option>
+										<option value="17:00">17:00</option>
+										<option value="18:00">18:00</option>
+									</select>
+								</div>
+								<div class="form-group ccol-12 col-md-4 col-lg-4">
+									<label for="roomPrice">객실 가격</label> <input type="text"
+										class="form-control" name="roomPrice">
+								</div>
+								<div class="form-group col-12 col-md-4 col-lg-4">
+									<label for="roomDiscount">객실 할인율</label> <input type="text"
+										class="form-control" name="roomDiscount">
+								</div>
+								<div class="col-12" style="display: flex; justify-content: space-around;">
+									<button type="submit" class="btn btn-primary" id="addRoom">신규등록</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- summernote -->
+	<script th:src="@{js/summernote/summernote.min.js}"></script>
+	<!-- summernote -->
+	<script th:src="@{js/simplemde/simplemde.min.js}"></script>
+	<script th:src="@{js/simplemde/simplemde.js}"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+	<script th:src="@{js/dropzone/dropzone.min.js}"></script>
+	<script th:src="@{/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+	<script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+	<script>
+		$(document).ready(function() {
+			var fileTarget = $('.filebox .upload-hidden');
+
+			fileTarget.on('change', function() { // 값이 변경되면
+			if (window.FileReader) { // modern browser 
+				var filename = $(this)[0].files[0].name;
+			} else { // old IE 
+				var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출 
+			} // 추출한 파일명 삽입 
+				$(this).siblings('.upload-name').val(filename);
+				});
+			});
+		//preview image 
+		var imgTarget = $('.preview-image .upload-hidden');
+
+		imgTarget.on('change',function() {
+			var parent = $(this).parent();parent.children('.upload-display').remove();
+
+			if (window.FileReader) {//image 파일만 
+			if (!$(this)[0].files[0].type.match(/image\//))
+			return;
+
+			var reader = new FileReader();
+			reader.onload = function(e) {
+			var src = e.target.result;
+				parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img src="'+src+'" class="upload-thumb"></div></div>');
+			}
+				reader.readAsDataURL($(this)[0].files[0]);
+			} else {
+				$(this)[0].select();
+				$(this)[0].blur();
+				var imgSrc = document.selection.createRange().text;
+					parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb"></div></div>');
+
+				var img = $(this).siblings('.upload-display').find('img');
+					img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+ imgSrc + "\")";
+				}
+			});
+	</script>
+
+</th:block>
+</html>

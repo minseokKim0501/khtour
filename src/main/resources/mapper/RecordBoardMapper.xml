@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.RecordBoardMapper">
+	<!-- 여행 기록 resultMap -->
+	<resultMap type="RecordBoard" id="recordBoardResultMap">
+		<id column="record_board_code" 			property="recordBoardCode"/>				<!-- 여행게시글 코드 -->
+		<result column="member_id" 				property="memberId"/>						<!-- 등록자 아이디 -->										
+		<result column="record_board_name" 		property="recordBoardName"/>				<!-- 여행게시글 이름 -->
+		<result column="record_board_sub_name" 	property="recordBoardSubName"/>				<!-- 여행게시글 서브 이름 -->
+		<result column="content" 				property="content"/>						<!-- 여행게시글 내용 -->
+		<result column="plan_status_code"		property="planStatusCode"/>					<!-- 여행 상태 -->
+		<result column="file_path" 				property="recordBoardImagePath"/>			<!-- 여행 이미지 -->
+		<result column="start_date"				property="startDate"/>						<!-- 여행 출발일 -->
+		<result column="end_date" 				property="endDate"/>						<!-- 여행 종료일 -->
+		<result column="reg_date" 				property="regDate"/>						<!-- 게시글 등록 일자 -->
+		<result column="feed_count" 			property="feedCount"/>						<!-- 피드 개수 -->
+		<result column="views" 					property="views"/>							<!-- 조회수 -->					
+		<result column="travel_style" 			property="travelStyle"/>					<!-- 여행 스타일 -->	
+		<result column="comment_count" 			property="commentCount"/>					<!-- 댓글 개수 -->	
+		<association property="member" javaType="Member">
+			<id column ="member_id"				property="memberId"></id>
+			<result column="member_name" 		property="memberName"/>
+			<result column="member_user_name" 	property="memberUserName"/>
+			<result column="gender" 			property="memberGender"/>
+			<result column="birthday" 			property="memberBirthday"/>
+			<result column="email"				property="memberEmail"/>
+			<result column="reg_time"			property="memberRegTime"/>
+		</association>
+		<association property="planStatus"	javaType="PlanStatus">
+			<id column="plan_status_code" property="planStatusCode"/>				
+			<result column="plan_status_name" property="planStatusName"/>																	
+			<result column="reg_date" property="regDate"/>						
+		</association>		
+	</resultMap> 
+	
+	<!-- 여행 상태 resultMap -->
+	<resultMap type="PlanStatus" id="PlanStatusResultMap">
+		<id column="plan_status_code" property="planStatusCode"/>				
+		<result column="plan_status_name" property="planStatusName"/>																	
+		<result column="reg_date" property="regDate"/>																					
+	</resultMap>
+	
+	<!-- 여행게시글 댓글 resultMap -->
+	<resultMap type="RecordBoardComment" id="CommentResultMap">
+		<id column="comment_num" 				property="commentNum"/>			
+		<result column="record_board_code" 		property="recordBoardCode"/>	
+		<result column="content" 				property="content"/>			
+		<result column="member_id" 				property="memberId"/>			
+		<result column="reg_date" 				property="regDate"/>		
+	</resultMap> 	
+	
+	<!-- 피드 resultMap -->
+	<resultMap type="Feed" id="feedResultMap">
+		<id column="feed_code" 					property="feedCode"/>			<!-- 문화재 코드 -->
+		<result column="record_board_code" 		property="recordBoardCode"/>	<!-- 문화재 명 -->
+		<result column="feed_title" 			property="feedTitle"/>			<!-- 문화재 한문명 -->
+		<result column="feed_content" 			property="feedContent"/>		<!-- 문화재 시대명 -->
+		<result column="file_path" 				property="feedImagePath"/>		<!-- 피드 이미지 -->
+		<result column="feed_time" 				property="feedTime"/>			<!-- 문화재 지정일 -->
+		<result column="feed_reg_date"			property="regDate"/>			<!-- 문화재 분류 -->
+		<result column="feed_plan_days" 		property="feedPlanDays"/>		<!-- 문화재 이미지 -->
+	</resultMap>
+	 	
+	<select id="fileInfoByFileIdx" resultType="FileDto">
+      SELECT
+          f.file_idx            AS fileIdx
+         ,f.file_new_name      AS fileNewName
+         ,f.file_original_name   AS fileOriginalName
+         ,f.file_path         AS filePath
+         ,f.file_size         AS fileSize
+      FROM
+         tb_record_board AS r
+         LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         r.record_board_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f   
+         ON 
+         f.file_idx = fc.file_idx
+      WHERE
+         r.record_board_code = #{recordBoardCode};
+   </select> 	
+   
+	<select id="fileInfoByFileIdx2" resultType="FileDto">
+      SELECT
+          f.file_idx            AS fileIdx
+         ,f.file_new_name      AS fileNewName
+         ,f.file_original_name   AS fileOriginalName
+         ,f.file_path         AS filePath
+         ,f.file_size         AS fileSize
+      FROM
+         tb_record_board_feed AS fe
+         LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         fe.feed_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f   
+         ON 
+         f.file_idx = fc.file_idx
+      WHERE
+         fe.feed_code = #{feedCode};
+   </select> 	
+
+	<!-- 여행상태 목록 조회 SQL -->
+	<select id="getPlanStatusList"  resultMap="PlanStatusResultMap">
+		SELECT
+		  s.plan_status_code
+		   ,s.plan_status_name
+		   ,s.reg_date
+		FROM
+		  tb_tra_status AS s;
+	</select>
+	
+	<!--  여행 상태별 검색 조회 SQL -->
+	<select id="getRecordBoardByPlanStatus"  resultMap="recordBoardResultMap">
+		SELECT
+			 r.record_board_code,
+			 r.member_id,
+			 r.travel_style,
+			 r.plan_status_code,
+			 r.record_board_name,
+			 r.record_board_sub_name,
+			 r.content,
+			 r.start_date,
+			 r.end_date,
+			 r.reg_date,
+			 r.feed_count,
+			 r.views,
+			 r.comment_count,
+			 m.member_user_name,
+			 p.plan_status_name,
+			 f.file_path    
+			From
+			 tb_record_board AS r
+			INNER join
+			 tb_member AS m
+			ON 
+			 r.member_id = m.member_id
+			INNER join
+			 tb_tra_status AS p
+			ON
+			 r.plan_status_code = p.plan_status_code
+			LEFT JOIN 
+		    tb_file_control AS fc
+		    ON 
+		    r.record_board_code = fc.reference_code
+		    LEFT JOIN 
+		    tb_file AS f
+		    ON 
+		    fc.file_idx = f.file_idx
+		where
+			 	p.plan_status_name = #{planStatusName};
+	</select>
+	<!--  여행 스타일별 검색 조회 SQL -->
+	<select id="getRecordBoardByTravelStyle"  resultMap="recordBoardResultMap">
+	SELECT
+		 r.record_board_code,
+		 r.member_id,
+		 r.travel_style,
+		 r.plan_status_code,
+		 r.record_board_name,
+		 r.record_board_sub_name,
+		 r.content,
+		 r.start_date,
+		 r.end_date,
+		 r.reg_date,
+		 r.feed_count,
+		 r.views,
+		 r.comment_count,
+		 p.plan_status_name,
+		 m.member_user_name,  
+		 f.file_path     
+	 From
+		 tb_record_board AS r
+		INNER join
+		 tb_member AS m
+	 ON 
+		 r.member_id = m.member_id
+		  LEFT JOIN 
+		   tb_file_control AS fc
+		   ON 
+		   r.record_board_code = fc.reference_code
+		   INNER join
+			 tb_tra_status AS p
+			ON
+			 r.plan_status_code = p.plan_status_code
+		   LEFT JOIN 
+		   tb_file AS f
+		   ON 
+		   fc.file_idx = f.file_idx
+		where
+		  r.travel_style = #{travelStyle}
+   </select>
+	
+	
+	
+	
+	<!-- 여행상태 목록 조회 SQL -->
+	<select id="getPlanStatusByCode"  resultMap="PlanStatusResultMap">
+		SELECT
+		  s.plan_status_code
+		   ,s.plan_status_name
+		   ,s.reg_date
+		FROM
+		   tb_tra_status AS s
+		WHERE
+		  s.plan_status_code = #{planStatusCode};
+	</select>
+	
+	<!-- 여행게시글 목록 조회 SQL -->
+	<select id="getRecordBoardList"  resultMap="recordBoardResultMap">
+		SELECT
+		  r.record_board_code
+		   ,r.member_id
+		   ,r.record_board_name
+		   ,r.record_board_sub_name
+		   ,r.content
+		   ,r.plan_status_code    
+		   ,r.start_date   
+		   ,r.end_date
+		   ,r.reg_date    
+		   ,r.feed_count    
+		   ,r.views
+		   ,r.comment_count
+		   ,r.travel_style 
+		   ,f.file_path
+		   ,m.member_user_name     
+		FROM
+		   tb_record_board AS r
+		   INNER JOIN 
+		   tb_member AS m
+		   ON 
+		   r.member_id = m.member_id
+		   LEFT JOIN 
+		   tb_file_control AS fc
+		   ON 
+		   r.record_board_code = fc.reference_code
+		   LEFT JOIN 
+		   tb_file AS f
+		   ON 
+		   fc.file_idx = f.file_idx
+		   <trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="memberId != null and memberId != ''">
+				h.member_id = #{memberId}
+			</if>
+			<if test="searchKey != null and searchKey != '' and searchValue != ''">
+		 		AND ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+		 	</if>
+		</trim>
+		ORDER BY r.record_board_code;	
+	</select>
+	
+	<!-- 코드에 따른 여행게시글 조회 SQL -->
+	<select id="getRecordBoardByCode" parameterType="String" resultMap="recordBoardResultMap">
+		SELECT
+		    r.record_board_code
+		   ,r.member_id
+		   ,r.record_board_name
+		   ,r.record_board_sub_name
+		   ,r.content
+		   ,r.plan_status_code    
+		   ,r.start_date   
+		   ,r.end_date
+		   ,r.reg_date    
+		   ,r.feed_count    
+		   ,r.views
+		   ,r.comment_count
+		   ,r.travel_style    
+		   ,f.file_path
+		   ,m.member_name
+		   ,m.member_user_name
+		   ,m.gender
+		   ,m.birthday
+		   ,m.email  
+	      FROM
+	         tb_record_board AS r
+	         INNER JOIN 
+	         tb_member AS m
+	         ON 
+	         r.member_id = m.member_id
+	         LEFT JOIN 
+	         tb_file_control AS fc
+	         ON 
+	         r.record_board_code = fc.reference_code
+	         LEFT JOIN 
+	         tb_file AS f
+	         ON 
+	         fc.file_idx = f.file_idx
+	      WHERE
+	         record_board_code = #{recordBoardCode};
+	   
+	</select>
+	
+	<!-- 코드에 따른 댓글 조회 SQL -->
+	<select id="getCommentdByCode" parameterType="String" resultMap="CommentResultMap">
+		SELECT
+			 c.comment_num
+			,c.record_board_code
+			,c.content
+			,c.member_id
+			,reg_date  
+		FROM
+		 tb_record_board_comment AS c
+		WHERE
+			comment_num = #{commentNum};
+	
+	</select>
+	
+	<select id="getTopRecordBoardList"  resultMap="recordBoardResultMap">
+		SELECT
+		    r.record_board_code
+		   ,r.member_id
+		   ,r.record_board_name
+		   ,r.record_board_sub_name
+		   ,r.content
+		   ,r.plan_status_code    
+		   ,r.start_date   
+		   ,r.end_date
+		   ,r.reg_date    
+		   ,r.feed_count    
+		   ,r.views
+		   ,r.comment_count
+		   ,r.travel_style
+			,c.file_idx
+			,f.file_path    
+		FROM
+		 tb_record_board AS r
+		 INNER join
+		 tb_file_control AS c
+		 ON 
+		 r.record_board_code = c.reference_code
+		 INNER JOIN 
+		 tb_file AS f
+		 ON 
+		 f.file_idx = c.file_idx
+		Order BY 
+			r.views DESC
+			LIMIT 4;	
+	</select>
+	
+	<!-- 여행게시글 등록 SQL -->
+	<insert id="addRecordBoard" parameterType="RecordBoard">
+		<selectKey resultType="string" keyProperty="recordBoardCode" order="BEFORE">
+			SELECT sf_new_record_board_code() as recordBoardCode
+		</selectKey>
+		INSERT INTO  tb_record_board
+		(   record_board_code
+		   ,member_id
+		   ,record_board_name
+		   ,record_board_sub_name
+		   ,content  
+		   ,plan_status_code    
+		   ,start_date   
+		   ,end_date
+		   ,reg_date    
+		   ,feed_count    
+		   ,views
+		   ,travel_style    
+		) VALUES (
+		    #{recordBoardCode}
+		   ,#{memberId}
+		   ,#{recordBoardName}
+		   ,#{recordBoardSubName}
+		   ,#{content}
+		   ,#{planStatusCode}
+		   ,#{startDate}
+		   ,#{endDate}
+		   ,CURDATE()
+		   ,#{feedCount}
+		   ,#{views}
+		   ,#{travelStyle}
+		);
+	
+	</insert>
+	
+	
+	<!-- 여행게시글 조회수 업데이트 SQL -->
+	<update id="updateViewsByCode" parameterType="String">
+	UPDATE tb_record_board
+	SET
+		views = views+1
+	WHERE
+		record_board_code = #{recordBoardCode};
+	</update>
+	
+	<!-- 게시글 댓글 개수 +업데이트 SQL -->
+	<update id="addCommentCount" parameterType="String">
+      UPDATE tb_record_board
+         SET
+         comment_count = comment_count + 1   
+             
+      WHERE
+         record_board_code = #{recordBoardCode};   
+    </update>
+	
+	<!-- 게시글 댓글 개수 -업데이트 SQL -->
+	<update id="subtractCommentCount" parameterType="String">
+      UPDATE tb_record_board
+         SET
+        comment_count = comment_count - 1   
+             
+      WHERE
+         record_board_code = #{recordBoardCode};   
+   </update>
+	
+	<!-- 게시글 피드 개수 +업데이트 SQL -->
+	<update id="addFeedCount" parameterType="String">
+      UPDATE tb_record_board
+         SET
+         	feed_count = feed_count + 1   
+             
+      WHERE
+         record_board_code = #{recordBoardCode};   
+    </update>
+	
+	<!-- 게시글 피드 개수 -업데이트 SQL -->
+	<update id="subtractFeedCount" parameterType="String">
+      UPDATE tb_record_board
+         SET
+        feed_count = feed_count - 1   
+             
+      WHERE
+         record_board_code = #{recordBoardCode};   
+   </update>
+   
+	<!-- 여행게시글에 피드갯수 구하는 SQL -->
+	<select id="getrecordBoardByfeedCount" parameterType="String" resultType="string">
+	SELECT
+	COUNT(*)
+	FROM
+		tb_record_board AS r
+	INNER join
+		tb_record_board_feed AS f
+	on
+		r.record_board_code = f.record_board_code
+	WHERE 
+		r.record_board_code = #{recordBoardCode};
+	</select>
+	
+	<!-- 여행 게시글 정보 수정 SQL -->
+	<update id="modifyRecordBoard" parameterType="RecordBoard">
+		UPDATE tb_record_board
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="recordBoardName != null and recordBoardName != ''">
+				record_board_name = #{recordBoardName},
+			</if>
+			<if test="recordBoardSubName != null and recordBoardSubName != ''">
+				record_board_sub_name = #{recordBoardSubName},
+			</if>
+			<if test="content != null and content != ''">
+				content = #{content},
+			</if>
+			<if test="planStatusCode != null and planStatusCode != ''">
+				plan_status_code = #{planStatusCode},
+			</if>
+			<if test="startDate != null and startDate != ''">
+				start_date = #{startDate},
+			</if>
+			<if test="endDate != null and endDate != ''">
+				end_date = #{endDate},
+			</if>		
+			<if test="regDate != null and regDate != ''">
+				reg_date = #{regDate},
+			</if>				
+			<if test="feedCount != null and feedCount != ''">
+				feed_count = #{feedCount},
+			</if>				
+			<if test="views != null and views != ''">
+				views = #{views},
+			</if>				
+			<if test="travelStyle != null and travelStyle != ''">
+				travel_style = #{travelStyle},
+			</if>				
+		</trim>
+		WHERE
+			record_board_code = #{recordBoardCode};
+	</update>
+	
+	<!-- 여행게시글 정보 삭제 SQL -->
+	<delete id="removeRecordBoard" parameterType="String">
+		DELETE
+		FROM
+			tb_record_board
+		WHERE
+			record_board_code = #{recordBoardCode};
+	</delete>
+	
+	<!-- 댓글  정보 삭제 SQL -->
+	<delete id="removeRecordBoardComment" parameterType="String">
+		DELETE
+		FROM
+			tb_record_board_comment
+		WHERE
+			comment_num = #{commentNum};
+	</delete>
+		
+	<!-- 게시글코드에 따른 피드 삭제 SQL -->
+	<delete id="removeFeedByrCode" parameterType="String">
+		DELETE 
+			f
+		FROM
+			tb_record_board AS r
+			INNER join
+			tb_record_board_feed AS f
+			on
+			r.record_board_code = f.record_board_code
+		where
+			r.record_board_code = #{recordBoardCode};
+	</delete>
+	
+	<!-- 게시글코드에 따른 댓글 삭제 SQL -->
+	<delete id="removeCommentByrCode" parameterType="String">
+		DELETE 
+			c
+		FROM
+			tb_record_board AS r
+			INNER join
+			tb_record_board_comment AS c
+			on
+			r.record_board_code = c.record_board_code
+		where
+			r.record_board_code = #{recordBoardCode};
+	</delete>
+	
+	
+   <!-- 피드 목록 조회 SQL -->
+   <select id="getFeedListByRecordBoardCode" parameterType="String" resultMap="feedResultMap">
+      SELECT
+        f.feed_code
+         ,f.record_board_code
+         ,f.feed_title
+         ,f.feed_content  
+         ,f.feed_time    
+         ,f.feed_reg_date
+         ,f.feed_plan_days
+         ,fi.file_path
+		 ,fi.file_idx        
+      FROM
+        tb_record_board_feed AS f
+		   LEFT JOIN 
+		   tb_file_control AS fc
+		   ON 
+		   f.feed_code = fc.reference_code
+		   LEFT JOIN 
+		   tb_file AS fi
+		   ON 
+		   fc.file_idx = fi.file_idx
+      where
+      	f.record_board_code = #{recordBoardCode};
+   </select>
+   
+ <!-- 피드 등록 SQL -->
+   <insert id="addFeed" parameterType="Feed">
+   	  <selectKey resultType="string" keyProperty="feedCode" order="BEFORE">
+			SELECT sf_new_record_board_feed_code() as feedCode
+	  </selectKey>
+      INSERT INTO tb_record_board_feed
+      (   feed_code
+         ,record_board_code
+         ,feed_title
+         ,feed_content 
+         ,feed_time
+         ,feed_reg_date   
+         ,feed_plan_days   
+      ) VALUES (
+          #{feedCode}
+         ,#{recordBoardCode}
+         ,#{feedTitle}
+         ,#{feedContent}
+         ,#{feedTime}
+         ,CURDATE()
+         ,#{feedPlanDays}
+      );
+   </insert>
+   
+   <!-- 피드 정보 수정 SQL -->
+	<update id="modifyFeed" parameterType="Feed">
+		UPDATE tb_record_board_feed
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="feedTitle != null and feedTitle != ''">
+				feed_title = #{feedTitle},
+			</if>
+			<if test="feedContent != null and feedContent != ''">
+				feed_content = #{feedContent},
+			</if>
+			<if test="feedTime != null and feedTime != ''">
+				feed_time = #{feedTime},
+			</if>
+			<if test="feedPlanDays != null and feedPlanDays != ''">
+				feed_plan_days = #{feedPlanDays},
+			</if>
+		</trim>
+		WHERE
+			feed_code = #{feedCode};
+	</update>
+	
+	<!-- 피드 정보 삭제 SQL -->
+	<delete id="removeFeed" parameterType="Feed">
+		DELETE
+		FROM
+			tb_record_board_feed
+		WHERE
+			feed_code = #{feedCode};
+	</delete>
+	
+	<!-- 게시글 댓글 목록 조회 SQL -->
+	<select id="getCommentListByrCode"  resultMap="CommentResultMap">
+		SELECT
+		  c.comment_num
+		   ,c.record_board_code
+		   ,c.content
+		   ,c.member_id
+		   ,c.reg_date
+		FROM
+		  tb_record_board_comment AS c
+		WHERE
+		 	c.record_board_code = #{recordBoardCode};
+	</select>
+
+	<!-- 게시글 댓글 등록 SQL -->
+	<insert id="addComment" parameterType="RecordBoardComment">
+		INSERT INTO tb_record_board_comment
+		(   comment_num
+		   ,record_board_code
+		   ,content
+		   ,member_id  
+		   ,reg_date      
+		) VALUES (
+		    sf_new_feed_comment_code()
+		   ,#{recordBoardCode}
+		   ,#{content}
+		   ,#{memberId}
+		   ,Now()
+		);
+	</insert>
+	
+	
+</mapper>

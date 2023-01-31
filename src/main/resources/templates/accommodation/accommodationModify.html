@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>숙박업소 정보 수정</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">숙박업소 정보 수정</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customContents">
+	<style>
+.form-group {
+	float: left;
+}
+
+.filebox input[type="file"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.filebox label {
+	display: inline-block;
+	padding: 0.7rem 0.75rem;
+	color: #53cad8;
+	font-size: inherit;
+	line-height: normal;
+	vertical-align: middle;
+	background-color: #f8f9fa;
+	cursor: pointer;
+	border: 1px solid #53cad8;
+	border-bottom-color: #53cad8;
+	border-radius: .25em;
+}
+
+/* named upload */
+.filebox .upload-name {
+	display: inline-block;
+	padding: 0.7em 3.75rem; /* label의 패딩값과 일치 */
+	font-size: inherit;
+	font-family: inherit;
+	line-height: normal;
+	vertical-align: middle;
+	background-color: #f5f5f5;
+	border: 1px solid #ebebeb;
+	border-bottom-color: #e2e2e2;
+	border-radius: .25em;
+	-webkit-appearance: none; /* 네이티브 외형 감추기 */
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.filebox input[type="file"] { /* 파일 필드 숨기기 */
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.filebox .upload-display { /* 이미지가 표시될 지역 */
+	margin-bottom: 5px;
+}
+
+@media ( min-width : 768px) {
+	.filebox .upload-display {
+		display: inline-block;
+		margin-right: 5px;
+		margin-bottom: 0;
+	}
+}
+
+.filebox .upload-thumb-wrap { /* 추가될 이미지를 감싸는 요소 */
+	display: inline-block;
+	width: 73px;
+	padding: 2px;
+	vertical-align: middle;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+.filebox .upload-display img { /* 추가될 이미지 */
+	display: block;
+	max-width: 100%;
+	width: 100% \9;
+	height: auto;
+}
+</style>
+
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/datepicker/daterangepicker.css}">
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="card-title">
+						<form id="addaccommodationModify"
+							th:action="@{/accommodation/modifyAccommodation}" method="post" enctype="multipart/form-data">
+							<div class="card-title-left">
+								<h4 class="card-title-text">등록 정보 입력</h4>
+								<input type="hidden" class="form-control" name="ldgCode"
+									th:value="${accommodation.ldgCode}">
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="ldgName">숙박업소 명</label> <input type="text"
+										class="form-control" name="ldgName"
+										th:value="${accommodation.ldgName}">
+								</div>
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="ldgType">숙박시설 종류 선택</label> 
+									<select class="form-control border border-secondary"
+										id="exampleFormControlSelect1" name="ldgType" th:value="${accommodation.ldgType}">
+										<option value="5성급호텔">5성급호텔</option>
+										<option value="4성급호텔">4성급호텔</option>
+										<option value="호텔">호텔</option>
+										<option value="비지니스호텔">비지니스호텔</option>
+										<option value="펜션">펜션</option>
+										<option value="게스트하우스">게스트하우스</option>
+										<option value="캠핑장">캥핑장</option>
+										<option value="모텔">모텔</option>
+									</select>
+								</div>
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="businessNumber">사업자번호</label> <input type="text"
+										class="form-control" name="businessNumber"
+										th:value="${accommodation.businessNumber}">
+								</div>
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="ldgTel">전화번호</label> <input type="text"
+										class="form-control" name="ldgTel"
+										th:value="${accommodation.ldgTel}">
+								</div>
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="ldgPhone">휴대폰번호</label> <input type="text"
+										class="form-control" name="ldgPhone"
+										th:value="${accommodation.ldgPhone}">
+								</div>
+								<div class="form-group col-12 col-md-12 col-lg-12"
+									style="margin: 0;">
+									<label for="exampleInputEmail1">우편번호</label>
+									<div class="input-group mb-3">
+										<input name="zip" type="text" class="form-control"
+											aria-label="Recipient's username"
+											aria-describedby="button-addon">
+										<button class="btn btn-primary" onclick="openZipSearch()"
+											type="button">검색</button>
+									</div>
+								</div>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="ldgAddr">주소</label> <input type="text"
+										class="form-control" name="ldgAddr" 
+										th:value="${accommodation.ldgAddr}">
+								</div>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="ldgldgDetailAddr">상세주소</label> <input type="text"
+										class="form-control" name="ldgDetailAddr"
+										th:value="${accommodation.ldgDetailAddr}">
+								</div>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="ldgEmail">이메일</label> <input type="text"
+										class="form-control" name="ldgEmail"
+										th:value="${accommodation.ldgEmail}">
+								</div>
+
+								<label class="form-group col-12 col-md-12 col-lg-12"
+									style="margin-bottom: 6.5px;">홈페이지</label>
+								<div class="input-group mb-3 col-12 col-md-12 col-lg-12">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="ldgEmail">https://</span>
+									</div>
+									<input type="text" class="form-control" name="ldgHomepage"
+										aria-describedby="ldgEmail"
+										th:value="${accommodation.ldgHomepage}">
+								</div>
+								<label class="form-group col-12 col-md-12 col-lg-12"
+									style="margin-top: 0.5rem">숙박업체 대표사진등록</label>
+								<div class="filebox preview-image col-12 col-md-12 col-lg-12"
+									style="margin-bottom: 1rem;">
+									<input class="upload-name" value="파일선택" disabled="disabled">
+									<label for="ldgImg" style="margin-bottom: 0;">업로드</label> <input
+										type="file" id="ldgImg" class="upload-hidden" name="accommodationImageFiles">
+								</div>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="accommodationExplanin">숙박업체 상세 설명</label>
+									<input class="form-control" id="ldgExplain1"
+										name="ldgExplain1" th:value="${accommodation.ldgExplain1}">
+								</div>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="accommodationExplanin">숙박업체 상세 설명</label>
+									<input class="form-control" id="ldgExplain2"
+										name="ldgExplain2" th:value="${accommodation.ldgExplain2}">
+								</div>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="accommodationExplanin">숙박업체 상세 설명</label>
+									<input class="form-control" id="ldgExplain3"
+										name="ldgExplain3" th:value="${accommodation.ldgExplain3}">
+								</div>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="accommodationExplanin">숙박업체 상세 설명</label>
+									<input class="form-control" id="ldgExplain4"
+										name="ldgExplain4" th:value="${accommodation.ldgExplain4}">
+								</div>
+								<div class="col-2" style="display: inline-block;">
+									<button type="submit" class="btn btn-primary">수정완료</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- summernote -->
+	<script th:src="@{js/summernote/summernote.min.js}"></script>
+	<!-- summernote -->
+	<script th:src="@{js/simplemde/simplemde.min.js}"></script>
+	<script th:src="@{js/simplemde/simplemde.js}"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+	<script th:src="@{js/dropzone/dropzone.min.js}"></script>
+	<script th:src="@{/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+	<script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+	<script
+		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script type="text/javascript">
+		function openZipSearch() {
+			new daum.Postcode({
+				oncomplete : function(data) {
+					$('[name=zip]').val(data.zonecode); // 우편번호 (5자리)
+					$('[name=ldgAddr]').val(data.address);
+					$('[name=ldgldgDetailAddr]').val(data.buildingName);
+				}
+			}).open();
+		}
+	</script>
+	<script>
+		$(document).ready(function() {
+			var fileTarget = $('.filebox .upload-hidden');
+
+			fileTarget.on('change', function() { // 값이 변경되면
+			if (window.FileReader) { // modern browser 
+				var filename = $(this)[0].files[0].name;
+			} else { // old IE 
+				var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출 
+			} // 추출한 파일명 삽입 
+				$(this).siblings('.upload-name').val(filename);
+				});
+			});
+		//preview image 
+		var imgTarget = $('.preview-image .upload-hidden');
+
+		imgTarget.on('change',function() {
+			var parent = $(this).parent();parent.children('.upload-display').remove();
+
+			if (window.FileReader) {//image 파일만 
+			if (!$(this)[0].files[0].type.match(/image\//))
+			return;
+
+			var reader = new FileReader();
+			reader.onload = function(e) {
+			var src = e.target.result;
+				parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img src="'+src+'" class="upload-thumb"></div></div>');
+			}
+				reader.readAsDataURL($(this)[0].files[0]);
+			} else {
+				$(this)[0].select();
+				$(this)[0].blur();
+				var imgSrc = document.selection.createRange().text;
+					parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb"></div></div>');
+
+				var img = $(this).siblings('.upload-display').find('img');
+					img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+ imgSrc + "\")";
+				}
+			});
+	</script>
+
+</th:block>

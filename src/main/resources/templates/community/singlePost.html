@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block th:fragment="singlePost">
+			<div class="card-group mb-4" th:if="${not #lists.isEmpty(postList)}" th:each="p: ${postList}">
+
+						
+						<div class="col-sm-1 card bg-primary pl-0 pr-0">
+							<div class="card-body pl-0 pr-0 pt-5">
+								<a href="#"  onclick="return false;" class="upVote" th:data-postCode="${p.postCode}"> <i th:if="${p.likeOrDislike != 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-white pb-5"></i><i th:if="${p.likeOrDislike == 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-success pb-5"></i></a>
+								<p id="resultCnt" class="card-text text-white text-center mb-0 pb-0">[[${p.resultCnt}]]</p>
+								<p class="card-text text-white text-center mt-0 pt-0 pb-5">좋아요</p>
+								<a href="#!" onclick="return false;" class="downVote" th:data-postCode="${p.postCode}"> <i th:if="${p.likeOrDislike != 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-white"></i><i th:if="${p.likeOrDislike == 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i></a>
+							</div>
+						</div>
+						<div class="col-sm-11 card">
+							<div class="card-body">
+								<p>작성자 : [[${p.memberId}]]	</p>
+								<div  th:if="${not #strings.isEmpty(p.CommTag)}">
+									<button th:class="'btn active btn-sm pt-1 pb-1 pull-left mr-2 btn-'+${p.CommTag.getTagColor()}" th:text="${p.CommTag.getTagName()}"></button>
+								</div>
+								<h5 class="card-title mt-1" th:text="${p.title}"></h5>
+								<p class="card-text" th:text="${p.mainText}"></p>
+								
+								<div  th:if="${not #strings.isEmpty(p.pictureLink)}">
+									<div th:id="carouselExampleControls" class="carousel slide" data-ride="carousel"  >
+									  <div class="carousel-inner">
+									    <div class="carousel-item active">
+									      <img class="d-block w-100" th:src="@{${p.pictureLink}}">
+									    </div>
+									    <div class="carousel-item" th:each="fc: ${p.filePath}">
+									      <img class="d-block w-100" th:src="@{${fc}}">
+									    </div>
+									  </div>
+									</div>
+								</div>
+							</div>
+							<div class="card-foot p-2 text-center border-top">
+								<p class="card-text">
+									<a><i class="text-dark feather icon-message-circle"></i> 댓글([[${p.commentsCnt}]])</a> 
+									<a th:href="@{/post(postCode=${p.postCode})}" class="stretched-link"></a>
+								</p>
+							</div>
+
+						</div>
+			</div>
+</th:block>
+
+</html>

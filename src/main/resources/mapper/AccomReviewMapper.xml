@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.AccomReviewMapper">
+
+	<resultMap type="AccomReview" 			id="accomReviewResultMap">
+		<id column="ldg_review_code"  		property="ldgReviewCode"/>
+		<result column="member_id"			property="memberId"/>
+		<result column="ldg_code" 			property="ldgCode"/>
+		<result column="ldg_grade" 			property="ldgGrade"/>
+		<result column="ldg_cleanliness" 	property="ldgCleanliness"/>
+		<result column="ldg_kindness" 		property="ldgKindness"/>
+		<result column="ldg_convenience" 	property="ldgConvenience"/>
+		<result column="ldg_location" 		property="ldgLocation"/>
+		<result column="ldg_price_sta" 		property="ldgPriceSta"/>
+		<result column="review_contents" 	property="reviewContents"/>
+		<result column="review_time" 		property="reviewTime"/>
+		<association property="member" 			javaType="Member">
+			<id 	column="member_id"			property="memberId"/>
+			<result column="member_user_name"	property="memberUserName"/>
+			<result column="member_name"		property="memberName"/>
+		</association>
+	</resultMap>
+	
+	
+<!-- 리뷰 삭제 -->
+  	<delete id="deleteReview" parameterType="String">
+  	
+  		DELETE 
+  		FROM 
+  			tb_ldg_review
+  		WHERE 
+  			ldg_review_code = #{ldgReviewCode};
+  		
+  	</delete>
+
+
+<!-- ldgCode에 따른 리뷰조회 SQL -->
+<select id="getAccomReviewList"  resultMap="accomReviewResultMap">
+		SELECT
+		  	r.ldg_review_code
+		   ,r.member_id
+		   ,r.ldg_code
+		   ,r.ldg_grade
+		   ,r.ldg_cleanliness    
+		   ,r.ldg_kindness
+		   ,r.ldg_convenience   
+		   ,r.ldg_location   
+		   ,r.ldg_price_sta    
+		   ,r.review_contents    
+		   ,r.review_time 
+		   ,m.member_user_name   
+		FROM
+		  	tb_ldg_review AS r
+		INNER JOIN
+			tb_member AS m
+		ON
+			r.member_id = m.member_id
+		WHERE
+		  	r.ldg_code = #{ldgCode}
+	    Order BY 
+			r.ldg_review_code DESC
+			LIMIT 10;	
+</select>
+
+<!-- 리뷰 개수 조회  -->
+<select id="getLdgCodeByReviewCode"  resultType="String">
+		SELECT
+		   r.ldg_code
+		FROM
+		  tb_ldg_review AS r
+		WHERE
+		  r.ldg_review_code = #{ldgReviewCode};
+</select>
+
+<!-- ldgCode에 따른 리뷰조회 SQL -->
+<select id="getReviewByDate"  resultMap="accomReviewResultMap">
+		SELECT
+		  	r.ldg_review_code
+		   ,r.member_id
+		   ,r.ldg_code
+		   ,r.ldg_grade
+		   ,r.ldg_cleanliness    
+		   ,r.ldg_kindness
+		   ,r.ldg_convenience   
+		   ,r.ldg_location   
+		   ,r.ldg_price_sta    
+		   ,r.review_contents    
+		   ,r.review_time
+		   ,m.member_user_name  
+		FROM
+		  tb_ldg_review AS r
+		INNER JOIN
+			tb_member AS m
+		ON
+			r.member_id = m.member_id
+		WHERE
+		  	ldg_code = #{ldgCode}
+		Order BY 
+			r.ldg_review_code DESC
+			LIMIT 2;	
+</select>
+
+<!-- 리뷰 등록  SQL -->
+<insert id="addAccomReview" parameterType="AccomReview">
+		INSERT INTO
+			tb_ldg_review
+			( ldg_review_code
+			 ,member_id
+			 ,ldg_code
+			 ,ldg_grade
+			 ,ldg_cleanliness
+			 ,ldg_kindness
+			 ,ldg_convenience
+			 ,ldg_location
+			 ,ldg_price_sta
+			 ,review_contents
+			 ,review_time
+		)VALUES (
+			sf_ldg_review_code()
+			,#{memberId}
+			,#{ldgCode}
+			,#{ldgGrade}
+			,#{ldgCleanliness}
+			,#{ldgKindness}
+			,#{ldgConvenience}
+			,#{ldgLocation}
+			,#{ldgPriceSta}
+			,#{reviewContents}
+			,CURDATE()
+		);
+</insert>
+
+</mapper>

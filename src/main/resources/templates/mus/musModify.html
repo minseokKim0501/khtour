@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>박물관 수정</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a th:href="@{/mus/musList}">박물관 조회 및 수정</a></li>
+			<li class="breadcrumb-item active" aria-current="page">박물관 수정</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/datepicker/daterangepicker.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<div id="exhibInsert">
+		<div class="row justify-content-center">
+			<div class="col-12 col-la-10 col-xl-7">
+				<!-- **********************************  Start ContentsWrap  ********************************** -->
+				<div class="card">
+					<div class="card-body">
+						<form th:action="@{/mus/modifyMus}" method="post">
+							<input type="hidden" class="form-control" id="musCode" name="musCode" th:value="${mus.musCode}">
+							<div class="form-row">
+								<div class="form-group col-4">
+									<label for="musLargeCateName">카테고리</label>
+									<select name="musLargeCateName" class="form-control" th:value="${mus.musLargeCateName}">
+										<option>::선택::</option>
+										<option th:selected="${mus.musLargeCateName=='문화재'}">문화재</option>
+										<option th:selected="${mus.musLargeCateName=='박물관'}">박물관</option>
+									</select>
+								</div>
+								<div class="form-group col-8">
+									<label for="musName">박물관 명</label>
+									<input type="text" class="form-control" name="musName" th:value="${mus.musName}">
+								</div>
+							</div>
+							<div class="form">
+								<div class="form-group">
+									<label>운영시간</label>
+									<div class="form-group" style="top: 26px;">
+										<div class="row">
+											<div class="col">
+												<div class="input-group bootstrap-timepicker timepicker">
+													<input id="timepicker1" type="text" class="form-control input-small" name="musStart">
+													<span class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+												</div>
+											</div>
+											<span style="line-height: 41px;">~</span>
+											<div class="col">
+												<div class="input-group bootstrap-timepicker timepicker">
+													<input id="timepicker2" type="text" class="form-control input-small" name="musEnd">
+													<span class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="musClose">휴관일</label>
+									<select name="musClose" class="form-control" th:value="${mus.musClose}">
+										<option>::선택::</option>
+										<option th:selected="${mus.musClose=='월'}">월</option>
+										<option th:selected="${mus.musClose=='화'}">화</option>
+										<option th:selected="${mus.musClose=='수'}">수</option>
+										<option th:selected="${mus.musClose=='목'}">목</option>
+										<option th:selected="${mus.musClose=='금'}">금</option>
+										<option th:selected="${mus.musClose=='토'}">토</option>
+										<option th:selected="${mus.musClose=='일'}">일</option>
+										<option th:selected="${mus.musClose=='없음'}">없음</option>
+									</select>
+
+								</div>
+								<div class="form-group">
+									<label for="musDisclose">체험활동 유/무</label>
+									<select name="musDisclose" class="form-control" th:value="${mus.musDisclose}">
+										<option>::선택::</option>
+										<option th:selected="${mus.musDisclose=='유'}">유</option>
+										<option th:selected="${mus.musDisclose=='무'}">무</option>
+									</select>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<label for="musSite">홈페이지</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="basic-addon3">https://</span>
+									</div>
+									<input type="text" class="form-control" name="musSite" aria-describedby="basic-addon3" th:value="${mus.musSite}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="exampleInputEmail1">우편번호</label>
+								<div class="input-group mb-3">
+									<input name="zip" type="text" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon" th:value="${mus.musAddr}">
+									<button class="btn btn-primary" onclick="openZipSearch()" type="button">검색</button>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="musAddr">주소</label>
+								<input type="text" class="form-control" readonly name="musAddr">
+							</div>
+							<div class="form-group">
+								<label for="">상세주소</label>
+								<input type="text" class="form-control" name="addr2">
+							</div>
+							<p style="margin-top: -12px">
+								<em class="link"><a href="javascript:void(0);" onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')"> 혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요. </a></em>
+							</p>
+
+							<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+							<script type="text/javascript">
+								function openZipSearch() {new daum.Postcode({oncomplete : function(data) {
+													$('[name=zip]').val(
+															data.zonecode); // 우편번호 (5자리)
+													$('[name=musAddr]').val(
+															data.address);
+													$('[name=addr2]').val(
+															data.buildingName);}}).open();}
+							</script>
+							<div class="form-group">
+								<label for="chMusNum">전화번호</label>
+								<input type="text" class="phone_us form-control" name="musNum" maxlength="14"
+									placeholder="000-000-0000" th:value="${mus.musNum}" id="phoneNum">
+							</div>
+							<div class="form-group">
+								<label for="chMusDetail">상세설명 </label>
+								<input type="text" class="form-control" name="musDetail" th:value="${mus.musDetail}">
+							</div>
+							<div class="col-12">
+								<div class="add-new text-center">
+									<button type="submit" class="btn btn-primary">수정</button>
+									<a type="button" class="btn btn-danger" th:href="@{/mus/musList}">취소</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- **********************************  End Editor ********************************** -->
+			</div>
+		</div>
+	</div>
+	<!-- **********************************  End ContentsWrap ********************************** -->
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<script>
+		var autoHypenPhone = function(str) {
+			str = str.replace(/[^0-9]/g, '');
+			var tmp = '';
+			if (str.length < 4) {
+				return str;
+			} else if (str.length < 7) {
+				tmp += str.substr(0, 3);
+				tmp += '-';
+				tmp += str.substr(3);
+				return tmp;
+			} else if (str.length < 11) {
+				tmp += str.substr(0, 3);
+				tmp += '-';
+				tmp += str.substr(3, 3);
+				tmp += '-';
+				tmp += str.substr(6);
+				return tmp;
+			} else {
+				tmp += str.substr(0, 3);
+				tmp += '-';
+				tmp += str.substr(3, 4);
+				tmp += '-';
+				tmp += str.substr(7);
+				return tmp;
+			}
+
+			return str;
+		}
+
+		var phoneNum = document.getElementById('phoneNum');
+
+		phoneNum.onkeyup = function() {
+			console.log(this.value);
+			this.value = autoHypenPhone(this.value);
+		}
+	</script>
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+
+	<script th:src="@{/js/datepicker/daterangepicker.js}"></script>
+	<script th:src="@{/js/datepicker/bootstrap-timepicker.js}"></script>
+</th:block>
+</html>

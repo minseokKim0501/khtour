@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.HeritageMapper">
+
+	<resultMap type="Heritage" id="heritageResultMap">
+		<id column="heritage_code" property="heritageCode"/>
+		<result column="member_id" property="memberId"/>
+		<result column="heritage_name" property="heritageName"/>
+		<result column="heritage_sub_name" property="heritageSubName"/>
+		<result column="heritage_location" property="heritageLocation"/>
+		<result column="heritage_era" property="heritageEra"/>
+		<result column="heritage_designation" property="heritageDesignation"/>
+		<result column="heritage_classification" property="heritageClassification"/>
+		<result column="heritage_image" property="heritageImage"/>
+		<result column="heritage_detail" property="heritageDetail"/>
+	</resultMap> 
+
+	<!-- 문화재 목록 조회 SQL -->
+	<select id="getHeritageList"  resultMap="heritageResultMap">
+		SELECT
+		   h.heritage_code
+		   ,h.member_id
+		   ,h.heritage_name
+		   ,h.heritage_sub_name     
+		   ,h.heritage_location     
+		   ,h.heritage_era
+		   ,h.heritage_designation   
+		   ,h.heritage_classification   
+		   ,h.heritage_image    
+		   ,h.heritage_detail   
+		FROM
+		  tb_heritage_detail AS h;
+	</select>
+	
+	<!-- 코드에 따른 문화재 조회 SQL -->
+	<select id="getHeritageByCode" parameterType="String" resultMap="heritageResultMap">
+		SELECT
+			h.heritage_code
+		   ,h.member_id
+		   ,h.heritage_name
+		   ,h.heritage_sub_name     
+		   ,h.heritage_location     
+		   ,h.heritage_era
+		   ,h.heritage_designation   
+		   ,h.heritage_classification   
+		   ,h.heritage_image    
+		   ,h.heritage_detail 
+		FROM
+			tb_heritage_detail AS h
+		WHERE
+			heritage_code = #{heritageCode};
+	
+	</select>
+	
+	<!-- 문화재 등록 SQL -->
+	<insert id="addHeritage" parameterType="Heritage">
+		INSERT INTO tb_heritage_detail
+		(   heritage_code
+		   ,member_id
+		   ,heritage_name
+		   ,heritage_sub_name     
+		   ,heritage_location     
+		   ,heritage_era
+		   ,heritage_designation   
+		   ,heritage_classification   
+		   ,heritage_image    
+		   ,heritage_detail   
+		) VALUES (
+		   sf_new_heritage_code()
+		   ,#{memberId}
+		   ,#{heritageName}
+		   ,#{heritageSubName}
+		   ,#{heritageLocation}
+		   ,#{heritageEra}
+		   ,#{heritageDesignation}
+		   ,#{heritageClassification}
+		   ,#{heritageImage}
+		   ,#{heritageDetail}
+		);
+	
+	<!-- 문화재 수정 SQL -->
+	</insert>
+		<update id="modifyHeritage" parameterType="Heritage">
+		UPDATE tb_heritage_detail
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="heritageName != null and heritageName != ''">
+				heritage_name = #{heritageName},
+			</if>
+			<if test="heritageSubName != null and heritageSubName != ''">
+				heritage_sub_name = #{heritageSubName},
+			</if>
+			<if test="heritageLocation != null and heritageLocation != ''">
+				heritage_location = #{heritageLocation},
+			</if>
+			<if test="heritageEra != null and heritageEra != ''">
+				heritage_era = #{heritageEra},
+			</if>
+			<if test="heritageDesignation != null and heritageDesignation != ''">
+				heritage_designation = #{heritageDesignation},
+			</if>
+			<if test="heritageClassification != null and heritageClassification != ''">
+				heritage_classification = #{heritageClassification},
+			</if>		
+			<if test="heritageImage != null and heritageImage != ''">
+				heritage_image = #{heritageImage},
+			</if>		
+			<if test="heritageDetail != null and heritageDetail != ''">
+				heritage_detail = #{heritageDetail},
+			</if>		
+		</trim>
+		WHERE
+			heritage_code = #{heritageCode};
+	</update>
+</mapper>

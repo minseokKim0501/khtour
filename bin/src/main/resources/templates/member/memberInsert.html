@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   <th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   </th:block>
+   <th:block layout:fragment="contentsTitle">
+      
+   </th:block>
+
+   <th:block layout:fragment="customContents">
+	<div class="login bg-white py-5 px-5">
+		<div class="title">
+			<h3 _msthash="1548898" _msttexthash="53835730">회원가입</h3>
+			<p _msthash="1495234" _msttexthash="27313416">계정 만들기</p>
+		</div>
+		<form action="">
+			<div class="row">
+				<div class="form-group col">
+					<input type="text" class="form-control" placeholder="이름" required="" _mstplaceholder="9585628">
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="아이디" required="" _mstplaceholder="15582216">
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" placeholder="암호" required="" _mstplaceholder="10300316">
+			</div>
+			<div class="form-group">
+				<input class="form-control" placeholder="암호 확인" required="" _mstplaceholder="23358309">
+			</div>
+			<a href="#" class="btn btn-primary" _msthash="1557361" _msttexthash="9318920">가입</a>
+		</form>
+		<p class="mb-0" _msthash="1166672" _msttexthash="273189748">귀하는 당사의 
+			<a href="#" _istranslated="1"> 약관에 동의합니다.</a>
+		</p>
+	</div>
+</th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+   </th:block>
+</html>

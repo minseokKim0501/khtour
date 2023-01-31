@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h2>1:1문의 답변 작성</h2>
+</th:block>
+<th:block layout:fragment="customContents">
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="card-title">
+						<form id="addBoard" th:action="@{/board/boardRePost}" method="post"
+							enctype="multipart/form-data">
+							<div class="card-title-left">
+								<h4 class="card-title-text" style="text-align: center;">1:1 문의 답변 작성</h4>
+								<div class="form-group col-12">
+									<input th:value="${boardSeq}">
+									<input th:value="${boardReRef}">
+									<input th:value="${boardReLev}">
+									<input th:value="${boardReSeq}">
+									<input type="hidden" class="form-control" name="memberId"
+									       th:value="${session.SID}">
+								</div>
+								<div class="form-group col-12">
+									<label for="boardType">제목</label> <input type="text"
+										class="form-control" name="boardTitle">
+								</div>
+								<div class="form-group col-12">
+									<label for="boardType">문의 분류 선택</label> <select
+										class="form-control border border-secondary"
+										id="exampleFormControlSelect1" name="boardType">
+										<option value="답변">답변</option>
+									</select>
+								</div>
+								<div class="form-group col-12">
+									<label for="boardContent">1:1문의 답변 내용</label>
+									<textarea class="form-control" id="exampleFormControlTextarea1"
+										rows="12" name="boardContent"></textarea>
+								</div>
+								<label class="form-group col-12 col-md-12 col-lg-12"
+									style="margin-top: 0.5rem">첨부파일 등록</label>
+								<div class="filebox preview-image col-12 col-md-12 col-lg-12"
+									style="margin-bottom: 1rem;">
+									<input class="upload-name" value="파일선택" disabled="disabled">
+									<label for="boardFiles" style="margin-bottom: 0;">업로드</label> <input
+										type="file" id="boardFiles" class="upload-hidden"
+										name="boardFiles">
+								</div>
+								<div class="col-12"
+									style="display: flex; justify-content: space-around;">
+									<button type="submit" class="btn btn-primary" id="addBoard">문의 답변 등록</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- summernote -->
+	<script src="js/summernote/summernote.min.js"></script>
+	<!-- summernote -->
+	<script src="js/simplemde/simplemde.min.js"></script>
+	<script src="js/simplemde/simplemde.js"></script>
+	<!-- custom -->
+	<script src="js/custom.js"></script>
+</th:block>
+</html>

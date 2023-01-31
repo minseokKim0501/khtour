@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   <th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   </th:block>
+   <th:block layout:fragment="contentsTitle">
+      <h2>회원 정보 삭제<h2>
+	  <h4>회원관리 > 회원 정보 삭제</h4>
+   </th:block>
+
+   <th:block layout:fragment="customContents">   
+     
+      <div class="col-lg-12">
+				<div class="card">
+					<div class="card-title">
+						<div class="card-title-left">
+							<h4 class="card-title-text" _msthash="1928901" _msttexthash="28309424">사용자 관리</h4>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-centered table-hover mb-0">
+								<thead>
+									<tr>
+										<th scope="col"># </th>
+										<th scope="col" _msthash="3578315" _msttexthash="9585628">아이디 </th>
+										<th scope="col" _msthash="3578445" _msttexthash="28298855">생성된 날짜</th>
+										<th scope="col" _msthash="3578575" _msttexthash="10051067">상태</th>
+										<th scope="col" _msthash="3578705" _msttexthash="10291775">등급</th>
+										<th scope="col" _msthash="3578835" _msttexthash="9914515">작업</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td _msthash="3585649" _msttexthash="9464"> 01 </td>
+										<td> <img class="rounded-circle mr-2" src="images/team/01.jpg" width="40" height="40" alt=""><font _mstmutation="1" _msthash="3585778" _msttexthash="29573076"> id001 </font></td>
+										<td _msthash="3585908" _msttexthash="73190">04/10/2013</td>
+										<td><i class="fa fa-circle text-success mr-2"></i><font _mstmutation="1" _msthash="3586038" _msttexthash="22410817"> 정상 </font></td>
+										<td _msthash="3586167" _msttexthash="14950832">관리자</td>
+										<td></a><a class="btn btn-danger btn-icon btn-sm mb-1" href="#"><i class="fa fa-trash-o"></i> </a></td>
+									</tr>
+									<tr>
+										<td _msthash="3585843" _msttexthash="9568"> 02</td>
+										<td> <img class="rounded-circle mr-2" src="images/team/01.jpg" width="40" height="40" alt=""><font _mstmutation="1" _msthash="3585972" _msttexthash="34442772"> id002 </font></td>
+										<td _msthash="3586102" _msttexthash="74516">05/08/2014</td>
+										<td><i class="fa fa-circle text-success mr-2"></i><font _mstmutation="1" _msthash="3586232" _msttexthash="22410817"> 정상 </font></td>
+										<td _msthash="3586362" _msttexthash="15184884">일반회원</td>
+										<td></a><a class="btn btn-danger btn-icon btn-sm mb-1" href="#"><i class="fa fa-trash-o"></i> </a></td>
+									</tr>
+									<tr>
+										<td _msthash="3586039" _msttexthash="9672"> 03 </td>
+										<td> <img class="rounded-circle mr-2" src="images/team/01.jpg" width="40" height="40" alt=""><font _mstmutation="1" _msthash="3586168" _msttexthash="21978944"> id003 </font></td>
+										<td _msthash="3586297" _msttexthash="73970">11/05/2015</td>
+										<td><i class="fa fa-circle text-danger mr-2"></i><font _mstmutation="1" _msthash="3586427" _msttexthash="21811465"> 정지 </font></td>
+										<td _msthash="3586557" _msttexthash="15184884">일반회원</td>
+										<td></a><a class="btn btn-danger btn-icon btn-sm mb-1" href="#"><i class="fa fa-trash-o"></i> </a></td>
+									</tr>
+									<tr>
+										<td _msthash="3586233" _msttexthash="9776"> 04</td>
+										<td> <img class="rounded-circle mr-2" src="images/team/01.jpg" width="40" height="40" alt=""><font _mstmutation="1" _msthash="3586363" _msttexthash="29244904"> id004 </font></td>
+										<td _msthash="3586492" _msttexthash="75179">06/09/2016</td>
+										<td><i class="fa fa-circle text-warning mr-2"></i><font _mstmutation="1" _msthash="3586622" _msttexthash="14879228"> 휴먼 </font></td>
+										<td _msthash="3586752" _msttexthash="15222740">일반회원</td>
+										<td></a><a class="btn btn-danger btn-icon btn-sm mb-1" href="#"><i class="fa fa-trash-o"></i> </a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+   </th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+   </th:block>
+</html>

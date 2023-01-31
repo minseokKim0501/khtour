@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>여행 게시판 리스트</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="/">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">여행 일정 공유게시판</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+<style>
+.btn {
+    border-radius: 5px;
+    margin: 5px;
+  }
+
+.blog-info {
+	height: 200px;
+}
+
+
+.image {
+    object-fit: cover;
+    width: 100%;
+    height: 280px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: none
+}
+
+.image.active {
+    display: block
+}
+
+
+
+.grade {
+    font-size: 18px
+}
+
+.line {
+    height: 1px;
+    background-color: #E0E0E0
+}
+
+.text-sm {
+    font-size: 14px
+}
+</style>
+	<div class="row">
+		<div class="col-12 col-md-4 col-lg-3">
+			<div class="card">
+				<div class="card-title">
+				<h3>여행 게시글 검색</h3>
+				</div>
+				<div class="card-body text-center">
+					<!-- 여행 게시글 등록 폼 시작 -->
+					<form>
+						<div class="form-group">
+							<label for="textFormControlInput2"> 검색범위 및 정렬방식 </label>
+							<div class="card-footer" style="padding: 5px;"></div>
+							<div class="row">
+								<div class="col-6 col-md-6" style="padding-right: 5px;">
+									<select class="form-control border"
+										id="exampleFormControlSelect1">
+										<option>전체</option>
+										<option>최근 1주일</option>
+										<option>최근 2주일</option>
+										<option>최근 1달</option>
+									</select>
+								</div>
+								<div class="col-6 col-md-6" style="padding-left: 5px;">
+									<select class="form-control border"
+										id="exampleFormControlSelect1">
+										<option>최신순</option>
+										<option>조회수</option>
+										<option>인기순</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="customRange2" class="form-label">여행 유형</label>
+							<div class="card-footer" style="padding: 5px;"></div>
+							<div>
+								<button type="button" value="여행전" class="planStatus btn btn-outline-primary">여행전
+								</button>
+								<button type="button" value="여행중" class="planStatus btn btn-outline-primary">여행중
+								</button>
+								<button type="button" value="여행후" class="planStatus btn btn-outline-primary">여행후
+								</button>
+
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="customRange2" class="form-label">여행 맴버</label>
+							<div class="card-footer" style="padding: 5px;"></div>
+							<div>
+								<button type="button" value="가족과여행" class="travelStyle btn btn-outline-primary">가족과여행
+								</button>
+								<button type="button" value="친구와여행" class="travelStyle btn btn-outline-primary">친구와여행
+								</button>
+								<button type="button" value="애인과여행" class="travelStyle btn btn-outline-primary">애인과여행
+								</button>
+								<button type="button" value="나홀로여행" class="travelStyle btn btn-outline-primary">나홀로여행
+								</button>
+
+							</div>
+						</div>
+					</form>
+					<!-- 여행 게시글 검색 폼 종료 -->
+					<!-- 여행 게시글 키워드별 검색 include -->
+						<div th:include="searchMinSeok/search.html :: searchRecordBoardListFragment"></div>
+					<!-- 블로그 리스트 끝 -->
+				</div>
+			</div>
+			<!-- 여행 게시글 등록 버튼 시작 -->
+			<div class="card text-center">
+				<div class="card-title">
+					나도 여행 기록 달기
+				</div>
+				<hr class="mt-2">
+				<div class="card-body">
+					<a th:href="@{/recordBoard/recordBoardInsert}" type="button"
+						class="btn btn-primary"> <i class="feather icon-plus"></i>여행 기록
+						등록
+					</a>
+				</div>
+			</div>
+			<!-- 여행 게시글 등록 버튼 종료 -->
+		</div>
+
+		<div class="col-12 col-md-8 col-lg-9">
+			<div class="card">
+				<div class="card-body">
+					<!-- 여행 게시글 목록 조회 시작 -->
+					<div class="row">
+						<div class="col-md-4 col-lg-4"
+							th:if="${not #lists.isEmpty(recordBoardList)}"
+							th:each="l : ${recordBoardList}">
+							<div class="blog mb-5">
+								<div class="blog-image">
+									<div class="embed-responsive embed-responsive-4by3">
+										<img th:src="@{${#strings.isEmpty(l.recordBoardImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(l.recordBoardImagePath,'\','/')}}"
+											class="card-img-top h-10 embed-responsive-item"
+											alt="...">
+											<a th:href="@{/recordBoard/feedList(recordBoardCode=${l.recordBoardCode})}" class="stretched-link"></a>
+									</div>
+								</div>
+								<div class="blog-info">
+									<div class="blog-date">
+										<a href="#!" th:text="${l.planStatus.getPlanStatusName()}">
+										</a>
+										<p class="text-right" th:text="'등록일자: '+${l.regDate}"></p>
+									</div>
+									<hr class="my-2">
+									<div class="blog-title mt-2">
+										<h5 class="mb-3">
+											<span style="color:blue;">[[${l.member.memberUserName}]]님의</span>
+											<p><strong><a
+											th:href="@{/recordBoard/feedList(recordBoardCode=${l.recordBoardCode})}"
+												th:text="${l.recordBoardName}"></a></strong></p>
+										</h5>
+										<p class="mb-0" th:text="${l.recordBoardSubName}"></p>
+									</div>
+								</div>
+								<div class="blog-bottom">
+									<div class="row">
+										<div class="feather icon-image col-4">
+											<span th:text="'피드:' + ${l.feedCount}" style="opacity: 0.8;"></span>
+										</div>
+										<div class="feather icon-tv col-4">
+											<span th:text="'조회수:' + ${l.views}" style="opacity: 0.8;"></span>
+										</div>
+										<div class="feather icon-tv col-4">
+											<span th:text="'댓글:' + ${l.commentCount}" style="opacity: 0.8;"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 여행 게시글 목록 조회 종료 -->
+				</div>
+				<div class="text-center">
+					<!-- 페이징 시작 -->
+					<div id="paging">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center">
+								<li class="page-item"><a class="page-link" href="#">이전</a></li>
+								<li class="page-item"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">4</a></li>
+								<li class="page-item"><a class="page-link" href="#">5</a></li>
+								<li class="page-item"><a class="page-link" href="#">다음</a></li>
+							</ul>
+						</nav>
+					</div>
+					<!-- 페이징 끝 -->
+				</div>
+				<!-- 블로그 리스트 끝 -->
+			</div>
+		</div>
+	</div>
+
+</th:block>
+<!-- javascript 삽입 시작 -->
+<th:block layout:fragment="customBodyScript">
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/rangelider/ion.rangeSlider.min.js}"></script>
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<script>
+		$(function(){
+			$(document).on('click', '.planStatus', function(){
+	               
+	               var planStatus = $(this).val();
+	               //console.log(planStatus);
+	               
+	               var planBtnForm = $('<form></form>');
+	               
+	               planBtnForm.attr("name", "planBtnForm");
+	               planBtnForm.attr("method", "get");
+	               planBtnForm.attr("action", "/recordBoard/recordBoardListByPlanStatus");
+	               
+	               planBtnForm.append($('<input/>', {type: 'hidden', name: 'planStatusName', value: planStatus}));
+	               
+	               planBtnForm.appendTo('body');
+	               
+	               planBtnForm.submit();
+	            });
+		});
+		$(function(){
+			$(document).on('click', '.travelStyle', function(){
+	               
+	               var travelStyle = $(this).val();
+	               //console.log(planStatus);
+	               
+	               var travelStyleBtnForm = $('<form></form>');
+	               
+	               travelStyleBtnForm.attr("name", "travelStyleBtnForm");
+	               travelStyleBtnForm.attr("method", "get");
+	               travelStyleBtnForm.attr("action", "/recordBoard/recordBoardByTravelStyle");
+	               
+	               travelStyleBtnForm.append($('<input/>', {type: 'hidden', name: 'travelStyle', value: travelStyle}));
+	               
+	               travelStyleBtnForm.appendTo('body');
+	               
+	               travelStyleBtnForm.submit();
+	            });
+		});
+	</script>
+</th:block>
+<!-- javascript 삽입 종료 -->
+</html>

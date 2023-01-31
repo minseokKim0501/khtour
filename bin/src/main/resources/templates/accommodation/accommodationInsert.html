@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>숙박업소 신규등록</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">숙박업소
+						신규등록</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/datepicker/daterangepicker.css}">
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-6 col-md-6">
+							<div class="card">
+								<div class="card-title">
+									<div class="card-title-left">
+										<h4 class="card-title-text">등록 정보 입력</h4>
+									</div>
+								</div>
+								<div class="card-body">
+									<form>
+										<div class="form-group">
+											<label for="comName">숙박업소 명</label> <input type="text"
+												class="form-control" id="comName">
+										</div>
+										<div class="form-group">
+											<label for="businessNumber">사업자번호</label> <input type="text"
+												class="form-control" id="businessNumber">
+										</div>
+										<div class="form-group">
+											<label for="inputAddress">연락처</label> <input type="text"
+												class="form-control" id="inputAddress">
+										</div>
+										<div class="form-group">
+											<label for="inputAddress">연락처</label> <input type="text"
+												class="form-control" id="inputAddress">
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">우편번호</label>
+											<div class="input-group mb-3">
+												<input name="zip" type="text" class="form-control"
+													aria-label="Recipient's username"
+													aria-describedby="button-addon">
+												<button class="btn btn-primary" onclick="openZipSearch()"
+													type="button">검색</button>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="">주소</label> <input type="text"
+												class="form-control" name="addr1" readonly>
+										</div>
+										<div class="form-grou">
+											<label for="">상세주소</label> <input type="text"
+												class="form-control" name="addr2">
+										</div>
+										<label style="margin-top: 0.5rem">홈페이지</label>
+										<div class="input-group mb-3">
+											<div class="input-group-prepend">
+												<span class="input-group-text" id="basic-addon3">https://</span>
+											</div>
+											<input type="text" class="form-control" id="basic-url"
+												aria-describedby="basic-addon3">
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-6 col-md-6">
+							<div class="card">
+								<div class="card-body">
+									<form action="/file-upload" class="dropzone dz-clickable">
+										<label for="agree" style="margin-top: 0.5rem">업체사진등록</label>
+										<div class="dz-message needsclick">
+											<i class="la la-cloud-upload d-block mb-2"></i> 업체 대표이미지를
+											등록해주세요.
+										</div>
+									</form>
+									<form class="comform" id="form" method="get">
+										<div class="form-group">
+											<label for="agree" style="margin-top: 0.5rem">업체상세정보입력</label>
+											<textarea id="mainText" name="mainText" class="form-control"
+												rows="17" placeholder="업체 상세 내용 입력" required></textarea>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="card">
+								<div class="card-title">
+									<h4 class="card-title-text">상세 옵션 선택</h4>
+								</div>
+								<div class="card-body">
+									<div class="col-md-12">
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input"
+												id="swimmingPool" value="checked"> <label
+												class="custom-control-label" for="swimmingPool">수영장</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input"
+												id="smoking" value="checked"> <label
+												class="custom-control-label" for="smoking">흡연가능</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input"
+												id="solitary" value="checked"> <label
+												class="custom-control-label" for="solitary">독채</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input"
+												id="onDol" value="checked"> <label
+												class="custom-control-label" for="onDol">온돌방</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input" id="tub"
+												value="checked"> <label class="custom-control-label"
+												for="tub">개별욕조</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input"
+												id="amenities" value="checked"> <label
+												class="custom-control-label" for="amenities">어메니티</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input" id="pet"
+												value="checked"> <label class="custom-control-label"
+												for="pet">반려동물</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input" id="wifi"
+												value="checked"> <label class="custom-control-label"
+												for="wifi">와이파이</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input" id="bbq"
+												value="checked"> <label class="custom-control-label"
+												for="bbq">바베큐</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input"
+												id="cooking" value="checked"> <label
+												class="custom-control-label" for="cooking">개별취사</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input"
+												id="paking" value="checked"> <label
+												class="custom-control-label" for="paking">주차장</label>
+										</div>
+										<div class="custom-control custom-checkbox mb-1 col-md-2"
+											style="float: right;">
+											<input type="checkbox" class="custom-control-input"
+												id="addpeople" value="checked"> <label
+												class="custom-control-label" for="addpeople">인원추가</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-2" style="display: inline-block; float: right;">
+						<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#exampleModal">신규등록</button>
+					</div>
+					<div class="modal fade" id="exampleModal" tabindex="-1"
+						role="dialog" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">최종확인</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<p>등록전에 내용에 문제가 없는지 확인하세요!</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-dismiss="modal">돌아가기</button>
+									<button type="button" class="btn btn-primary">등록하기</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- summernote -->
+	<script th:src="@{js/summernote/summernote.min.js}"></script>
+	<!-- summernote -->
+	<script th:src="@{js/simplemde/simplemde.min.js}"></script>
+	<script th:src="@{js/simplemde/simplemde.js}"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+	<script th:src="@{js/dropzone/dropzone.min.js}"></script>
+	<script th:src="@{/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+	<script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+
+
+</th:block>
+</html>

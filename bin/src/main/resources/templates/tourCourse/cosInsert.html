@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h2>코스 등록</h2>
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/datepicker/daterangepicker.css}">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<div id="cosInsert">
+		<!-- **********************************  Start ContentsWrap  ********************************** -->
+		<!-- **********************************  Start 코스기본정보 ********************************** -->
+		<div class="card">
+			<div class="card-title">
+				<div class="card-title-left">
+					<h4 class="card-title-text">코스 기본 정보</h4>
+				</div>
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="form-group">
+						<label for="exampleFormControlSelect1">카테고리</label> <select
+							class="form-control" id="exampleFormControlSelect1">
+							<option>::선택::</option>
+							<option>테마전시</option>
+							<option>특별전시</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleFormControlSelect1">지역선택</label> <select
+							class="form-control" id="exampleFormControlSelect1">
+							<option>::선택::</option>
+							<option>테마전시</option>
+							<option>특별전시</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">코스명</label> <input type="text"
+							class="form-control" placeholder="코스명을 입력하세요.">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">코스설명</label>
+						<input type="text"
+							class="form-control" placeholder="코스설명을 입력하세요.">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">코스설정</label>
+						<div id="wizard-04" class="wizard">
+							<div class="wizard-nav">
+								<ul class="nav nav-fill nav-pills">
+									<li class="nav-item"><a class="nav-link" href="#tabadd1"
+										data-toggle="tab"> <span class="number">01</span> 코스
+									</a></li>
+									<li class="nav-item"><a class="nav-link" href="#tabadd2"
+										data-toggle="tab"> <span class="number">02</span> 코스
+									</a></li>
+									<li class="nav-item"><a class="nav-link" href="#tabadd3"
+										data-toggle="tab"> <span class="number">03</span> 코스
+									</a></li>
+									<li class="nav-item"><a class="nav-link" href="#tabadd4"
+										data-toggle="tab"> <span class="number">04</span> 코스
+									</a></li>
+									<li class="nav-item"><a class="nav-link active"
+										href="#tabadd5" data-toggle="tab"> <span class="number">05</span>
+											코스
+									</a></li>
+								</ul>
+							</div>
+							<div id="bar" class="progress mt-4">
+								<div
+									class="progress-bar progress-bar-striped progress-bar-animated"
+									role="progressbar" aria-valuenow="25" aria-valuemin="0"
+									aria-valuemax="100" style="width: 100%;"></div>
+							</div>
+							<div class="tab-content">
+								<div class="tab-pane" id="tabadd1">
+									<form>
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">문화재/박물관 선택</label> <select
+												class="form-control" id="exampleFormControlSelect1">
+												<option>::선택::</option>
+												<option>테마전시</option>
+												<option>특별전시</option>
+											</select>
+										</div>
+										<div class="form-group cosInsf">
+											<label for="exampleInputEmail1">우편번호</label>
+											<div class="input-group mb-3">
+												<input name="zip" type="text" class="form-control"
+													aria-label="Recipient's username"
+													aria-describedby="button-addon">
+												<button class="btn btn-primary" onclick="openZipSearch()"
+													type="button">검색</button>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="">주소</label> <input type="text"
+												class="form-control" name="addr1" readonly>
+										</div>
+										<div class="form-group">
+											<label for="">상세주소</label> <input type="text"
+												class="form-control" name="addr2">
+										</div>
+									</form>
+
+									<p style="margin-top: -12px">
+										<em class="link"> <a href="javascript:void(0);"
+											onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+												혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요. </a>
+										</em>
+									</p>
+
+									<script
+										src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+									<script type="text/javascript">
+										function openZipSearch() {
+											new daum.Postcode({
+												oncomplete : function(data) {
+													$('[name=zip]').val(
+															data.zonecode); // 우편번호 (5자리)
+													$('[name=addr1]').val(
+															data.address);
+													$('[name=addr2]').val(
+															data.buildingName);
+												}
+											}).open();
+										}
+									</script>
+								</div>
+								<div class="tab-pane" id="tabadd2">
+									<form>
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">문화재/박물관 선택</label> <select
+												class="form-control" id="exampleFormControlSelect1">
+												<option>::선택::</option>
+												<option>테마전시</option>
+												<option>특별전시</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">우편번호</label>
+											<div class="input-group mb-3">
+												<input name="zip" type="text" class="form-control"
+													aria-label="Recipient's username"
+													aria-describedby="button-addon">
+												<button class="btn btn-primary" onclick="openZipSearch()"
+													type="button">검색</button>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="">주소</label> <input type="text"
+												class="form-control" name="addr1" readonly>
+										</div>
+										<div class="form-group">
+											<label for="">상세주소</label> <input type="text"
+												class="form-control" name="addr2">
+										</div>
+									</form>
+
+									<p style="margin-top: -12px">
+										<em class="link"> <a href="javascript:void(0);"
+											onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+												혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요. </a>
+										</em>
+									</p>
+
+									<script
+										src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+									<script type="text/javascript">
+										function openZipSearch() {
+											new daum.Postcode({
+												oncomplete : function(data) {
+													$('[name=zip]').val(
+															data.zonecode); // 우편번호 (5자리)
+													$('[name=addr1]').val(
+															data.address);
+													$('[name=addr2]').val(
+															data.buildingName);
+												}
+											}).open();
+										}
+									</script>
+								</div>
+								<div class="tab-pane" id="tabadd3">
+									<form>
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">문화재/박물관 선택</label> <select
+												class="form-control" id="exampleFormControlSelect1">
+												<option>::선택::</option>
+												<option>테마전시</option>
+												<option>특별전시</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">우편번호</label>
+											<div class="input-group mb-3">
+												<input name="zip" type="text" class="form-control"
+													aria-label="Recipient's username"
+													aria-describedby="button-addon">
+												<button class="btn btn-primary" onclick="openZipSearch()"
+													type="button">검색</button>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="">주소</label> <input type="text"
+												class="form-control" name="addr1" readonly>
+										</div>
+										<div class="form-group">
+											<label for="">상세주소</label> <input type="text"
+												class="form-control" name="addr2">
+										</div>
+									</form>
+
+									<p style="margin-top: -12px">
+										<em class="link"> <a href="javascript:void(0);"
+											onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+												혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요. </a>
+										</em>
+									</p>
+
+									<script
+										src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+									<script type="text/javascript">
+										function openZipSearch() {
+											new daum.Postcode({
+												oncomplete : function(data) {
+													$('[name=zip]').val(
+															data.zonecode); // 우편번호 (5자리)
+													$('[name=addr1]').val(
+															data.address);
+													$('[name=addr2]').val(
+															data.buildingName);
+												}
+											}).open();
+										}
+									</script>
+								</div>
+								<div class="tab-pane" id="tabadd4">
+									<form>
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">문화재/박물관 선택</label> <select
+												class="form-control" id="exampleFormControlSelect1">
+												<option>::선택::</option>
+												<option>테마전시</option>
+												<option>특별전시</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">우편번호</label>
+											<div class="input-group mb-3">
+												<input name="zip" type="text" class="form-control"
+													aria-label="Recipient's username"
+													aria-describedby="button-addon">
+												<button class="btn btn-primary" onclick="openZipSearch()"
+													type="button">검색</button>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="">주소</label> <input type="text"
+												class="form-control" name="addr1" readonly>
+										</div>
+										<div class="form-group">
+											<label for="">상세주소</label> <input type="text"
+												class="form-control" name="addr2">
+										</div>
+									</form>
+
+									<p style="margin-top: -12px">
+										<em class="link"> <a href="javascript:void(0);"
+											onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+												혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요. </a>
+										</em>
+									</p>
+
+									<script
+										src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+									<script type="text/javascript">
+										function openZipSearch() {
+											new daum.Postcode({
+												oncomplete : function(data) {
+													$('[name=zip]').val(
+															data.zonecode); // 우편번호 (5자리)
+													$('[name=addr1]').val(
+															data.address);
+													$('[name=addr2]').val(
+															data.buildingName);
+												}
+											}).open();
+										}
+									</script>
+								</div>
+								<div class="tab-pane" id="tabadd5">
+									<form>
+										<div class="form-group">
+											<label for="exampleFormControlSelect1">문화재/박물관 선택</label> <select
+												class="form-control" id="exampleFormControlSelect1">
+												<option>::선택::</option>
+												<option>테마전시</option>
+												<option>특별전시</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">우편번호</label>
+											<div class="input-group mb-3">
+												<input name="zip" type="text" class="form-control"
+													aria-label="Recipient's username"
+													aria-describedby="button-addon">
+												<button class="btn btn-primary" onclick="openZipSearch()"
+													type="button">검색</button>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="">주소</label> <input type="text"
+												class="form-control" name="addr1" readonly>
+										</div>
+										<div class="form-group">
+											<label for="">상세주소</label> <input type="text"
+												class="form-control" name="addr2">
+										</div>
+									</form>
+
+									<p style="margin-top: -12px">
+										<em class="link"> <a href="javascript:void(0);"
+											onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+												혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요. </a>
+										</em>
+									</p>
+
+									<script
+										src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+									<script type="text/javascript">
+										function openZipSearch() {
+											new daum.Postcode({
+												oncomplete : function(data) {
+													$('[name=zip]').val(
+															data.zonecode); // 우편번호 (5자리)
+													$('[name=addr1]').val(
+															data.address);
+													$('[name=addr2]').val(
+															data.buildingName);
+												}
+											}).open();
+										}
+									</script>
+								</div>
+
+								<ul class="pager wizard list-unstyled text-right"
+									style="margin-top: 3.1em;">
+									<li class="previous list-inline-item" style="float: left;"><a
+										class="btn btn-primary">이전</a></li>
+									<li class="next list-inline-item disabled"><a
+										class="btn btn-primary">다음</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="add-new text-center mb-5">
+		<button type="button" class="btn btn-primary ftbtn"
+			data-toggle="modal" data-target="#exampleModal-02">등록</button>
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal-02" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title ftbtn" id="exampleModalLabel">공개/공유여부</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="card-body switcher">
+							<ul class="list-unstyled">
+								<li>공유여부</li>
+								<li><label class="switch">.<input type="checkbox"
+										class="primary" checked=""> <span
+										class="slider round name"></span>
+								</label></li>
+							</ul>
+							<ul class="list-unstyled">
+								<li>공개여부</li>
+								<li><label class="switch">. <input type="checkbox"
+										class="primary" checked=""> <span
+										class="slider round name"></span>
+								</label></li>
+							</ul>
+						</div>
+						<button type="submit" class="btn btn-primary">등록</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+	</div>
+	</div>
+	</div>
+	<!-- **********************************  End ContentsWrap ********************************** -->
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- bootstrap wizard-->
+	<script th:src="@{/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+	<script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+
+	<!--  datepicker  -->
+	<script th:src="@{/js/datepicker/daterangepicker.js}"></script>
+	<script th:src="@{/js/datepicker/bootstrap-timepicker.js}"></script>
+
+	<!-- summernote -->
+	<script th:src="@{/js/simplemde/simplemde.min.js}"></script>
+	<script th:src="@{/js/simplemde/simplemde.js}"></script>
+</th:block>
+</html>

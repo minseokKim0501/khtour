@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   	<th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   	</th:block>
+   	<th:block layout:fragment="contentsTitle">
+		<div class="row">
+			<div class="col">
+				<h2>회원 가입</h2>
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">회원 가입</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+   	</th:block>
+
+	<th:block layout:fragment="customContents">
+	<!-- FAVICON -->
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+	<!-- STYLE -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/lmyCss/addCssLmy.css}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" defer="defer"></script>
+	<script th:src="@{/js/lmyJs/dayjs.min.js}"></script>
+    <script th:src="@{/js/lmyJs/validate.min.js}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
+
+	<div class="login bg-white py-5 px-5" id="memberInsert">
+		<div class="title">
+			<h3>회원가입</h3>
+			<p>계정 만들기</p>
+		</div>
+		<form th:action="@{/member/memberInsert}" method="post" id="memberInsertForm">
+			<div class="form-group">
+				<label for="memberId">아이디</label>
+				<input id="memberId" type="text" class="form-control" placeholder="아이디" required="" name="memberId">
+				<div class="check_font" id="idCheck"></div>
+				<!-- <button type="button" class="btn btn-outline-dark" data-idcheck="false" id="idCheck">아이디중복체크</button> -->
+			</div>
+			<div class="form-group">
+				<label for="memberPw">비밀번호</label>
+				<input id="memberPw" type="password" class="form-control" placeholder="비밀번호" required="" name="memberPw" onchange="check_pw()">
+			</div>
+			<div class="form-group">
+				<input id="memberPw2" type="password" class="form-control" placeholder="비밀번호 확인" required="" name="memberPw2" onchange="check_pw()">
+				&nbsp;<span id="check"></span>
+			</div>
+			<div class="form-group">
+				<label for="memberName">성함</label>
+				<input id="memberName" type="text" class="form-control" placeholder="이름" required="" name="memberName">
+			</div>
+			<div class="form-group">
+				<label for="memberGender">성별</label>
+				<select class="custom-select" id="memberGender" name="memberGender">
+					<option selected="">::성별선택::</option>
+					<option value="남">남</option>
+					<option value="여">여</option>
+				</select>
+			</div>
+			<div class="form-group">
+					<label for="memberBirthday">생년월일</label> 
+						<input type="text" id="memberBirthday" class="form-control datepicker"
+								name="memberBirthday" data-original-title="" title="">
+			</div>
+			<div class="form-group">
+				<label for="memberContact">연락처</label>
+				<input id="memberContact" class="form-control" name="memberContact" type="text">
+			</div>
+			<div class="form-group">
+				<label for="memberCountry">국적</label>
+				<select class="custom-select" id="memberCountry" name="memberCountry">
+					<option selected="">::나라선택::</option>
+					<option value="대한민국">대한민국</option>
+					<option value="미국">미국</option>
+					<option value="일본">일본</option>
+					<option value="중국">중국</option>
+					<option value="러시아">러시아</option>
+					<option value="호주">호주</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="memberUserName">닉네임</label>
+				<input id="memberUserName" class="form-control" name="memberUserName" type="text">
+			</div>
+			<div class="form-group">
+					<label for="memberEmail">이메일</label>
+					<input id="memberEmail" class="form-control" name="memberEmail" type="email">
+			</div>
+			<div class="form-group col-12" style=" text-align: center;">
+			<button type="submit" id="memberInsertBtn"  class="btn btn-primary col-5" th:href="@{/member/loginMain}">가입하기</button>
+			</div>
+			<button type="button" class="btn btn-outline-primary btn-block"><i class="fa fa-facebook"></i>페이스북으로 가입하기</button>
+			<button type="button" class="btn btn-outline-secondary btn-block"><i class="fa fa-instagram"></i>인스타로 가입하기</button>
+			<button type="button" class="btn btn-outline-warning btn-block"><i class="feather icon-message-circle"></i>카카오톡으로 가입하기</button>
+		</form>
+		<p class="mb-0" >귀하는 당사의 
+			<a href="#" _istranslated="1"> 약관에 동의합니다.</a>
+		</p>
+	</div>
+</th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- bootstrap -->
+      <script th:src="@{/js/bootstrap/bootstrap.bundle.min.js}"></script>
+      <!-- jquery-nicescroll -->
+      <script th:src="@{/js/jquery-nicescroll/jquery.nicescroll.min.js}"></script>
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+      <script th:src="@{/js/lmyJs/datepicker-bs4.js}" defer="defer"></script>
+      <script>
+		document.addEventListener('DOMContentLoaded', function () {
+			jQuery('#start_date, #end_date, #memberBirthday').datepicker({
+
+			});
+		});
+	  </script>
+      <script>
+			//$(document).ready(function())
+			
+			$(function(){
+				
+				function validationCheck(data){
+					if(typeof data == 'undefined' || data == '' || data == null){
+						return false;
+					}
+					return true;
+				}
+				
+				 $("#memberId").blur(function() {
+					// id = "id_reg" / name = "userId"
+					var memberId = $('#memberId').val();
+					$.ajax({
+						url : '/member/idCheck',
+						type : 'POST',
+						success : function(data) {
+							console.log("1 = 중복o / 0 = 중복x : "+ data);							
+							
+							if (data == 1) {
+									// 1 : 아이디가 중복되는 문구
+									$("#idCheck").text("사용중인 아이디입니다 :p");
+									$("#idCheck").css("color", "red");
+									$("#reg_submit").attr("disabled", true);
+								} else {
+									
+									if(idJ.test(user_id)){
+										// 0 : 아이디 길이 / 문자열 검사
+										$("#idCheck").text("");
+										$("#memberInsertBtn").attr("disabled", false);
+							
+									} else if(user_id == ""){
+										
+										$('#idCheck').text('아이디를 입력해주세요 :)');
+										$('#idCheck').css('color', 'red');
+										$("#memberInsertBtn").attr("disabled", true);				
+										
+									} else {
+										
+										$('#idCheck').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
+										$('#idCheck').css('color', 'red');
+										$("#memberInsertBtn").attr("disabled", true);
+									}
+									
+								}
+							}, error : function() {
+									console.log("실패");
+							}
+						});
+					}); 
+					
+				 /* $('#idCheck').click(function(){
+					var memberId = $('input[name="memberId"]').val();
+					//console.log(validationCheck(memberId));
+					var vCheck = validationCheck(memberId);
+					if(vCheck){
+						$.ajax({
+							 url: '/member/idCheck'
+							,type: 'POST'
+							,data: {'memberId' : memberId}
+							,dataType: 'json'
+							,success: function(data){
+								console.log(data);
+								// 화면에서 맨처음 아이디를 제외한 모든 입력하는 요소는 비활성화 (HTML 속성 추가 disabled="disabled") 
+								// 아이디 중복이 발생 않은 경우(회원가입 O) 입력하는 요소는 활성화
+								if(data){
+									alert("사용가능한 아이디입니다.")
+									$('#memberInsertForm input').prop('disabled', false);
+									$('#memberInsertForm select').prop('disabled', false);
+									$('#memberInsertForm button').prop('disabled', false);
+									$('#idCheck').attr('data-idcheck','true');
+								}else{									
+									// 아이디 중복이 발생하는 경우(회원가입 X) 입력하는 요소는 비활성화
+									alert("이미 사용중인 아이디입니다.")
+									$('#memberInsertForm input').not('input[name="memberId"]').prop('disabled', true);
+									$('#memberInsertForm button').not('#idCheck').prop('disabled', true);
+									$('#memberInsertForm select').prop('disabled', true);
+								}
+							}
+						});
+					}
+					
+				}); */ 
+				
+				$('#memberInsertBtn').click(function(){
+					var isIdCheck = $('#idCheck').attr('data-idcheck');
+					
+					
+					var isSubmit = true;
+					var inputObj = $('#memberInsertForm').find('input');
+					var memberId = $('input[name="memberId"]').val();
+					//console.log(validationCheck(memberId));
+					var vCheck = validationCheck(memberId);
+					
+					$.each(inputObj, function(){
+						var inputData = $(this).val();
+						var result = validationCheck(inputData);
+						
+						// 사용자가 입력하지 않은 경우
+						if(!result){
+							alert('필수 항목입니다. 입력해주세요');
+							$(this).focus();
+							isSubmit = false;
+							return false;
+						}			
+					});
+					
+					console.log('유효여부 폼전송할건지?' + isSubmit );
+					
+					if(isIdCheck && isSubmit) $('#memberInsertForm').submit();
+					
+				});
+			});
+			 		
+		</script>
+		<script>
+        function check_pw(){
+            var memberPw = document.getElementById('memberPw').value;
+            var SC = ["!","@","#","$","%"];
+            var check_SC = 0;
+ 
+            if(memberPw.length < 6 || memberPw.length>16){
+                window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
+                document.getElementById('memberPw').value='';
+            }
+            for(var i=0;i<SC.length;i++){
+                if(memberPw.indexOf(SC[i]) != -1){
+                    check_SC = 1;
+                }
+            }
+            if(check_SC == 0){
+                window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
+                document.getElementById('memberPw').value='';
+            }
+            if(document.getElementById('memberPw').value !='' && document.getElementById('memberPw2').value!=''){
+                if(document.getElementById('memberPw').value==document.getElementById('memberPw2').value){
+                    document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+                    document.getElementById('check').style.color='blue';
+                }
+                else{
+                    document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+                    document.getElementById('check').style.color='red';
+                }
+            }
+        }
+    </script>
+    
+    
+
+		
+   </th:block>
+</html>

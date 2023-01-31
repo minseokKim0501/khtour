@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   <th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   </th:block>
+   <th:block layout:fragment="contentsTitle">
+      
+   </th:block>
+
+   <th:block layout:fragment="customContents">
+	<div class="login bg-white py-5 px-5">
+		<div class="title">
+			<h3 _msthash="1548898" _msttexthash="20782853">계정 복구</h3>
+			<p _msthash="1495234" _msttexthash="20782853">계정 복구</p>
+		</div>
+		<form>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="아이디 "
+					required="" _mstplaceholder="45439160">
+			</div>
+			<div class="forgot-pass">
+				<a th:href="@{/user/userId.html}" _msthash="1683409" _msttexthash="83268315"> 아이디를 잊어버렸습니까? </a>
+			</div>
+			<a href="#" class="btn btn-primary" _msthash="1557127" _msttexthash="9473516">다음</a>
+		</form>
+		<span _msthash="973115" _msttexthash="164775546">계정이 없는가요? 여기에 하나를 만듭니다 <a th:href="@{/user/userInsert.html}" _istranslated="1">가입하기</a>
+		</span>
+	</div>
+</th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+   </th:block>
+</html>

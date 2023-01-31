@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h2>특별전 등록</h2>
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/datepicker/daterangepicker.css}">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<div id="exhibInsert">
+		<!-- **********************************  Start 달력  ********************************** -->
+		<div class="daterangepicker ltr show-calendar opensright"
+			style="top: 276.484px; left: 304.562px; right: auto; display: block; display: none;">
+			<div class="ranges"></div>
+			<div class="drp-calendar left">
+				<div class="calendar-table">
+					<table class="table-condensed">
+						<thead>
+							<tr>
+								<th class="prev available"><span></span></th>
+								<th colspan="5" class="month">Mar 2022</th>
+								<th></th>
+							</tr>
+							<tr>
+								<th>Su</th>
+								<th>Mo</th>
+								<th>Tu</th>
+								<th>We</th>
+								<th>Th</th>
+								<th>Fr</th>
+								<th>Sa</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="weekend off available" data-title="r0c0">27</td>
+								<td class="off available" data-title="r0c1">28</td>
+								<td class="available" data-title="r0c2">1</td>
+								<td class="available" data-title="r0c3">2</td>
+								<td class="available" data-title="r0c4">3</td>
+								<td class="available" data-title="r0c5">4</td>
+								<td class="weekend available" data-title="r0c6">5</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r1c0">6</td>
+								<td class="available" data-title="r1c1">7</td>
+								<td class="available" data-title="r1c2">8</td>
+								<td class="available" data-title="r1c3">9</td>
+								<td class="available" data-title="r1c4">10</td>
+								<td class="available" data-title="r1c5">11</td>
+								<td class="weekend available" data-title="r1c6">12</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r2c0">13</td>
+								<td class="available" data-title="r2c1">14</td>
+								<td class="available" data-title="r2c2">15</td>
+								<td class="available" data-title="r2c3">16</td>
+								<td class="available" data-title="r2c4">17</td>
+								<td class="today active start-date active end-date available"
+									data-title="r2c5">18</td>
+								<td class="weekend available" data-title="r2c6">19</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r3c0">20</td>
+								<td class="available" data-title="r3c1">21</td>
+								<td class="available" data-title="r3c2">22</td>
+								<td class="available" data-title="r3c3">23</td>
+								<td class="available" data-title="r3c4">24</td>
+								<td class="available" data-title="r3c5">25</td>
+								<td class="weekend available" data-title="r3c6">26</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r4c0">27</td>
+								<td class="available" data-title="r4c1">28</td>
+								<td class="available" data-title="r4c2">29</td>
+								<td class="available" data-title="r4c3">30</td>
+								<td class="available" data-title="r4c4">31</td>
+								<td class="off available" data-title="r4c5">1</td>
+								<td class="weekend off available" data-title="r4c6">2</td>
+							</tr>
+							<tr>
+								<td class="weekend off available" data-title="r5c0">3</td>
+								<td class="off available" data-title="r5c1">4</td>
+								<td class="off available" data-title="r5c2">5</td>
+								<td class="off available" data-title="r5c3">6</td>
+								<td class="off available" data-title="r5c4">7</td>
+								<td class="off available" data-title="r5c5">8</td>
+								<td class="weekend off available" data-title="r5c6">9</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="calendar-time" style="display: none;"></div>
+			</div>
+			<div class="drp-calendar right">
+				<div class="calendar-table">
+					<table class="table-condensed">
+						<thead>
+							<tr>
+								<th></th>
+								<th colspan="5" class="month">Apr 2022</th>
+								<th class="next available"><span></span></th>
+							</tr>
+							<tr>
+								<th>Su</th>
+								<th>Mo</th>
+								<th>Tu</th>
+								<th>We</th>
+								<th>Th</th>
+								<th>Fr</th>
+								<th>Sa</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="weekend off available" data-title="r0c0">27</td>
+								<td class="off available" data-title="r0c1">28</td>
+								<td class="off available" data-title="r0c2">29</td>
+								<td class="off available" data-title="r0c3">30</td>
+								<td class="off available" data-title="r0c4">31</td>
+								<td class="available" data-title="r0c5">1</td>
+								<td class="weekend available" data-title="r0c6">2</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r1c0">3</td>
+								<td class="available" data-title="r1c1">4</td>
+								<td class="available" data-title="r1c2">5</td>
+								<td class="available" data-title="r1c3">6</td>
+								<td class="available" data-title="r1c4">7</td>
+								<td class="available" data-title="r1c5">8</td>
+								<td class="weekend available" data-title="r1c6">9</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r2c0">10</td>
+								<td class="available" data-title="r2c1">11</td>
+								<td class="available" data-title="r2c2">12</td>
+								<td class="available" data-title="r2c3">13</td>
+								<td class="available" data-title="r2c4">14</td>
+								<td class="available" data-title="r2c5">15</td>
+								<td class="weekend available" data-title="r2c6">16</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r3c0">17</td>
+								<td class="available" data-title="r3c1">18</td>
+								<td class="available" data-title="r3c2">19</td>
+								<td class="available" data-title="r3c3">20</td>
+								<td class="available" data-title="r3c4">21</td>
+								<td class="available" data-title="r3c5">22</td>
+								<td class="weekend available" data-title="r3c6">23</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r4c0">24</td>
+								<td class="available" data-title="r4c1">25</td>
+								<td class="available" data-title="r4c2">26</td>
+								<td class="available" data-title="r4c3">27</td>
+								<td class="available" data-title="r4c4">28</td>
+								<td class="available" data-title="r4c5">29</td>
+								<td class="weekend available" data-title="r4c6">30</td>
+							</tr>
+							<tr>
+								<td class="weekend off available" data-title="r5c0">1</td>
+								<td class="off available" data-title="r5c1">2</td>
+								<td class="off available" data-title="r5c2">3</td>
+								<td class="off available" data-title="r5c3">4</td>
+								<td class="off available" data-title="r5c4">5</td>
+								<td class="off available" data-title="r5c5">6</td>
+								<td class="weekend off available" data-title="r5c6">7</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="calendar-time" style="display: none;"></div>
+			</div>
+			<div class="drp-buttons">
+				<span class="drp-selected">03/18/2022 - 03/18/2022</span>
+				<button class="cancelBtn btn btn-sm btn-default" type="button">Cancel</button>
+				<button class="applyBtn btn btn-sm btn-primary" type="button">Apply</button>
+			</div>
+		</div>
+		<!-- **********************************  End 달력  ************************************ -->
+		<!-- **********************************  Start ContentsWrap  ********************************** -->
+		<div class="card">
+			<div class="card-title">
+				<div class="card-title-left">
+					<h4 class="card-title-text">특별전 등록</h4>
+				</div>
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="form-row">
+						<div class="form-group col-4">
+							<label for="exampleFormControlSelect1">카테고리</label> <select
+								class="form-control" id="exampleFormControlSelect1">
+								<option>::선택::</option>
+								<option>테마전시</option>
+								<option>특별전시</option>
+							</select>
+						</div>
+						<div class="form-group col-4">
+							<label for="formGroupExampleInput">전시명</label> <input type="text"
+								class="form-control" id="formGroupExampleInput"
+								placeholder="전시명을 입력하세요.">
+						</div>
+						<div class="form-group col-4">
+							<label for="exampleFormControlSelect1">전시현황</label> <select
+								class="form-control" id="exampleFormControlSelect1">
+								<option>::선택::</option>
+								<option>전시예정</option>
+								<option>전시중</option>
+								<option>전시완료</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-6">
+							<label>전시기간</label> <input style="letter-spacing: 1em;"
+								type="text" name="daterange" value="01/01/2021 - 01/15/2021"
+								class="form-control" />
+						</div>
+						<div class="form-group col-6" style="top:26px;">
+							<div class="row">
+								<div class="col">
+									<div class="input-group bootstrap-timepicker timepicker">
+										<input id="timepicker1" type="text"
+											class="form-control input-small"> <span
+											class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+									</div>
+								</div>
+								<span style="line-height: 41px;">~</span>
+								<div class="col">
+									<div class="input-group bootstrap-timepicker timepicker">
+										<input id="timepicker2" type="text"
+											class="form-control input-small"> <span
+											class="input-group-prepend"><i class="fa fa-clock-o"></i></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>포스터업로드</label> <input type="file" id="avatar"
+							class="form-control" name="avatar" required="">
+					</div>
+					
+					<div class="form-group">
+						<label>홈페이지</label>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon3">https://</span>
+							</div>
+							<input type="text" class="form-control" id="basic-url"
+								aria-describedby="basic-addon3">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">우편번호</label>
+						<div class="input-group mb-3">
+							<input name="zip" type="text" class="form-control"
+								aria-label="Recipient's username"
+								aria-describedby="button-addon">
+							<button class="btn btn-primary" onclick="openZipSearch()"
+								type="button">검색</button>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="">주소</label> <input type="text" class="form-control"
+							name="addr1" readonly>
+					</div>
+					<div class="form-group">
+						<label for="">상세주소</label> <input type="text" class="form-control"
+							name="addr2">
+					</div>
+					<p style="margin-top: -12px">
+						<em class="link"> <a href="javascript:void(0);"
+							onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+								혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요. </a>
+						</em>
+					</p>
+
+					<script
+						src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+					<script type="text/javascript">
+						function openZipSearch() {
+							new daum.Postcode({
+								oncomplete : function(data) {
+									$('[name=zip]').val(data.zonecode); // 우편번호 (5자리)
+									$('[name=addr1]').val(data.address);
+									$('[name=addr2]').val(data.buildingName);
+								}
+							}).open();
+						}
+					</script>
+					<div class="form-group">
+						<label for="inputEmail4">담당자</label> <input type="text"
+							class="form-control" id="inputEmail4">
+					</div>
+					<div class="form-group">
+						<label for="inputAddress">담당자 연락처</label> <input type="text"
+							class="form-control" id="inputAddress">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">담당자 이메일</label> <input
+							type="email" class="form-control" id="exampleInputEmail1"
+							aria-describedby="emailHelp" placeholder="Enter email"> <small
+							id="emailHelp" class="form-text text-muted">We'll never
+							share your email with anyone else.</small>
+					</div>
+					<div class="form-group">
+						<textarea id="editor-demo1" style="display: none;">상세입력1</textarea>
+						<div class="editor-toolbar">
+							<a title="Bold (Ctrl-B)" tabindex="-1" class="fa fa-bold"></a><a
+								title="Italic (Ctrl-I)" tabindex="-1" class="fa fa-italic"></a><a
+								title="Heading (Ctrl-H)" tabindex="-1" class="fa fa-header"></a><i
+								class="separator">|</i><a title="Quote (Ctrl-')" tabindex="-1"
+								class="fa fa-quote-left"></a><a title="Generic List (Ctrl-L)"
+								tabindex="-1" class="fa fa-list-ul"></a><a
+								title="Numbered List (Ctrl-Alt-L)" tabindex="-1"
+								class="fa fa-list-ol"></a><i class="separator">|</i><a
+								title="Create Link (Ctrl-K)" tabindex="-1" class="fa fa-link"></a><a
+								title="Insert Image (Ctrl-Alt-I)" tabindex="-1"
+								class="fa fa-picture-o"></a><i class="separator">|</i><a
+								title="Toggle Preview (Ctrl-P)" tabindex="-1"
+								class="fa fa-eye no-disable"></a><a
+								title="Toggle Side by Side (F9)" tabindex="-1"
+								class="fa fa-columns no-disable no-mobile"></a><a
+								title="Toggle Fullscreen (F11)" tabindex="-1"
+								class="fa fa-arrows-alt no-disable no-mobile"></a><i
+								class="separator">|</i><a title="Markdown Guide" tabindex="-1"
+								class="fa fa-question-circle"
+								href="https://simplemde.com/markdown-guide" target="_blank"></a>
+						</div>
+						<div class="CodeMirror cm-s-paper CodeMirror-wrap">
+							<div
+								style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 15px; left: 15px;">
+								<textarea autocorrect="off" autocapitalize="off"
+									spellcheck="false"
+									style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none;"
+									tabindex="0"></textarea>
+							</div>
+							<div class="CodeMirror-vscrollbar" cm-not-content="true">
+								<div style="min-width: 1px; height: 0px;"></div>
+							</div>
+							<div class="CodeMirror-hscrollbar" cm-not-content="true">
+								<div style="height: 100%; min-height: 1px; width: 0px;"></div>
+							</div>
+							<div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
+							<div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
+							<div class="CodeMirror-scroll" tabindex="-1">
+								<div class="CodeMirror-sizer"
+									style="margin-left: 0px; margin-bottom: -21px; border-right-width: 9px; min-height: 411px; padding-right: 0px; padding-bottom: 0px;">
+									<div style="position: relative; top: 0px;">
+										<div class="CodeMirror-lines">
+											<div style="position: relative; outline: none;">
+												<div class="CodeMirror-measure"></div>
+												<div class="CodeMirror-measure"></div>
+												<div style="position: relative; z-index: 1;"></div>
+												<div class="CodeMirror-cursors">
+													<div class="CodeMirror-cursor"
+														style="left: 4px; top: 0px; height: 52px;">&nbsp;</div>
+												</div>
+												<div class="CodeMirror-code" style="">
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-formatting cm-formatting-header cm-formatting-header-1 cm-header cm-header-1"># </span><span
+															class="cm-header cm-header-1">Intro</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">Go ahead, play around with the editor! Be sure to check out **bold** and *italic* styling, or even [links](https://google.com). You can type the Markdown syntax, use the toolbar, or use shortcuts like `cmd-b` or `ctrl-b`.</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															cm-text="">​</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">## Lists</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">Unordered lists can be started using the toolbar or by typing `* `, `- `, or `+ `. Ordered lists can be started by typing `1. `.</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															cm-text="">​</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">#### Unordered</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">* Lists are a piece of cake</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">* They even auto continue as you type</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">* A double enter will end them</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">* Tabs and shift-tabs work too</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															cm-text="">​</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">#### Ordered</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">1. Numbered lists...</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">2. ...work too!</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															cm-text="">​</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">## What about images?</span></span>
+													</pre>
+													<pre class=" CodeMirror-line ">
+														<span style="padding-right: 0.1px;"><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-tab" role="presentation" cm-text="	">  </span><span
+															class="cm-comment">![Ye1s](https://i.imgur.com/sZlktY7.png)</span></span>
+													</pre>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div
+									style="position: absolute; height: 9px; width: 1px; border-bottom: 0px solid transparent; top: 411px;"></div>
+								<div class="CodeMirror-gutters"
+									style="display: none; height: 420px;"></div>
+							</div>
+						</div>
+						<div class="editor-preview-side"></div>
+						<div class="editor-statusbar">
+							<span class="autosave"></span><span class="lines">18</span><span
+								class="words">105</span><span class="cursor">0:0</span>
+						</div>
+
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- **********************************  End Editor ********************************** -->
+	</div>
+	<div class="col-12">
+		<div class="add-new text-center mb-5">
+			<a class="btn btn-primary ftbtn" href="/exhibition/exhibList">
+				변경사항 저장 </a>
+		</div>
+	</div>
+	</div>
+
+	<!-- **********************************  End ContentsWrap ********************************** -->
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+
+	<script th:src="@{/js/datepicker/daterangepicker.js}"></script>
+	<script th:src="@{/js/datepicker/bootstrap-timepicker.js}"></script>
+</th:block>
+</html>

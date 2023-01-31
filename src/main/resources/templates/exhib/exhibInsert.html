@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>전시회 등록</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">전시회 등록</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/kmyCss/addCssKmy.css}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" defer="defer"></script>
+<script th:src="@{/js/KmyJs/dayjs.min.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/lmyCss/addCssLmy.css}">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" defer="defer"></script>
+   <script th:src="@{/js/lmyJs/dayjs.min.js}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
+<style>
+#addaccommodation label.error { color: red; }
+      .loginsnsicon{width:20px;height:20px;margin-right:5px;}
+</style>
+	<div id="khtour">
+		<div class="row justify-content-center">
+			<div class="col-12 col-la-10 col-xl-7">
+				<!-- **********************************  Start ContentsWrap  ********************************** -->
+				<div class="card">
+					<div class="card-title">
+						<div class="card-title-left">
+							<h4 class="card-title-text">전시회 등록</h4>
+						</div>
+					</div>
+					<div class="card-body">
+						<form id="addExhib" th:action="@{/exhib/exhibInsert}" method="post" enctype="multipart/form-data">
+							<div class="form-row">
+								<div class="form-group col-6">
+									<label for="exhibCate">카테고리</label>
+									<select class="form-control" name="exhibCate">
+										<option>::선택::</option>
+										<option value="exhib_theme">테마전시</option>
+										<option value="exhib_special">특별전시</option>
+									</select>
+								</div>
+								<div class="form-group col-6">
+									<label for="exhibCurrent">전시현황</label>
+									<select class="form-control" name="exhibCurrent">
+										<option>::선택::</option>
+										<option value="전시예정">전시예정</option>
+										<option value="전시중">전시중</option>
+										<option value="전시완료">전시완료</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="exhibName">전시명</label>
+								<input type="text" class="form-control" id="exhibName" name="exhibName" placeholder="전시명을 입력하세요.">
+								<div class="check_font" id="idCheck"></div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-6">
+										<label for="exhibStart">시작일</label>
+										<input type="text" id="start_date" class="form-control" name="exhibStart">
+								</div>
+								<div class="form-group col-6">
+										<label for="exhibEnd">종료일</label>
+										<input type="text" id="end_date" class="form-control" name="exhibEnd">
+								</div>
+							</div>
+							<div class="form-group">
+							<label for="exhibImage">포스터 업로드</label>
+							<input style="line-height:1.2;" type="file" id="exhibImage" class="form-control" name="exhibImageFiles" required="">
+							</div>
+
+							<div class="form-group">
+								<label for="exhibPage">홈페이지</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text">https://</span>
+									</div>
+									<input type="text" class="form-control" name="exhibPage">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="musName">전시관</label>
+								<div class="input-group mb-3">
+									<input type="text" class="form-control" disabled="disabled" id="musInput">
+									<input type="hidden" class="form-control" name="musCode" id="musCode">
+									<a class="btn btn-primary" data-toggle="modal" data-target="#musModal">검색</a>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="exhibCon">상세입력</label>
+								<input type="text" class="form-control" name="exhibCon">
+							</div>
+							<div class="col-12">
+								<div class="add-new text-center mb-5">
+									<button class="btn btn-primary ftbtn" type="submit" id="addExhib">등록</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- **********************************  End Editor ********************************** -->
+			</div>
+		</div>
+	</div>
+	
+	
+<div class="modal fade" id="musModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		<table id="table-selected" class="table table-striped table-bordered">
+			<thead style="text-align: center;">
+				<tr>
+					<th>카테고리</th>
+					<th>이름</th>
+					<th>주소</th>
+					<th>전화번호</th>
+					<th>운영시간</th>
+					<th>휴관일</th>
+					<th>선택</th>
+				</tr>
+			</thead>
+			<tbody class="text-center">
+				<tr th:if="${not #lists.isEmpty(musList)}" th:each="l:${musList}">
+					<td th:text="${l.musLargeCateName}"></td>
+					<td th:text="${l.musCode}" style="display:none;"></td>
+					<td th:text="${l.musName}"></td>
+					<td th:text="${l.musAddr}"></td>
+					<td th:text="${l.musNum}"></td>
+					<td th:text="|${l.musStart}~ ${l.musEnd}|"></td>
+					<td th:text="${l.musClose}"></td>
+					<td><input type="checkbox" class="musCheck1" name="musCode1" th:value="${l.musCode}" th:data-musName="${l.musName}"></td>
+				</tr>
+			</tbody>
+			<tfoot style="text-align: center;">
+				<tr>
+					<th>카테고리</th>
+					<th>이름</th>
+					<th>주소</th>
+					<th>전화번호</th>
+					<th>운영시간</th>
+					<th>휴관일</th>
+					<th>선택</th>
+				</tr>
+			</tfoot>
+		</table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="addMusBtn">선택</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancel">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
+	<!-- **********************************  End ContentsWrap ********************************** -->
+</th:block>
+<th:block layout:fragment="customBodyScript">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	jQuery('#start_date, #end_date, #birth_date').datepicker({
+
+	});
+});
+</script>
+<script>
+$(function(){
+	var musInput = $('#musInput'), musCode = $('#musCode');
+	
+	$('#addMusBtn').click(function(){
+		var musCheck1 = $('.musCheck1:checked');
+		var code = musCheck1.val();
+		var name = musCheck1.attr('data-musName');
+		console.log(code, name);
+		musCode.val(code);
+		musInput.val(name);
+		$('#musModal').modal('hide');
+	});
+	
+	$('#cancel').click(function(){
+		musInput.val('');
+		musCode.val('');
+	});
+$('#exhibName').keyup(function(){
+    var exhibName = $('input[name="exhibName"]').val();
+    
+    console.log(exhibName);
+    if(typeof exhibName == 'undefined' || exhibName == '' || exhibName == null){
+       return false;
+    }
+    
+    $.ajax({
+        url: '/exhib/isNameCheck'
+       ,type: 'POST'
+       ,data: {'exhibName' : exhibName}
+       ,dataType: 'json'
+       ,success: function(data){
+          console.log(data);
+          if(data){
+             $('#exhibName').attr('data-idcheck', true);
+             $("#idCheck").text("등록가능한 전시회 입니다");
+             $("#idCheck").css("color", "blue");
+             $("#addExhibBtn").attr("disabled", false);
+          }else{
+             $('#exhibName').attr('data-idcheck', false);
+             $("#idCheck").text("이미등록 된 전시회 입니다.");
+             $("#idCheck").css("color", "red");
+             $("#addExhibBtn").attr("disabled", true);
+          }
+       },error: function(xhr, status, errorThrown) {
+          console.log(xhr);
+          console.log(errorThrown);
+       }
+    });
+ });
+});
+$(document).on('click', '.musCheck1', function(){
+	$('.musCheck1').prop('checked', false);
+	$(this).prop('checked', true);
+});
+</script>
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+	<script th:src="@{/js/KmyJs/datepicker-bs4.js}" defer="defer"></script>
+</th:block>
+</html>

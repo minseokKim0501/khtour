@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h2>카테고리 관리</h2>
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css"
+		href="https://t1.daumcdn.net/tistory_admin/assets/blog/tistory-bac131c8b9e1840e183541bf1202048350be6bd3/blogs/style/manage/font.css?_version_=tistory-bac131c8b9e1840e183541bf1202048350be6bd3">
+	<link rel="stylesheet" type="text/css"
+		href="https://t1.daumcdn.net/tistory_admin/assets/tistory-gnb/3.2.3/gnb.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="https://t1.daumcdn.net/tistory_admin/assets/blog/tistory-bac131c8b9e1840e183541bf1202048350be6bd3/blogs/style/manage/common.css?_version_=tistory-bac131c8b9e1840e183541bf1202048350be6bd3">
+	<link rel="stylesheet" type="text/css"
+		href="https://t1.daumcdn.net/tistory_admin/assets/blog/tistory-bac131c8b9e1840e183541bf1202048350be6bd3/blogs/style/manage/photo.css?_version_=tistory-bac131c8b9e1840e183541bf1202048350be6bd3">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<style>
+/* Photos */
+.photos-container {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 60000;
+	display: none
+}
+
+/* DesignSetting */
+div:focus {
+	outline: 0;
+}
+
+.checkboard {
+	background-image: -moz-linear-gradient(45deg, #CDCDCD 25%, transparent 25%),
+		-moz-linear-gradient(-45deg, #CDCDCD 25%, transparent 25%),
+		-moz-linear-gradient(45deg, transparent 75%, #CDCDCD 75%),
+		-moz-linear-gradient(-45deg, transparent 75%, #CDCDCD 75%);
+	background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #CDCDCD),
+		color-stop(.25, transparent)),
+		-webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #CDCDCD),
+		color-stop(.25, transparent)),
+		-webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent),
+		color-stop(.75, #CDCDCD)),
+		-webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent),
+		color-stop(.75, #CDCDCD));
+	-moz-background-size: 12px 12px;
+	background-size: 12px 12px;
+	-webkit-background-size: 12px 12px;
+	background-position: 6px 0, 0 0, 0px 6px, 6px -6px;
+}
+
+.colorpicker-input {
+	width: 169px;
+	height: 26px !important;
+	margin-top: 10px;
+	margin-left: 9px;
+	padding-left: 10px;
+	border: 1px solid #C5CDD7;
+	outline: none;
+	background: white;
+	font-size: 14px;
+	color: #333;
+}
+
+.blog_statistic .wrap_graph {
+	position: relative;
+}
+</style>
+	<div class="inner_article">
+		<h2 id="kakaoBody" class="screen_out">블로그관리 본문</h2>
+		<div class="blog_category">
+			<h3 class="tit_cont">카테고리 관리</h3>
+			<div class="wrap_set">
+				<strong class="tit_set">카테고리 순서를 변경하고 주제 연결을 설정할 수 있습니다.<a
+					href="http://notice.tistory.com/601" class="info_sub"
+					target="_blank">자세히 보기</a></strong>
+				<p class="desc_info">드래그 앤 드롭으로 카테고리 순서를 변경할 수 있습니다.</p>
+				<div class="bundle_group">
+					<span class="count_total"><span class="screen_out">카테고리
+							개수</span><span class="txt_num">27</span> / 500</span><label
+						class="lab_btn btn_group">전체 펼치기<input type="button"
+						class="btn_g" value="카테고리 전체 펼치기"></label><label
+						class="lab_btn btn_group">전체 접기<input type="button"
+						class="btn_g" value="카테고리 전체 접기"></label>
+				</div>
+				<div class="set_order" id="category-app">
+					<div class="wrap_order">
+						<div class="list_order">
+							<div class="bundle_item">
+								<div class="item_order">
+									<div class="basic_item">
+										<div class="wrap_drag wrap_all">
+											<span class="ico_blog ico_drag ico_all"></span>
+										</div>
+										<span class="txt_name">분류 전체보기</span>
+										<div class="info_btn">
+											<a href="#" class="btn_post">추가</a><a href="#"
+												class="btn_post">수정</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="bundle_item open_subcate">
+								<div class="item_order">
+									<label class="lab_btn lab_cate lab_fold"><span
+										class="wrap_arr"><span class="ico_blog"></span></span><input
+										type="button" class="btn_g" value="open sub category"></label>
+									<div class="basic_item">
+										<div class="wrap_drag" draggable="true">
+											<span class="ico_blog ico_drag"></span>
+										</div>
+										<div style="display: inline;">
+											<div class="wrap_name">
+												<span class="txt_name">html_css_js</span><span
+													class="txt_count">(92)</span>
+											</div>
+											<span class="txt_cate">IT 인터넷</span>
+											<div class="info_btn">
+												<a href="#" class="btn_post" draggable="false">추가</a><a
+													href="#" class="btn_post" draggable="false">수정</a><a
+													href="#" class="btn_post" draggable="false">관리</a><a
+													href="#" class="btn_post" draggable="false">이동</a><a
+													href="#" class="btn_post disabled" draggable="false">삭제</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="list_sub">
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">html</span><span class="txt_count">(4)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">HTML실습</span><span
+															class="txt_count">(10)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">css</span><span class="txt_count">(10)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">JavaScript</span><span
+															class="txt_count">(33)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">Js실습</span><span class="txt_count">(15)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">jQuery</span><span
+															class="txt_count">(10)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">jQuery 실습</span><span
+															class="txt_count">(8)</span>
+													</div>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">ajax</span><span class="txt_count">(1)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">ajax 실습</span><span
+															class="txt_count">(1)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="bundle_item open_subcate">
+								<div class="item_order">
+									<label class="lab_btn lab_cate lab_fold"><span
+										class="wrap_arr"><span class="ico_blog"></span></span><input
+										type="button" class="btn_g" value="open sub category"></label>
+									<div class="basic_item">
+										<div class="wrap_drag" draggable="true">
+											<span class="ico_blog ico_drag"></span>
+										</div>
+										<div style="display: inline;">
+											<div class="wrap_name">
+												<span class="txt_name">Java</span><span class="txt_count">(34)</span>
+											</div>
+											<span class="txt_cate">IT 인터넷</span>
+											<div class="info_btn">
+												<a href="#" class="btn_post" draggable="false">추가</a><a
+													href="#" class="btn_post" draggable="false">수정</a><a
+													href="#" class="btn_post" draggable="false">관리</a><a
+													href="#" class="btn_post" draggable="false">이동</a><a
+													href="#" class="btn_post disabled" draggable="false">삭제</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="list_sub">
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">Java</span><span class="txt_count">(26)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">Java실습</span><span
+															class="txt_count">(8)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="bundle_item open_subcate">
+								<div class="item_order">
+									<label class="lab_btn lab_cate lab_fold"><span
+										class="wrap_arr"><span class="ico_blog"></span></span><input
+										type="button" class="btn_g" value="open sub category"></label>
+									<div class="basic_item">
+										<div class="wrap_drag" draggable="true">
+											<span class="ico_blog ico_drag"></span>
+										</div>
+										<div style="display: inline;">
+											<div class="wrap_name">
+												<span class="txt_name">jsp</span><span class="txt_count">(26)</span>
+											</div>
+											<span class="txt_cate">IT 인터넷</span>
+											<div class="info_btn">
+												<a href="#" class="btn_post" draggable="false">추가</a><a
+													href="#" class="btn_post" draggable="false">수정</a><a
+													href="#" class="btn_post" draggable="false">관리</a><a
+													href="#" class="btn_post" draggable="false">이동</a><a
+													href="#" class="btn_post disabled" draggable="false">삭제</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="list_sub">
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">05_jsp_mysql</span><span
+															class="txt_count">(11)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">06_jsp_java_mysql_model01</span><span
+															class="txt_count">(8)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">07_jsp_java_MVC_model02_Oracle</span><span
+															class="txt_count">(6)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="bundle_item open_subcate">
+								<div class="item_order">
+									<label class="lab_btn lab_cate lab_fold"><span
+										class="wrap_arr"><span class="ico_blog"></span></span><input
+										type="button" class="btn_g" value="open sub category"></label>
+									<div class="basic_item">
+										<div class="wrap_drag" draggable="true">
+											<span class="ico_blog ico_drag"></span>
+										</div>
+										<div style="display: inline;">
+											<div class="wrap_name">
+												<span class="txt_name">dbms</span><span class="txt_count">(22)</span>
+											</div>
+											<span class="txt_cate">IT 인터넷</span>
+											<div class="info_btn">
+												<a href="#" class="btn_post" draggable="false">추가</a><a
+													href="#" class="btn_post" draggable="false">수정</a><a
+													href="#" class="btn_post" draggable="false">관리</a><a
+													href="#" class="btn_post" draggable="false">이동</a><a
+													href="#" class="btn_post disabled" draggable="false">삭제</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="list_sub">
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">데이터베이스 이론</span><span
+															class="txt_count">(6)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">sql</span><span class="txt_count">(7)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">sql 실습</span><span
+															class="txt_count">(4)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">eXERD</span><span class="txt_count">(4)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="bundle_item open_subcate">
+								<div class="item_order">
+									<label class="lab_btn lab_cate lab_fold"><span
+										class="wrap_arr"><span class="ico_blog"></span></span><input
+										type="button" class="btn_g" value="open sub category"></label>
+									<div class="basic_item">
+										<div class="wrap_drag" draggable="true">
+											<span class="ico_blog ico_drag"></span>
+										</div>
+										<div style="display: inline;">
+											<div class="wrap_name">
+												<span class="txt_name">Framework</span><span
+													class="txt_count">(14)</span>
+											</div>
+											<span class="txt_cate">IT 인터넷</span>
+											<div class="info_btn">
+												<a href="#" class="btn_post" draggable="false">추가</a><a
+													href="#" class="btn_post" draggable="false">수정</a><a
+													href="#" class="btn_post" draggable="false">관리</a><a
+													href="#" class="btn_post" draggable="false">이동</a><a
+													href="#" class="btn_post disabled" draggable="false">삭제</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="list_sub">
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">springboot</span><span
+															class="txt_count">(10)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">sts_mybatis</span><span
+															class="txt_count">(0)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="bundle_item open_subcate">
+										<div class="item_order">
+											<div class="basic_item">
+												<div class="wrap_drag" draggable="true">
+													<span class="ico_blog ico_drag"></span>
+												</div>
+												<div style="display: inline;">
+													<div class="wrap_name">
+														<span class="txt_name">bootstrap</span><span
+															class="txt_count">(4)</span>
+													</div>
+													<span class="txt_cate">IT 인터넷</span>
+													<div class="info_btn">
+														<a href="#" class="btn_post" draggable="false">수정</a><a
+															href="#" class="btn_post" draggable="false">관리</a><a
+															href="#" class="btn_post" draggable="false">이동</a><a
+															href="#" class="btn_post disabled" draggable="false">삭제</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="bundle_item open_subcate">
+								<div class="item_order">
+									<label class="lab_btn lab_cate"><span class="wrap_arr"><span
+											class="ico_blog"></span></span><input type="button" class="btn_g"
+										value="open sub category"></label>
+									<div class="basic_item">
+										<div class="wrap_drag" draggable="true">
+											<span class="ico_blog ico_drag"></span>
+										</div>
+										<div style="display: inline;">
+											<div class="wrap_name">
+												<span class="txt_name">에러</span><span class="txt_count">(1)</span>
+											</div>
+											<span class="txt_cate">IT 인터넷</span>
+											<div class="info_btn">
+												<a href="#" class="btn_post" draggable="false">추가</a><a
+													href="#" class="btn_post" draggable="false">수정</a><a
+													href="#" class="btn_post" draggable="false">관리</a><a
+													href="#" class="btn_post" draggable="false">이동</a><a
+													href="#" class="btn_post disabled" draggable="false">삭제</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="wrap_add">
+							<label class="lab_btn lab_add"><span
+								class="ico_blog ico_add"></span>카테고리 추가<input type="button"
+								class="btn_g" value="카테고리 추가"></label><span class="count_total"><span
+								class="screen_out">카테고리 개수</span><span class="txt_num">27</span>
+								/ 500</span>
+						</div>
+					</div>
+				</div>
+				<div class="set_btn">
+					<button type="button" class="btn_save btn_off" disabled="">변경사항
+						저장</button>
+				</div>
+			</div>
+			<h3 class="tit_cont">카테고리 설정</h3>
+			<form class="wrap_set">
+				<fieldset>
+					<legend class="screen_out">카테고리 설정</legend>
+					<div class="item_set">
+						카테고리명이<input type="text" class="tf_set tf_set1" value="27">글자까지
+						표시됩니다.
+					</div>
+					<div class="item_set">
+						카테고리별 글 수를
+						<div class="opt_set opt_cate2">
+							<button type="button" class="btn_opt">
+								<span class="txt_ellip">표시합니다</span><span
+									class="ico_blog ico_open"></span>
+							</button>
+							<div class="layer_opt">
+								<label class="lab_set on"><input type="radio"
+									class="inp_set" value="1"><span
+									class="txt_set txt_ellip">표시합니다</span></label><label class="lab_set"><input
+									type="radio" class="inp_set" value="0"><span
+									class="txt_set txt_ellip">표시하지 않습니다</span></label>
+								<button type="button" class="btn_close">
+									<span class="ico_blog"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="item_set">
+						카테고리에 새 글 발행 여부를
+						<div class="opt_set opt_cate3">
+							<button type="button" class="btn_opt">
+								<span class="txt_ellip">표시합니다</span><span
+									class="ico_blog ico_open"></span>
+							</button>
+							<div class="layer_opt">
+								<label class="lab_set on"><input type="radio"
+									class="inp_set" value="1"><span
+									class="txt_set txt_ellip">표시합니다</span></label><label class="lab_set"><input
+									type="radio" class="inp_set" value="0"><span
+									class="txt_set txt_ellip">표시하지 않습니다</span></label>
+								<button type="button" class="btn_close">
+									<span class="ico_blog"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="item_set item_sub">
+						<div class="opt_set opt_cate4">
+							<button type="button" class="btn_opt">
+								<span class="txt_ellip">3일</span><span class="ico_blog ico_open"></span>
+							</button>
+							<div class="layer_opt">
+								<label class="lab_set"><input type="radio"
+									class="inp_set" value="1"><span
+									class="txt_set txt_ellip">1일</span></label><label class="lab_set on"><input
+									type="radio" class="inp_set" value="3"><span
+									class="txt_set txt_ellip">3일</span></label><label class="lab_set"><input
+									type="radio" class="inp_set" value="5"><span
+									class="txt_set txt_ellip">5일</span></label>
+								<button type="button" class="btn_close">
+									<span class="ico_blog"></span>
+								</button>
+							</div>
+						</div>
+						이내에 발행된 글이 있으면 새 글 여부를 표시합니다.
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend class="screen_out">저장 버튼</legend>
+					<button type="button" class="btn_save btn_off" disabled="">변경사항
+						저장</button>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<script th:src="@{/js/custom.js}"></script>
+	<script>
+		window.Config = {
+			production : true,
+			service : "tistory",
+			blog : {
+				"image" : "https:\/\/t1.daumcdn.net\/tistory_admin\/static\/manage\/images\/r3\/default_L.png",
+				"domain" : "https:\/\/moon09-developer.tistory.com",
+				"customDomain" : "",
+				"title" : "\uce58\ubc00\ud55c\ucef5\ucf00\uc774\ud06c",
+				"categories" : [
+						{
+							"id" : -3,
+							"name" : "\uce74\ud14c\uace0\ub9ac \uc804\uccb4\ubcf4\uae30",
+							"label" : "\uce74\ud14c\uace0\ub9ac \uc804\uccb4\ubcf4\uae30",
+							"priority" : -3,
+							"entries" : 0,
+							"visibility" : 20,
+							"viewChannel" : "",
+							"children" : [],
+							"leaf" : true,
+							"categoryInfo" : {
+								"liststyle" : null,
+								"image" : null,
+								"description" : null
+							}
+						},
+						{
+							"id" : 0,
+							"name" : "\uce74\ud14c\uace0\ub9ac \uc5c6\uc74c",
+							"label" : "\uce74\ud14c\uace0\ub9ac \uc5c6\uc74c",
+							"priority" : -2,
+							"entries" : 0,
+							"visibility" : 20,
+							"viewChannel" : "",
+							"children" : [],
+							"leaf" : true,
+							"categoryInfo" : {
+								"liststyle" : null,
+								"image" : null,
+								"description" : null
+							}
+						},
+						{
+							"id" : 914662,
+							"name" : "html_css_js",
+							"label" : "html_css_js",
+							"priority" : 0,
+							"entries" : 92,
+							"visibility" : 20,
+							"viewChannel" : "401",
+							"children" : [ {
+								"id" : 914663,
+								"name" : "html",
+								"label" : "html_css_js\/html",
+								"priority" : 0,
+								"entries" : 4,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 903124,
+								"name" : "HTML\uc2e4\uc2b5",
+								"label" : "html_css_js\/HTML\uc2e4\uc2b5",
+								"priority" : 1,
+								"entries" : 10,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 914664,
+								"name" : "css",
+								"label" : "html_css_js\/css",
+								"priority" : 2,
+								"entries" : 10,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 903125,
+								"name" : "JavaScript",
+								"label" : "html_css_js\/JavaScript",
+								"priority" : 3,
+								"entries" : 33,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 904221,
+								"name" : "Js\uc2e4\uc2b5",
+								"label" : "html_css_js\/Js\uc2e4\uc2b5",
+								"priority" : 4,
+								"entries" : 15,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 912346,
+								"name" : "jQuery",
+								"label" : "html_css_js\/jQuery",
+								"priority" : 5,
+								"entries" : 10,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 912347,
+								"name" : "jQuery \uc2e4\uc2b5",
+								"label" : "html_css_js\/jQuery \uc2e4\uc2b5",
+								"priority" : 6,
+								"entries" : 8,
+								"visibility" : 20,
+								"viewChannel" : null,
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 914182,
+								"name" : "ajax",
+								"label" : "html_css_js\/ajax",
+								"priority" : 7,
+								"entries" : 1,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 914183,
+								"name" : "ajax \uc2e4\uc2b5",
+								"label" : "html_css_js\/ajax \uc2e4\uc2b5",
+								"priority" : 8,
+								"entries" : 1,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							} ],
+							"leaf" : false,
+							"categoryInfo" : {
+								"liststyle" : null,
+								"image" : null,
+								"description" : null
+							}
+						},
+						{
+							"id" : 914665,
+							"name" : "Java",
+							"label" : "Java",
+							"priority" : 1,
+							"entries" : 34,
+							"visibility" : 20,
+							"viewChannel" : "401",
+							"children" : [ {
+								"id" : 903126,
+								"name" : "Java",
+								"label" : "Java\/Java",
+								"priority" : 0,
+								"entries" : 26,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 903127,
+								"name" : "Java\uc2e4\uc2b5",
+								"label" : "Java\/Java\uc2e4\uc2b5",
+								"priority" : 1,
+								"entries" : 8,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							} ],
+							"leaf" : false,
+							"categoryInfo" : {
+								"liststyle" : null,
+								"image" : null,
+								"description" : null
+							}
+						},
+						{
+							"id" : 914666,
+							"name" : "jsp",
+							"label" : "jsp",
+							"priority" : 2,
+							"entries" : 26,
+							"visibility" : 20,
+							"viewChannel" : "401",
+							"children" : [
+									{
+										"id" : 914667,
+										"name" : "05_jsp_mysql",
+										"label" : "jsp\/05_jsp_mysql",
+										"priority" : 0,
+										"entries" : 11,
+										"visibility" : 20,
+										"viewChannel" : "401",
+										"children" : [],
+										"leaf" : true,
+										"categoryInfo" : {
+											"liststyle" : null,
+											"image" : null,
+											"description" : null
+										}
+									},
+									{
+										"id" : 906306,
+										"name" : "06_jsp_java_mysql_model01",
+										"label" : "jsp\/06_jsp_java_mysql_model01",
+										"priority" : 1,
+										"entries" : 8,
+										"visibility" : 20,
+										"viewChannel" : "401",
+										"children" : [],
+										"leaf" : true,
+										"categoryInfo" : {
+											"liststyle" : null,
+											"image" : null,
+											"description" : null
+										}
+									},
+									{
+										"id" : 912987,
+										"name" : "07_jsp_java_MVC_model02_Oracle",
+										"label" : "jsp\/07_jsp_java_MVC_model02_Oracle",
+										"priority" : 2,
+										"entries" : 6,
+										"visibility" : 20,
+										"viewChannel" : "401",
+										"children" : [],
+										"leaf" : true,
+										"categoryInfo" : {
+											"liststyle" : null,
+											"image" : null,
+											"description" : null
+										}
+									} ],
+							"leaf" : false,
+							"categoryInfo" : {
+								"liststyle" : null,
+								"image" : null,
+								"description" : null
+							}
+						},
+						{
+							"id" : 914668,
+							"name" : "dbms",
+							"label" : "dbms",
+							"priority" : 3,
+							"entries" : 22,
+							"visibility" : 20,
+							"viewChannel" : "401",
+							"children" : [
+									{
+										"id" : 911701,
+										"name" : "\ub370\uc774\ud130\ubca0\uc774\uc2a4 \uc774\ub860",
+										"label" : "dbms\/\ub370\uc774\ud130\ubca0\uc774\uc2a4 \uc774\ub860",
+										"priority" : 0,
+										"entries" : 6,
+										"visibility" : 20,
+										"viewChannel" : "401",
+										"children" : [],
+										"leaf" : true,
+										"categoryInfo" : {
+											"liststyle" : null,
+											"image" : null,
+											"description" : null
+										}
+									}, {
+										"id" : 912231,
+										"name" : "sql",
+										"label" : "dbms\/sql",
+										"priority" : 1,
+										"entries" : 7,
+										"visibility" : 20,
+										"viewChannel" : "401",
+										"children" : [],
+										"leaf" : true,
+										"categoryInfo" : {
+											"liststyle" : null,
+											"image" : null,
+											"description" : null
+										}
+									}, {
+										"id" : 913702,
+										"name" : "sql \uc2e4\uc2b5",
+										"label" : "dbms\/sql \uc2e4\uc2b5",
+										"priority" : 2,
+										"entries" : 4,
+										"visibility" : 20,
+										"viewChannel" : "401",
+										"children" : [],
+										"leaf" : true,
+										"categoryInfo" : {
+											"liststyle" : null,
+											"image" : null,
+											"description" : null
+										}
+									}, {
+										"id" : 913734,
+										"name" : "eXERD",
+										"label" : "dbms\/eXERD",
+										"priority" : 3,
+										"entries" : 4,
+										"visibility" : 20,
+										"viewChannel" : "401",
+										"children" : [],
+										"leaf" : true,
+										"categoryInfo" : {
+											"liststyle" : null,
+											"image" : null,
+											"description" : null
+										}
+									} ],
+							"leaf" : false,
+							"categoryInfo" : {
+								"liststyle" : null,
+								"image" : null,
+								"description" : null
+							}
+						}, {
+							"id" : 917411,
+							"name" : "Framework",
+							"label" : "Framework",
+							"priority" : 4,
+							"entries" : 14,
+							"visibility" : 20,
+							"viewChannel" : "401",
+							"children" : [ {
+								"id" : 917412,
+								"name" : "springboot",
+								"label" : "Framework\/springboot",
+								"priority" : 0,
+								"entries" : 10,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 921221,
+								"name" : "sts_mybatis",
+								"label" : "Framework\/sts_mybatis",
+								"priority" : 1,
+								"entries" : 0,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							}, {
+								"id" : 915216,
+								"name" : "bootstrap",
+								"label" : "Framework\/bootstrap",
+								"priority" : 2,
+								"entries" : 4,
+								"visibility" : 20,
+								"viewChannel" : "401",
+								"children" : [],
+								"leaf" : true,
+								"categoryInfo" : {
+									"liststyle" : null,
+									"image" : null,
+									"description" : null
+								}
+							} ],
+							"leaf" : false,
+							"categoryInfo" : {
+								"liststyle" : null,
+								"image" : null,
+								"description" : null
+							}
+						}, {
+							"id" : 906349,
+							"name" : "\uc5d0\ub7ec",
+							"label" : "\uc5d0\ub7ec",
+							"priority" : 5,
+							"entries" : 1,
+							"visibility" : 20,
+							"viewChannel" : "401",
+							"children" : [],
+							"leaf" : true,
+							"categoryInfo" : {
+								"liststyle" : null,
+								"image" : null,
+								"description" : null
+							}
+						} ],
+				"blogSettings" : {
+					"blogId" : "5085550",
+					"url" : "",
+					"logo" : "",
+					"logoLabel" : "",
+					"logoWidth" : "0",
+					"logoHeight" : "0",
+					"entriesOnPage" : "6",
+					"entriesOnList" : "6",
+					"entriesOnRSS" : "10",
+					"publishWholeOnRSS" : "1",
+					"allowWriteOnGuestbook" : "1",
+					"allowWriteDoubleCommentOnGuestbook" : "1",
+					"commentWritePermission" : "0",
+					"useCommentRecognition" : "0",
+					"useGuestbookRecognition" : "0",
+					"language" : "ko",
+					"timezone" : "Asia\/Seoul",
+					"showLocalSearchTag" : "1",
+					"useSlogan" : "0",
+					"description" : ""
+				},
+				"activePlugins" : [ "AddLinkToPostWithSearch",
+						"AD_Referer_Default", "AD_Visitor_Default", "DaumShow",
+						"DragSearchHandler", "EnglishSeriousPatient",
+						"lightbox", "LocationTag", "refererkeyword",
+						"SyntaxHighlight", "TistoryCustomizeMenu",
+						"EntryViewCounter", "TistoryProfileLayer",
+						"EndedPluginAfterProcessing",
+						"CommentCaptchaForSpammer", "PostListinCategory",
+						"EnglishPatient" ],
+				"created" : "2021-12-09 00:25:14",
+				"skinInfo" : {
+					"name" : "customize\/5085550",
+					"preview" : "https:\/\/tistory3.daumcdn.net\/tistory\/0\/xf_Portfolio\/preview256.jpg",
+					"preview560" : "https:\/\/tistory3.daumcdn.net\/tistory\/0\/xf_Portfolio\/preview256.jpg",
+					"preview1600" : "https:\/\/tistory3.daumcdn.net\/tistory\/0\/xf_Portfolio\/preview256.jpg",
+					"title" : "Portfolio",
+					"version" : "1.0",
+					"license" : "MIT License",
+					"description" : "\ub098\ub9cc\uc758 \uc2dc\uc120, \ub098\ub9cc\uc758 \ucf58\ud150\uce20\ub85c \uaf49 \ucc2c \uacf5\uac04.\n\uc5ec\ub7ec\ubd84\uc758 \ud3ec\ud2b8\ud3f4\ub9ac\uc624\ub97c \ubcf4\uc5ec\uc8fc\uc138\uc694.",
+					"layout" : "etc",
+					"author" : {
+						"name" : "Tistory",
+						"email" : "tistoryblog@daum.net",
+						"homepage" : "https:\/\/www.tistory.com"
+					},
+					"useWizard" : false,
+					"useBlogmenu" : true,
+					"default" : "{\"entriesOnPage\":\"6\",\"entriesOnList\":\"6\",\"recentEntries\":\"4\",\"recentComments\":\"4\",\"recentTrackbacks\":\"4\",\"itemsOnGuestbook\":\"4\",\"tagsInCloud\":\"20\",\"sortInCloud\":\"3\",\"expandComment\":\"8\",\"lengthOfRecentNotice\":\"40\",\"lengthOfRecentEntry\":\"30\",\"lengthOfRecentComment\":\"40\",\"lengthOfRecentTrackback\":\"40\",\"lengthOfLink\":\"30\",\"commentMessage\":{\"none\":\"0\",\"single\":\"1\"},\"trackbackMessage\":{\"none\":\"0\",\"single\":\"1\"},\"contentWidth\":\"700\",\"toolbar\":\"white\"}",
+					"variables" : "[{\"name\":\"logoImage\",\"label\":\"\\ub85c\\uace0 (\\ub192\\uc774 48px)\",\"description\":\"\",\"type\":\"IMAGE\",\"default\":\"\",\"option\":\"\"},{\"name\":\"colorSet\",\"label\":\"\\uceec\\ub7ec\\uc14b\",\"description\":\"\",\"type\":\"SELECT\",\"default\":\"theme_pink\",\"option\":\"[\\n\\t\\t\\t\\t\\t{\\\"name\\\":\\\"theme_pink\\\", \\\"label\\\":\\\"\\ud551\\ud06c\\\", \\\"value\\\":\\\"theme_pink\\\"},\\n\\t\\t\\t\\t\\t{\\\"name\\\":\\\"theme_blue\\\", \\\"label\\\":\\\"\\ube14\\ub8e8\\\", \\\"value\\\":\\\"theme_blue\\\"},\\n\\t\\t\\t\\t\\t{\\\"name\\\":\\\"theme_green\\\", \\\"label\\\":\\\"\\uadf8\\ub9b0\\\", \\\"value\\\":\\\"theme_green\\\"},\\n\\t\\t\\t\\t\\t{\\\"name\\\":\\\"theme_gray\\\", \\\"label\\\":\\\"\\uadf8\\ub808\\uc774\\\", \\\"value\\\":\\\"theme_gray\\\"}\\n\\t\\t\\t\\t]\"},{\"name\":\"listType\",\"label\":\"\\uae00 \\ubaa9\\ub85d \\ud615\\ud0dc\",\"description\":\"\",\"type\":\"SELECT\",\"default\":\"notice\",\"option\":\"[\\n\\t\\t\\t\\t\\t{\\\"name\\\":\\\"related\\\", \\\"label\\\":\\\"\\ube14\\ub85c\\uadf8\\ud615\\\", \\\"value\\\":\\\"related\\\"},\\n\\t\\t\\t\\t\\t{\\\"name\\\":\\\"notice\\\", \\\"label\\\":\\\"\\ub9ac\\uc2a4\\ud2b8\\ud615\\\", \\\"value\\\":\\\"notice\\\"}\\n\\t\\t\\t\\t]\"},{\"name\":\"footerCopyright\",\"label\":\"\\ud558\\ub2e8 \\uce74\\ud53c\\ub77c\\uc774\\ud2b8\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"\\u00a9 2018 TISTORY. All rights reserved.\",\"option\":\"\"},{\"name\":\"footerLink1Name\",\"label\":\"\\ud558\\ub2e8 \\ub9c1\\ud06c1 \\uc774\\ub984\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"\\ud2f0\\uc2a4\\ud1a0\\ub9ac\",\"option\":\"\"},{\"name\":\"footerLink1Url\",\"label\":\"\\ud558\\ub2e8 \\ub9c1\\ud06c1 URL\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"https:\\\/\\\/www.tistory.com\\\/\",\"option\":\"\"},{\"name\":\"footerLink2Name\",\"label\":\"\\ud558\\ub2e8 \\ub9c1\\ud06c2 \\uc774\\ub984\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"\",\"option\":\"\"},{\"name\":\"footerLink2Url\",\"label\":\"\\ud558\\ub2e8 \\ub9c1\\ud06c2 URL\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"\",\"option\":\"\"},{\"name\":\"footerLink3Name\",\"label\":\"\\ud558\\ub2e8 \\ub9c1\\ud06c3 \\uc774\\ub984\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"\",\"option\":\"\"},{\"name\":\"footerLink3Url\",\"label\":\"\\ud558\\ub2e8 \\ub9c1\\ud06c3 URL\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"\",\"option\":\"\"},{\"name\":\"footerLink4Name\",\"label\":\"\\ud558\\ub2e8 \\ub9c1\\ud06c4 \\uc774\\ub984\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"\",\"option\":\"\"},{\"name\":\"footerLink4Url\",\"label\":\"\\ud558\\ub2e8 \\ub9c1\\ud06c4 URL\",\"description\":\"\",\"type\":\"STRING\",\"default\":\"\",\"option\":\"\"}]",
+					"cover" : "[{\"name\":\"featured\",\"label\":\"\\uc2ac\\ub77c\\uc774\\ub354\",\"description\":\"\\ud654\\uba74 \\ub192\\uc774 100%\\ub97c \\ucc44\\uc6b0\\ub294 \\uc2ac\\ub77c\\uc774\\ub354\\uc785\\ub2c8\\ub2e4.\"},{\"name\":\"post\",\"label\":\"\\uac24\\ub7ec\\ub9ac\",\"description\":\"\\uc138\\ub85c \\uc9c1\\uc0ac\\uac01\\ud615 \\ud615\\ud0dc\\ub85c \\uc774\\ubbf8\\uc9c0\\ub97c \\ucd9c\\ub825\\ud569\\ub2c8\\ub2e4. 4\\ubc30\\uc218 \\ubaa9\\ub85d\\uc744 \\uad8c\\uc7a5\\ud569\\ub2c8\\ub2e4.\"},{\"name\":\"card\",\"label\":\"\\uc12c\\ub124\\uc77c \\ub9ac\\uc2a4\\ud2b8\",\"description\":\"\\uc9c1\\uc0ac\\uac01\\ud615 \\uc12c\\ub124\\uc77c \\ubaa9\\ub85d\\uc744 \\ucd9c\\ub825\\ud569\\ub2c8\\ub2e4. 4\\ubc30\\uc218 \\ubaa9\\ub85d\\uc744 \\uad8c\\uc7a5\\ud569\\ub2c8\\ub2e4.\"},{\"name\":\"banner\",\"label\":\"\\uc640\\uc774\\ub4dc\\ud328\\ub110\",\"description\":\"\\ubc30\\ub108 \\ud615\\ud0dc\\uc758 \\uc774\\ubbf8\\uc9c0\\ub97c \\ucc28\\ub840\\ub85c \\uc313\\uc544\\uc11c \\ucd9c\\ub825\\ud569\\ub2c8\\ub2e4.\"},{\"name\":\"notice\",\"label\":\"\\ub9ac\\uc2a4\\ud2b8\",\"description\":\"\\uc88c\\uce21 \\uc12c\\ub124\\uc77c\\uc744 \\ud3ec\\ud568\\ud558\\ub294 \\uc77c\\ubc18\\uc801\\uc778 \\ub9ac\\uc2a4\\ud2b8 \\ud615\\ud0dc\\uc785\\ub2c8\\ub2e4.\"}]",
+					"liststyle" : "",
+					"demoUrl" : "",
+					"skinUrl" : ""
+				},
+				"useMobileSkin" : true,
+				"targetNotification" : []
+			},
+			user : {
+				"userId" : "5172516",
+				"accountType" : "kakao",
+				"role" : "owner",
+				"roleLabel" : "\uc18c\uc720\uc790",
+				"name" : "\uac1c\ubc1c\uc790\uafc8\uafb8\ub294\uae40\ubb38\uc601",
+				"profileImageUrl" : "https:\/\/t1.daumcdn.net\/tistory_admin\/static\/manage\/images\/r3\/default_S.png",
+				"loginId" : "zxcv199698@naver.com"
+			},
+			useWriteButton : true,
+			useBlogList : true,
+			maintenance : {
+				"statistics" : null
+			},
+			frontSentry : "https:\/\/0b627419a0bc49a8acf30248a4f3f0e1@aem-collector.daumkakao.io\/748",
+		};
+
+		window.appInfo = {
+			domain : 'tistory.com',
+			topUrl : 'https://www.tistory.com',
+			loginUrl : 'https://www.tistory.com/auth/login',
+			logoutUrl : 'https://www.tistory.com/auth/logout',
+			memberUrl : 'https://www.tistory.com/member',
+			gnbBaseUrl : 'https://www.tistory.com/accio',
+			manageUrl : 'https://moon09-developer.tistory.com/manage',
+			thumbnailBaseUrl : 'https://img1.daumcdn.net/thumb',
+			revenueVendors : [],
+		};
+
+		window.initData = {
+			user : window.Config.user
+		}
+
+		window.user = window.Config.user;
+		window.production = window.Config.production;
+	</script>
+
+	<!-- amchart for statistics -->
+	<script src="//t1.daumcdn.net/tistory_admin/lib/amchart-3/amcharts.js"></script>
+	<script src="//t1.daumcdn.net/tistory_admin/lib/amchart-3/light.js"></script>
+	<script src="//t1.daumcdn.net/tistory_admin/lib/amchart-3/serial.js"></script>
+
+	<script src="https://t1.daumcdn.net/fp/photos/dist/1.3.0/photos.min.js"></script>
+	<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+	<script
+		src="https://t1.daumcdn.net/tistory_admin/assets/blog/tistory-bac131c8b9e1840e183541bf1202048350be6bd3/blogs/script/manage/index.min.js?_version_=tistory-bac131c8b9e1840e183541bf1202048350be6bd3"></script>
+	<script
+		src="https://t1.daumcdn.net/tistory_admin/assets/tistory-gnb/3.2.3/gnb.min.js"></script>
+
+	<!--<![endif]-->
+	<script type="text/javascript"
+		src="//t1.daumcdn.net/tiara/js/v1/tiara.min.js"></script>
+	<script type="text/javascript">
+		window.tiara = {
+			"svcDomain" : "user.tistory.com",
+			"section" : "\uad00\ub9ac\uc13c\ud130",
+			"trackPage" : "\uad00\ub9ac\uc13c\ud130_\uc0ac\uc6a9\ud558\uae30",
+			"page" : "\uad00\ub9ac\uc13c\ud130",
+			"key" : "5085550",
+			"customProps" : {
+				"userId" : "5172516",
+				"blogId" : "5085550",
+				"role" : "owner",
+				"filterTarget" : false,
+				"trackPage" : "\uad00\ub9ac\uc13c\ud130_\uc0ac\uc6a9\ud558\uae30"
+			},
+			"entry" : [],
+			"sentryDsn" : "https:\/\/a53520229cd744e798d42900d76b0e2a@aem-collector.daumkakao.io\/713",
+			"kakaoAppKey" : "b8aef3eeb03fa312b81795386484f051",
+			"appUserId" : "2025467056"
+		};
+	</script>
+	<script type="text/javascript"
+		src="https://t1.daumcdn.net/tistory_admin/assets/blog/tistory-bac131c8b9e1840e183541bf1202048350be6bd3/blogs/script/tiara/tiara.min.js?_version_=tistory-bac131c8b9e1840e183541bf1202048350be6bd3"
+		defer></script>
+</th:block>
+</html>

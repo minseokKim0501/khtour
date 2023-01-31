@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+<th:block layout:fragment="customContents">
+	<div class="card">
+	<div class="card-header bg-info">
+		<h5>오늘의 인기포스트</h5>
+	</div>
+	<div class="card-body m-0 p-0">
+	<div class="card-group">
+		<div class="card" th:if="${not #lists.isEmpty(dailyPostList)}" th:each="dp: ${dailyPostList}">
+			<img th:src="@{'/images/commPost/'+${dp.pictureLink}+'.jpg'}" class="card-img"
+							alt="...">
+			<div class="card-body">
+				<h5 class="card-title" th:text="${dp.title}"></h5>
+				 <a href="/post" class="stretched-link"></a>
+			</div>
+			<div class="card-foot p-2 text-center border-top bg-info">
+				<p class="card-text text-white" th:text="${dp.commName}"></p>
+			</div>
+		</div>
+		</div>
+	</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-8">
+			<div class="card">
+			<div class="card-header bg-info">
+				<h5>인기포스트</h5>
+			</div>
+				<div class="card-body text-center">
+					<button type="button" class="btn btn-info pull-left">HOT</button>
+					<button type="button" class="btn btn-info ">New</button>
+					<button type="button" class="btn btn-info pull-right">Top</button>
+				</div>
+
+			</div>
+			<div class="card-group" th:if="${not #lists.isEmpty(postList)}" th:each="p: ${postList}">
+			
+				<div class="card col-sm-1 bg-info d-flex ml-0 mr-0 pl-0 pr-0 pt-5">
+					<div class="card-body ml-0 mr-0 pl-0 pr-0 pt-5">
+							<a href="#!" > <i class="la la-caret-up d-flex la-3x justify-content-center text-dark"></i></a>
+							<p class="card-text text-white text-center mb-0 pb-0" th:text="${p.likesCnt}"></p>
+							<p class="card-text text-white text-center mt-0 pt-0">좋아요</p>
+							<a href="#!" > <i class="la la-caret-down d-flex la-3x justify-content-center text-dark"></i></a>
+							
+					</div>
+					
+				</div>
+				<div class="card col-sm-11">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${p.title}"></h5>
+						<p class="card-text" th:text="${p.mainText}"></p>
+						<img th:src="@{'/images/commPost/'+${p.pictureLink}+'.jpg'}" class="card-img"
+							alt="...">
+							
+						
+					
+					</div>
+					<div class="card-foot p-2 text-center border-top">
+						<p class="card-text">
+							<a href="#!" class="text-dark" style="z-index: 2; position: relative;" > <i class="text-dark feather icon-message-circle"></i> 댓글 (20) </a>
+							<a href="#!" class="text-dark" style="z-index: 2; position: relative;"><i class="text-dark la la-share  pl-3" ></i>공유하기</a>
+							<a href="#!" class="text-dark" style="z-index: 2; position: relative;"><i class="text-dark  la la-flag  pl-3"></i>신고하기</a>		
+						 	<a href="/post" class="stretched-link"></a>	
+						</p>
+					</div>
+
+				</div>
+			</div>	
+		</div>
+		
+		<div class="col-sm-4">
+			<div class="card">
+				<img th:src="@{/images/commPost/img004.jpg}" class="card-img-top"
+					alt="...">
+					<div class="card-body m-0">
+						<div class="table-responsive">
+							<table class="table table-centered table-hover mb-0">
+								<tbody>
+								<tr th:if="${not #lists.isEmpty(communityList)}" th:each="l,index : ${communityList}" style="transform: rotate(0);">
+									
+									<th scope="row"><a th:href="@{/commPage(commName=${l.commName})}" class="stretched-link"  th:text="${index.index}+1"></a></th>
+									<td><div class="d-inline-block text-truncate" style="max-width: 120px;"><a th:text="${l.commName}"></a></div></td>
+									<td class="text-right"><button type="button" class="btn btn-info btn-sm" style="z-index: 2; position: relative;">가입</button></td>
+								</tr>		
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+					<div class="card-foot p-2 text-center border-top bg-info">
+						<a href="/commRanking" class="btn btn-light active" role="button" aria-pressed="true">전체보기</a>
+					</div>
+				
+
+
+			</div>
+			<div class="card">
+				<img th:src="@{/images/commPost/img002.jpg}" class="card-img-top"
+					alt="...">
+				
+					<div class="card-body m-0">
+						<h5 class="card-title">HOME</h5>
+						
+							
+					</div>
+					<div class="card-foot p-2 text-center border-top bg-info">
+						<a href="/createPost" class="btn btn-light active mt-2 mb-0" role="button" aria-pressed="true">포스트 등록</a>
+						<a href="/addCommunity" class="btn btn-light active mt-2 mb-0" role="button" aria-pressed="true">커뮤니티 등록</a>
+					</div>
+				
+
+
+			</div>
+		</div>
+		
+	</div>
+
+
+</th:block>
+
+
+
+
+
+
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

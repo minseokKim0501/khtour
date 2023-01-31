@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+<th:block layout:fragment="customScript">
+	<script>
+		$(function() {
+			
+			$(".updateReplyButton").on('click', function() {
+				var replyCode = $(this).attr('data-replyCode');
+					$.ajax({
+						url : '/getReplyByReplyCode',
+						type : 'post',
+						data : {
+							'replyCode' : replyCode
+						},
+						dataType : 'json',
+						success : function(data) {	
+							$('#mainTextModal').val(data.mainText);	
+							$('#replyCodeModal').val(replyCode);
+							}	
+					});
+			});
+			$(".deleteReplyButton").on('click', function() {
+				var replyCode = $(this).attr('data-replyCode');
+					$.ajax({
+						url : '/getReplyByReplyCode',
+						type : 'post',
+						data : {
+							'replyCode' : replyCode
+						},
+						dataType : 'json',
+						success : function(data) {	
+							$('#replyCodeModal2').val(replyCode);
+							}	
+					});
+			});
+			
+			$(".upVote").on("click", function() {
+				var postCode = $(this).attr('data-postCode');
+				var replyCode = $(this).attr('data-replyCode');
+				var resultCnt = $(this).parent().find('#resultCnt');
+				var upVote = $(this);
+				var downVote = $(this).parent().find('.downVote');
+				if (typeof replyCode == 'undefined') {
+					$.ajax({
+						url : '/likesDislikesCheck',
+						type : 'post',
+						data : {
+							'postCode' : postCode
+						},
+						dataType : 'text',
+						success : function(data) {
+							console.log(data);
+							 if(data=='available')
+							{
+								 $.ajax({
+										url : '/addLikes',
+										type : 'post',
+										data : {
+											'postCode' : postCode
+										},
+										dataType : 'text',
+										success : function(data1) {
+											resultCnt.text(data1);	
+											upVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-success pb-5"></i>');
+											
+										}
+								 }); 
+								
+							}
+							 else if(data=='dislike')
+							{
+								 $.ajax({
+										url : '/updateLikeDislike',
+										type : 'post',
+										data : {
+											'postCode' : postCode,
+											'likeDislike' : 'dislike'
+										},
+										dataType : 'text',
+										success : function(data2) {
+											resultCnt.text(data2);
+											upVote.empty();
+											downVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-success pb-5"></i>');
+											downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-white"></i>');
+											
+										}
+								 }); 
+								
+							}
+						}
+					}); 
+				} else {
+					$.ajax({
+						url : '/likesDislikesCheck',
+						type : 'post',
+						data : {
+							'replyCode' : replyCode
+						},
+						dataType : 'text',
+						success : function(data) {
+							console.log(data);
+							 if(data=='available')
+							{
+								 $.ajax({
+										url : '/addLikes',
+										type : 'post',
+										data : {
+											'replyCode' : replyCode
+										},
+										dataType : 'text',
+										success : function(data1) {
+											resultCnt.text(data1);	
+											upVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-success pb-2"></i>');
+										}
+								 }); 
+								
+							}
+							 else if(data=='dislike')
+							{
+								 $.ajax({
+										url : '/updateLikeDislike',
+										type : 'post',
+										data : {
+											'replyCode' : replyCode,
+											'likeDislike' : 'dislike'
+										},
+										dataType : 'text',
+										success : function(data2) {
+											resultCnt.text(data2);
+											upVote.empty();
+											downVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-success pb-2"></i>');
+											downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-dark"></i>');
+										}
+								 }); 
+								
+							}
+						}
+					}); 
+				}
+
+			})
+		});
+		$(function() {
+			$(".downVote").on("click", function() {
+				var postCode = $(this).attr('data-postCode');
+				var replyCode = $(this).attr('data-replyCode');
+				var resultCnt = $(this).parent().find('#resultCnt')
+				var downVote = $(this);
+				var upVote = $(this).parent().find('.upVote');
+				if (typeof replyCode == 'undefined') {
+					$.ajax({
+						url : '/likesDislikesCheck',
+						type : 'post',
+						data : {
+							'postCode' : postCode
+						},
+						dataType : 'text',
+						success : function(data) {
+							 if(data=='available')
+							{
+								 $.ajax({
+										url : '/addDislikes',
+										type : 'post',
+										data : {
+											'postCode' : postCode
+										},
+										dataType : 'text',
+										success : function(data1) {
+											resultCnt.text(data1);	
+											downVote.empty();
+											downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i>');
+										}
+								 }); 
+								
+							}
+							 else if(data=='like')
+							{
+								 $.ajax({
+										url : '/updateLikeDislike',
+										type : 'post',
+										data : {
+											'postCode' : postCode,
+											'likeDislike' : 'like'
+										},
+										dataType : 'text',
+										success : function(data2) {
+											resultCnt.text(data2);	
+											downVote.empty();
+											upVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-white pb-5"></i>');
+											downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i>');
+										}
+								 }); 
+									 
+							}
+						}
+					}); 
+				} else {
+					$.ajax({
+						url : '/likesDislikesCheck',
+						type : 'post',
+						data : {
+							'replyCode' : replyCode
+						},
+						dataType : 'text',
+						success : function(data) {
+							 if(data=='available')
+							{
+								 $.ajax({
+										url : '/addDislikes',
+										type : 'post',
+										data : {
+											'replyCode' : replyCode
+										},
+										dataType : 'text',
+										success : function(data1) {
+											resultCnt.text(data1);	
+											downVote.empty();
+											downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i>');
+										}
+								 }); 
+								
+							}
+							 else if(data=='like')
+							{
+								 $.ajax({
+										url : '/updateLikeDislike',
+										type : 'post',
+										data : {
+											'replyCode' : replyCode,
+											'likeDislike' : 'like'
+										},
+										dataType : 'text',
+										success : function(data2) {
+											resultCnt.text(data2);	
+											downVote.empty();
+											upVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-dark pb-2"></i>');
+											downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i>');
+										}
+								 }); 
+									 
+							}
+						}
+					}); 
+				}
+			})
+		});
+	</script>
+</th:block>
+<th:block layout:fragment="customContents">
+
+	<div class="row justify-content-center">
+		<div class="card" style="width: 1000px">
+
+			<div class="row">
+				<div class="col-md-8">
+					<div class="card-group md-3">
+						<div class="card col-sm-1 bg-primary d-flex pl-0 pr-0">
+							<div class="card-body pl-0 pr-0 pt-5">
+								<a href="#!" onclick="return false;" class="upVote" th:data-postCode="${commPost.postCode}"> 
+								<i th:if="${commPost.likeOrDislike != 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-white pb-5"></i>
+								<i th:if="${commPost.likeOrDislike == 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-success pb-5"></i></a>
+								<p id="resultCnt" class="card-text text-white text-center mb-0 pb-0">[[${commPost.resultCnt}]]</p>
+								<p class="card-text text-white text-center mt-0 pt-0 pb-5">좋아요</p>
+								<a href="#!" onclick="return false;" class="downVote" th:data-postCode="${commPost.postCode}">  
+								<i th:if="${commPost.likeOrDislike != 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-white"></i>
+								<i th:if="${commPost.likeOrDislike == 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i></a>
+							</div>
+						</div>
+						<div class="card col-sm-11">
+							<div class="card-body">
+								<div th:if="${not #strings.isEmpty(commPost.CommTag)}">
+									<p>작성자 : [[${commPost.memberId}]]</p>
+									<button th:class="'btn active btn-sm pt-1 pb-1 pull-left mr-2 btn-'+${commPost.CommTag.getTagColor()}" th:text="${commPost.CommTag.getTagName()}"></button>
+								</div>
+								<h5 class="card-title" th:text="${commPost.title}"></h5>
+								<p class="card-text" th:text="${commPost.mainText}"></p>
+								<div th:if="${not #strings.isEmpty(commPost.pictureLink)}">
+									<div id="carouselExampleControls" class="carousel slide"
+										data-ride="carousel">
+										<div class="carousel-inner">
+											<div class="carousel-item active">
+												<img class="d-block w-100"
+													th:src="@{${commPost.pictureLink}}">
+											</div>
+											<div class="carousel-item" th:each="fc: ${filePathList}">
+												<img class="d-block w-100" th:src="@{${fc}}">
+											</div>
+										</div>
+										<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+											<span class="sr-only">Previous</span>
+										</a> 
+										<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next"> 
+											<span class="carousel-control-next-icon" aria-hidden="true"></span>
+											<span class="sr-only">Next</span>
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="card-foot p-2 text-center border-top">
+								<p class="card-text">
+									<a><i class="text-dark feather icon-message-circle"></i>
+										댓글([[${commPost.commentsCnt}]])</a>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-body">
+							<form class="cmxform" id="form2" method="post"
+								th:action="@{/addCommReply}" th:if="${session.SID !=null}">
+								<div class="form-group">
+									<div class="avatar avatar-sm bg-danger mr-1">
+										<span class="avatar-name">[[${session.SID}]]</span>
+									</div>
+									<label for="agree">[[${session.SNAME}]] : 댓글 달기</label>
+									<textarea id="mainText" name="mainText" class="form-control"
+										rows="5" placeholder="댓글 내용" required></textarea>
+									<input type="hidden" th:value="${commPost.postCode}"
+										name="postCode" /> <input type="hidden"
+										th:value="${session.SID}" name="memberId" />
+
+								</div>
+								<div class="form-group">
+									<input class="submit btn btn-primary btn-sm" type="submit"
+										value="댓글 등록">
+								</div>
+							</form>
+							<div th:if="${not #lists.isEmpty(replyList)}">
+								<div class="card card ml-4 mr-0 mb-1 mt-0"
+									th:if="${#strings.isEmpty(r1.parentReplyCode)}"
+									th:each="r1,index1: ${replyList}">
+									<div class="card-header ">
+										<div class="avatar avatar-sm bg-secondary mr-1">
+											<span class="avatar-name">[[${r1.memberId}]]</span>
+										</div>
+										<a th:text="${r1.memberName}"></a> <a th:text="${r1.regTime}"></a>
+										<button type="button" class="deleteReplyButton btn btn-primary text-white btn-sm" th:data-replyCode="${r1.replyCode}" data-toggle="modal" data-target="#deleteReplyModal" style="float:right;">삭제</button> 
+										<button type="button" class="updateReplyButton btn btn-primary text-white btn-sm" th:data-replyCode="${r1.replyCode}" data-toggle="modal" data-target="#updateReplyModal" style="float:right;">수정</button> 
+
+									</div>
+									<div class="card-body">
+										<div class="row">
+											<div class="col-sm-2 border-right">
+												<a href="#" onclick="return false;" class="upVote" th:data-replyCode="${r1.replyCode}"> 
+												<i th:if="${r1.likeOrDislike != 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-dark pb-2"></i>
+												<i th:if="${r1.likeOrDislike == 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-success pb-2"></i></a>
+												<p id="resultCnt" class="card-text  text-center mb-0 pb-0">[[${r1.resultCnt}]]</p>
+												<p class="card-text  text-center mt-0 pt-0 pb-2">좋아요</p>
+												<a href="#!" onclick="return false;" class="downVote" th:data-replyCode="${r1.replyCode}"> 
+												<i th:if="${r1.likeOrDislike != 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-dark"></i>
+												<i th:if="${r1.likeOrDislike == 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i></a>
+											</div>
+											<div class="col-sm-10 border-left">
+												<div class="card-text pt-3 pb-3 mt-2 mb-2"
+													th:text="${r1.mainText}"></div>
+											</div>
+										</div>
+
+									</div>
+									<div class="card-footer pt-1 pb-0">
+										<div class="accordion accordion-box" id="accordionExample-03">
+											<div class="card">
+												<div class="card-header" id="headingOne-03">
+													<div class="accordion-title bg-white pb-1 pt-1"
+														data-toggle="collapse"
+														th:attr="data-target='#collapseOne-' + ${index1.index}"
+														aria-expanded="true" aria-controls="collapseOne-03">
+														<a><i class="text-dark feather icon-message-circle"></i>댓글([[${r1.commentsCnt}]])</a>
+													</div>
+												</div>
+												<div th:id="'collapseOne-'+${index1.index}" class="collapse"
+													aria-labelledby="headingOne-03"
+													data-parent="#accordionExample-03">
+													<div class="card-body bg-white"
+														th:if="${session.SID !=null}">
+														<form class="cmxform" id="form3" method="post"
+															th:action="@{/addCommReply}">
+															<div class="form-group">
+																<div class="avatar avatar-sm bg-secondary mr-1">
+																	<span class="avatar-name">[[${r1.memberId}]]</span>
+																</div>
+																<textarea id="mainText" name="mainText" class="form-control" rows="5" placeholder="댓글달기" required></textarea>
+																<input type="hidden" th:value="${commPost.postCode}" name="postCode" /> 
+																<input type="hidden" th:value="${r1.replyCode}" name="parentReplyCode" /> 
+																<input type="hidden" th:value="${session.SID}" name="memberId" />
+															</div>
+															<div class="form-group">
+																<input class="submit btn btn-primary btn-sm" type="submit" value="등록">
+															</div>
+														</form>
+													</div>
+
+
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="card card ml-4 mr-0 mb-1 mt-0"
+										th:if="${not #lists.isEmpty(r1.childrenReply)}"
+										th:each="r2,index2: ${r1.childrenReply}">
+										<div class="card-header ">
+											<div class="avatar avatar-sm bg-success mr-1">
+												<span class="avatar-name">[[${r2.memberId}]]</span>
+											</div>
+											<a th:text="${r2.memberName}"></a> <a th:text="${r2.regTime}"></a>
+											<button type="button" class="deleteReplyButton btn btn-primary text-white btn-sm" th:data-replyCode="${r2.replyCode}" data-toggle="modal" data-target="#deleteReplyModal" style="float:right;">삭제</button> 
+											<button  type="button" class="updateReplyButton btn btn-primary text-white btn-sm" th:data-replyCode="${r2.replyCode}" data-toggle="modal" data-target="#updateReplyModal" style="float:right;">수정</button> 
+										</div>
+										<div class="card-body">
+											<div class="row">
+												<div class="col-sm-2 border-right">
+													<a href="#" onclick="return false;" class="upVote" th:data-replyCode="${r2.replyCode}"> 
+													<i th:if="${r2.likeOrDislike != 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-dark pb-2"></i>
+													<i th:if="${r2.likeOrDislike == 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-success pb-2"></i></a>
+													<p id="resultCnt" class="card-text  text-center mb-0 pb-0">[[${r2.resultCnt}]]</p>
+													<p class="card-text  text-center mt-0 pt-0 pb-2">좋아요</p>
+													<a href="#!" onclick="return false;" class="downVote" th:data-replyCode="${r2.replyCode}"> 
+													<i th:if="${r2.likeOrDislike != 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-dark"></i>
+													<i th:if="${r2.likeOrDislike == 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i></a>
+												</div>
+												<div class="col-sm-10 border-left">
+													<div class="card-text pt-3 pb-3 mt-2 mb-2"
+														th:text="${r2.mainText}"></div>
+												</div>
+											</div>
+										</div>
+										<div class="card-footer pt-1 pb-0">
+											<div class="accordion accordion-box" id="accordionExample-03">
+												<div class="card">
+													<div class="card-header" id="headingOne-03">
+														<div class="accordion-title bg-white pb-1 pt-1" data-toggle="collapse" th:attr="data-target='#collapseOne-' + ${index2.index} + ${index1.index}" aria-expanded="true" aria-controls="collapseOne-03">
+															<a><i class="text-dark feather icon-message-circle"></i> 댓글([[${r2.commentsCnt}]])</a>
+														</div>
+													</div>
+													<div
+														th:id="'collapseOne-'+${index2.index} +${index1.index}"
+														class="collapse" aria-labelledby="headingOne-03"
+														data-parent="#accordionExample-03">
+														<div class="card-body bg-white"
+															th:if="${session.SID !=null}">
+															<form class="cmxform" id="form3" method="post"
+																th:action="@{/addCommReply}">
+																<div class="form-group">
+																	<div class="avatar avatar-sm bg-success mr-1">
+																		<span class="avatar-name">[[${session.SID}]]</span>
+																	</div>
+																	<textarea id="mainText" name="mainText" class="form-control" rows="5" placeholder="댓글달기" required></textarea>
+																	<input type="hidden" th:value="${commPost.postCode}" name="postCode" /> 
+																	<input type="hidden" th:value="${r2.replyCode}" name="parentReplyCode" />
+																	<input type="hidden" th:value="${session.SID}"
+																		name="memberId" />
+																</div>
+																<div class="form-group">
+
+																	<input class="submit btn btn-primary btn-sm"
+																		type="submit" value="등록">
+																</div>
+															</form>
+														</div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+										<div class="card card ml-4 mr-0 mb-1 mt-0"
+											th:if="${not #lists.isEmpty(r1.childrenReply)}"
+											th:each="r3,index3: ${r2.childrenReply}">
+											<div class="card-header border-bottom">
+												<div class="avatar avatar-sm bg-primary mr-1">
+													<span class="avatar-name">[[${r3.memberId}]]</span>
+												</div>
+												<a th:text="${r3.memberName}"></a> <a
+													th:text="${r3.regTime}"></a>
+													<button type="button" class="deleteReplyButton btn btn-primary text-white btn-sm" th:data-replyCode="${r3.replyCode}" data-toggle="modal" data-target="#deleteReplyModal" style="float:right;">삭제</button> 
+													<button type="button" class="updateReplyButton btn btn-primary text-white btn-sm" th:data-replyCode="${r3.replyCode}" data-toggle="modal" data-target="#updateReplyModal" style="float:right;">수정</button> 
+
+											</div>
+											<div class="card-body bg-white">
+												<div class="row">
+													<div class="col-sm-2 border-right">
+														<a href="#" onclick="return false;" class="upVote" th:data-replyCode="${r3.replyCode}"> 
+														<i th:if="${r3.likeOrDislike != 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-dark pb-2"></i>
+														<i th:if="${r3.likeOrDislike == 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-success pb-2"></i></a>
+														<p id="resultCnt" class="card-text  text-center mb-0 pb-0">[[${r3.resultCnt}]]</p>
+														<p class="card-text  text-center mt-0 pt-0 pb-2">좋아요</p>
+														<a href="#!" onclick="return false;" class="downVote" th:data-replyCode="${r3.replyCode}"> 
+														<i th:if="${r3.likeOrDislike != 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-dark"></i>
+														<i th:if="${r3.likeOrDislike == 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i></a>
+													</div>
+													<div class="col-sm-10 border-left">
+														<div class="card-text pt-3 pb-3 mt-2 mb-2"
+															th:text="${r3.mainText}"></div>
+													</div>
+												</div>
+											</div>
+											<div class="card-footer pt-1 pb-0">
+												<div class="accordion accordion-box"
+													id="accordionExample-03">
+													<div class="card">
+														<div class="card-header" id="headingOne-03">
+															<div class="accordion-title bg-white pb-1 pt-1"
+																data-toggle="collapse"
+																th:attr="data-target='#collapseOne-' + ${index2.index} + ${index1.index}+${index3.index}"
+																aria-expanded="true" aria-controls="collapseOne-03">
+																<a><i class="text-dark feather icon-message-circle"></i>
+																	댓글([[${r3.commentsCnt}]])</a>
+															</div>
+														</div>
+														<div th:id="'collapseOne-'+${index2.index} +${index1.index}+${index3.index}" class="collapse" aria-labelledby="headingOne-03" data-parent="#accordionExample-03">
+															<div class="card-body bg-white" th:if="${session.SID !=null}">
+																<form class="cmxform" id="form3" method="post" th:action="@{/addCommReply}">
+																	<div class="form-group">
+																		<div class="avatar avatar-sm bg-info mr-1">
+																			<span class="avatar-name">[[${session.SID}]]</span>
+																		</div>
+																		<textarea id="mainText" name="mainText"
+																			class="form-control" rows="5" placeholder="댓글달기"
+																			required></textarea>
+																		<input type="hidden" th:value="${commPost.postCode}"
+																			name="postCode" /> <input type="hidden"
+																			th:value="${r3.replyCode}" name="parentReplyCode" />
+																		<input type="hidden" th:value="${session.SID}"
+																			name="memberId" />
+																	</div>
+																	<div class="form-group">
+
+																		<input class="submit btn btn-primary btn-sm"
+																			type="submit" value="등록">
+																	</div>
+																</form>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="card card ml-4 mr-0 mb-1 mt-0"
+												th:if="${not #lists.isEmpty(r1.childrenReply)}"
+												th:each="r4,index4: ${r3.childrenReply}">
+												<div class="card-header border-bottom">
+													<div class="avatar avatar-sm bg-warning mr-1">
+														<span class="avatar-name">[[${r4.memberId}]]</span>
+													</div>
+													<a th:text="${r4.memberName}"></a> <a
+														th:text="${r4.regTime}"></a>
+													<button type="button" class="deleteReplyButton btn btn-primary text-white btn-sm" th:data-replyCode="${r4.replyCode}" data-toggle="modal" data-target="#deleteReplyModal" style="float:right;">삭제</button> 
+													<button  type="button" class="updateReplyButton btn btn-primary text-white btn-sm" th:data-replyCode="${r4.replyCode}" data-toggle="modal" data-target="#updateReplyModal" style="float:right;">수정</button> 
+												</div>
+												<div class="card-body bg-white">
+													<div class="row">
+														<div class="col-sm-2 border-right">
+															<a href="#" onclick="return false;" class="upVote" th:data-replyCode="${r4.replyCode}"> 
+															<i th:if="${r4.likeOrDislike != 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-dark pb-2"></i>
+															<i th:if="${r4.likeOrDislike == 'like'}" class="la la-caret-up d-flex la-3x justify-content-center text-success pb-2"></i></a>
+															<p id="resultCnt" class="card-text  text-center mb-0 pb-0">[[${r4.resultCnt}]]</p>
+															<p class="card-text  text-center mt-0 pt-0 pb-2">좋아요</p>
+															<a href="#!" onclick="return false;" class="downVote" th:data-replyCode="${r4.replyCode}"> 
+															<i th:if="${r4.likeOrDislike != 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-dark"></i>
+															<i th:if="${r4.likeOrDislike == 'dislike'}" class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i></a>
+															</div>
+														<div class="col-sm-10 border-left">
+															<div class="card-text pt-3 pb-3 mt-2 mb-2"
+																th:text="${r4.mainText}"></div>
+														</div>
+													</div>
+												</div>
+												<div class="card-footer pt-1 pb-0"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="col-md-4">
+					<div class="card">
+						<div class="card-header bg-primary">
+							<h5 class="card-title text-white mb-0">About Community</h5>
+						</div>
+						<div class="card-body m-0">
+							<table class="table">
+								<thead>
+									<tr>
+										<th colspan="2">
+											<div class="card-title" th:text="${community.commName}"></div>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td colspan="2"><p class="card-text"
+												th:text="${community.commDesc}"></p></td>
+									</tr>
+									<tr>
+										<td><p class="card-text">맴버수</p></td>
+										<td><p class="card-text" th:text="${community.memberCnt}"></p></td>
+									</tr>
+									<tr>
+										<td><p class="card-text">온라인</p></td>
+										<td><p class="card-text"
+												th:text="${community.onlineMemberCnt}"></p></td>
+									</tr>
+									<tr>
+										<td><p class="card-text">관리자</p></td>
+										<td><p class="card-text" th:text="${community.memberId}"></p></td>
+									</tr>
+									<tr>
+										<td><p class="card-text">등록일</p></td>
+										<td><p class="card-text" th:text="${community.regDate}"></p></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="card-foot p-2 text-center border-top ">
+							<a th:href="@{/commPage(commCode=${community.commCode})}" class="stretched-link"></a>
+							<a th:if="${isPostMaker=='true'}" th:href="@{/updatePost(postCode=${commPost.postCode})}" class="btn btn-primary active btn-sm" role="button" aria-pressed="true" style="z-index: 2; position: relative;">포스트 수정</a> 
+							<button type="button" class="btn btn-primary text-white btn-sm" data-toggle="modal" data-target="#deletePostModal" style="z-index: 2; position: relative;">포스트 삭제  </button>
+							
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header bg-primary">
+							<h5 class="card-title text-white mb-0">커뮤니티 규칙</h5>
+						</div>
+						<div class="card-body m-0">
+							<div class="accordion accordion-box" id="accordionExample">
+								<div class="card" th:if="${not #lists.isEmpty(ruleList)}"
+									th:each="r,index: ${ruleList}">
+									<div class="card-header" id="headingTwo-02">
+										<div class="accordion-title collapsed p-1 bg-white"
+											data-toggle="collapse"
+											th:attr="data-target='#collapseTwo-' + ${index.index}">
+											<p class="mb-0 text-dark"
+												th:text="'규칙'+ ${index.index+1} +': ' + ${r.title}">
+												<i class="zmdi zmdi-help-outline mr-3"></i>
+											</p>
+										</div>
+									</div>
+									<div th:id="'collapseTwo-'+${index.index}" class="collapse"
+										aria-labelledby="headingTwo-01"
+										data-parent="#accordionExample">
+										<div class="card-body bg-primary">
+											<p class="text-white" th:text="${r.detail}"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="modal fade" id="updateReplyModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">규칙변경</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/updateReply}">
+						<div class="form-group">
+							<input type="hidden" name="postCode" id="postCode" class="form-control" th:value="${commPost.postCode}"></input>
+							
+						</div>
+						<div class="form-group">
+							<label for="mainTextModal">답장 내용</label>
+							<textarea id="mainTextModal" name="mainText" class="form-control" rows="10" required></textarea>
+							<input type="hidden" name="replyCode" id="replyCodeModal" class="form-control"></input>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">등록</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="modal fade" id="deleteReplyModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">댓글 삭제</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/deleteCommReply}">
+						<div class="form-group">
+							<input type="hidden" name="postCode" id="postCode" class="form-control" th:value="${commPost.postCode}"></input>
+							<h2>경고! 정말 삭제 하시겠습니까?</h2>
+							<input type="hidden" name="replyCode" id="replyCodeModal2" class="form-control"></input>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">확인</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="deletePostModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">포스트 삭제</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/deleteCommPost}">
+						<div class="form-group">
+							<input type="hidden" name="postCode" id="postCode" class="form-control" th:value="${commPost.postCode}"></input>
+							<h2>경고! 정말 삭제 하시겠습니까?</h2>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">확인</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

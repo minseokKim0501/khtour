@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h2>1:1문의 상세페이지</h2>
+</th:block>
+<th:block layout:fragment="customContents">
+	<style>
+.card .card-footer {
+	margin: 0px;
+	padding: 7px;
+}
+
+.btn.btn-primary {
+	background-color: #f3f5f700;
+	border-color: #f3f5f700;
+	color: #212529;
+}
+
+.btn.btn-primary:hover {
+	background-color: #f3f5f700;
+	border-color: #f3f5f700;
+}
+.replyContent {
+	font-size: 20px;
+	margin: 10px;
+}
+</style>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div>
+						<a type="button" style="padding: 10px; padding-left: 0px;"
+							onclick="history.back(-1)">돌아가기</a> <a type="button"
+							class="btn addReview" data-toggle="modal" th:if="${session.SLEVEL != '일반회원'}"
+							data-target=".bd-example-modal-lg" style="float: right;">답글
+							작성하기</a>
+					</div>
+					<input type="hidden" th:value="${board.boardCode}">
+					<div
+						style="display: flex; font-size: 20px; background-color: #007bff26">
+						<p class="replyContent">제목</p>
+						<p class="replyContent" th:text="${board.boardTitle}"
+							style="padding-left: 103px;"></p>
+					</div>
+					<div class="replyForm" style="display: flex;">
+						<p class="replyContent">작성자</p>
+						<p class="replyContent" th:text="${board.member.memberUserName}"
+							style="padding-left: 87px;"></p>
+					</div>
+					<div class="card-footer" style="padding: 0px;"></div>
+					<div style="display: flex; justify-content: flex-start;">
+						<p class="replyContent">상담유형</p>
+						<p class="replyContent" th:text="${board.boardType}"></p>
+						<p class="replyContent">작성일</p>
+						<p class="replyContent" th:text="${board.boardDate}"></p>
+					</div>
+					<div class="card-footer" style="padding: 0px;"></div>
+					<div>
+						<p style="font-size: 18px; margin: 40px"
+							th:text="${board.boardContent}"></p>
+					</div>
+					<div class="card-footer"></div>
+
+
+					<!-- 리뷰작성 모달 창 실행 -->
+					<form id="addRePlyForm" th:action="@{/board/boardDetail}"
+						method="post">
+						<div class="modal fade bd-example-modal-lg" tabindex="-1"
+							role="dialog" aria-labelledby="myLargeModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content" style="margin: 0 auto;">
+									<div class="modal-header"
+										style="display: inline-block; text-align: center;">
+										<h5 class="modal-title" id="exampleModalLabel">답글등록</h5>
+									</div>
+									<div class="modal-body">
+										<input type="hidden" class="form-control" name="boardCode"
+											th:value="${board.boardCode}" readonly="readonly"> <input
+											type="hidden" class="form-control" name="memberId"
+											th:value="${session.SID}">
+										<textarea class="form-control"
+											id="exampleFormControlTextarea1" rows="3"
+											name="boardReplyContent"></textarea>
+
+										<div class="modal-footer">
+											<a type="button" data-dismiss="modal">등록취소</a> <a
+												type="button" id="addRePlyBtn">등록하기</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- 리뷰작성 모달창 끝 -->
+				</div>
+				<div class="col-12">
+					<div class="comments-list"
+						th:if="${not #lists.isEmpty(BoardReplyList)}"
+						th:each="rp,index: ${BoardReplyList}">
+						<ul class="list-inline">
+							<li class="comments">
+								<div class="comment-info">
+									<div
+										style="display: flex; font-size: 20px; background-color: #f36c9b4a">
+										<p class="replyContent">답변 내용입니다.</p>
+									</div>
+									<div style="display: flex; justify-content: space-between;">
+										<p class="replyContent">담당자</p>
+										<p class="replyContent" th:text="${rp.member.memberUserName}"></p>
+										<p class="replyContent">작성일</p>
+										<p class="replyContent" th:text="${rp.replyDate}"></p>
+									</div>
+									<div class="card-footer"></div>
+									<p style="font-size: 18px; margin: 40px"
+											th:text="${rp.boardReplyContent}"></p>
+									<div class="card-footer"></div>
+									<div class="review-bottom"
+										style="display: flex; justify-content: flex-end; padding: 0px">
+										<button class="btn" id="swal-delete-boardReply"
+											th:unless="${session.SID != rp.memberId}"
+											th:data-boardReplyCd="${rp.boardReplyCode}">삭제</button>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<!-- delbtn -->
+	<script th:src="@{/js/sweetalert2/sweetalert2.min.js}"
+		aria-hidden="true"></script>
+	<script th:src="@{/js/sweetalert2/sweetalert2-custom.js}"
+		aria-hidden="true"></script>
+	<script type="text/javascript" th:inline="javascript">
+		$('#addRePlyBtn').click(function() {
+
+			var isSubmit = true;
+			var inputObj = $('#addRePlyForm').find('input');
+
+			$.each(inputObj, function() {
+				var inputId = $(this).attr('id');
+				var inputLabel = $('label[for="' + inputId + '"]').text();
+				var inputData = $(this).val();
+
+				// 사용자가 입력하지 않은 경우
+			});
+
+			if (isSubmit)
+				$('#addRePlyForm').submit();
+		});
+	</script>
+	<script>
+		$(function(){
+			$(document).on('click','#swal-delete-boardReply',function(){
+				var boardReplyCd = $(this).attr('data-boardReplyCd');
+			      const swalWithBootstrapButtons = swal.mixin({
+			          confirmButtonClass: 'btn btn-success',
+			          cancelButtonClass: 'btn btn-danger',
+			          buttonsStyling: false,
+			        });
+
+			        swalWithBootstrapButtons({
+			          title: '정말 삭제 하시겠습니까?',
+			          text: "삭제 클릭시 해당 정보는 복구 할 수 없습니다.",
+			          type: 'warning',
+			          showCancelButton: true,
+			          confirmButtonText: '네',
+			          cancelButtonText: '아니오',
+			          reverseButtons: false
+			        }).then((result) => {
+			          if (result.value) {
+			            swalWithBootstrapButtons(
+			              '삭제완료',
+			              '파일이 안전하게 삭제되었습니다.',
+			              'success'
+			            )
+			            location.href = '/board/deleteReply?boardReplyCode=' + boardReplyCd;
+			          } else if (
+			            // Read more about handling dismissals
+			            result.dismiss === swal.DismissReason.cancel
+			          ) {
+			            swalWithBootstrapButtons(
+			              '취소',
+			              '사진은 안전하게 보호됩니다.',
+			              'error'
+			            )
+			          }
+			        });	
+			});
+			
+		});
+	</script>
+</th:block>
+</html>

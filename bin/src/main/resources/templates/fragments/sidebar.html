@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<div class="sidebar-panel nicescrollbar sidebar-panel-light" th:fragment="sidebarFragment">
+		<ul class="sidebar-menu">
+			<li class="sidebar-header"> 메뉴(2022.03.22.배포파일) </li>
+			<li>
+				<a href="#">
+					<i class="la la-bank"></i> <span>문화재 검색 (김민석)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/heritage/heritageListByItem}"><i class="la la-minus"></i> <span> #문화재 종목별 검색 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-camera-retro"></i> <span>특별전 관리 (김문영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/exhibition/exhibInsert}"><i class="la la-minus"></i> <span> 특별전 등록 </span> </a></li>
+					<li><a th:href="@{/exhibition/exhibList}"><i class="la la-minus"></i> <span> 특별전 조회 및 수정 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-map"></i> <span>코스 관리 (김문영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/tourCourse/cosCate}"><i class="la la-minus"></i> <span> 카테고리 관리 </span> </a></li>
+					<li><a th:href="@{/tourCourse/cosInsert}"><i class="la la-minus"></i> <span> 코스 등록 </span> </a></li>
+					<li><a th:href="@{/tourCourse/cosList}"><i class="la la-minus"></i> <span> 코스  조회 및 수정 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-twitter-square"></i> <span> 여행일정 공유 (김민석) </span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/traShare/traShareInsert}"><i class="la la-minus"></i> <span> #여행기록 공유 등록 </span> </a></li>
+					<li><a th:href="@{/traShare/traShareList}"><i class="la la-minus"></i> <span> #여행기록 공유 리스트 </span> </a></li>
+					<li><a th:href="@{/traShare/traShareListSt}"><i class="la la-minus"></i> <span> #여행기록 공유 리스트 <p>(관리자)</p> </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-calendar"></i> <span> 여행 계획 설정(김민석) </span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/traPlans/traPlansInsert}"><i class="la la-minus"></i> <span> #여행 계획 등록 </span> </a></li>
+					<li><a th:href="@{/traPlans/traPlansList}"><i class="la la-minus"></i> <span> #여행 계획 리스트 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+	            <a href="#">
+	               	<i class="fa fa-home"></i> <span>숙박업소 관리 (안창현)</span> <i class="la la-angle-right down-arrow"></i>
+	            </a>
+	            <ul class="sidebar-submenu">
+	               	<li><a th:href="@{/accommodation/accommodationList}"><i class="la la-minus"></i> <span> 숙박업소 상세관리</span> </a></li>
+	               	<li><a th:href="@{/room/roomList}"><i class="la la-minus"></i> <span>객실정보 상세관리 </span> </a></li>
+	            </ul>
+         	</li>
+        	<li>
+	            <a href="#">
+	               <i class="fa fa-edit"></i> <span> 1:1 문의게시판 관리 (안창현)</span> <i class="la la-angle-right down-arrow"></i>
+	            </a>
+	            <ul class="sidebar-submenu">
+	               <li><a th:href="@{/inquiry/inquiryList}"><i class="la la-minus"></i> <span> 1:1문의 관리</span> </a></li>
+	            </ul>
+        	 </li>
+        	 <li>
+				<a href="#">
+					<i class="la la-money"></i> <span>포인트관리 (김문영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/point/pointInsert}"><i class="la la-minus"></i><span> 포인트 규정 등록 </span></a></li>
+					<li><a th:href="@{/point/pointList}"><i class="la la-minus"></i> <span> 포인트 조회 및 수정 </span> </a></li>
+					<li><a th:href="@{/point/pointAlram}"><i class="la la-minus"></i><span>포인트 소멸<br/>알림주기 설정</span> </a></li>
+				</ul>
+			</li>
+        	 <li>
+		         <a th:href="@{/commDashboard}">
+		            <i class="la la-wechat"></i><span>커뮤니티 (한경수)</span>
+		            <span class="sidebar-badge"></span>
+		         </a>
+	         </li>
+	         <li>
+				<a href="#">
+					<i class="feather icon-users"></i> <span>회원관리 (이민영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/memberList}"><i class="la la-minus"></i> <span> 회원 정보 검색 및 전체 리스트 </span> </a></li>
+					<li><a th:href="@{/memberDelete}"><i class="la la-minus"></i> <span> 회원 정보 삭제 </span> </a></li>
+				</ul>
+			</li>
+	        <li>
+				<a href="#">
+					<i class="feather icon-dollar-sign"></i> <span>결제관리 (이민영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/payment/payDetail.html}"><i class="la la-minus"></i> <span> 결제정보 </span> </a></li>
+				</ul>
+			</li>
+	        <li>
+				<a href="#">
+					<i class="feather icon-dollar-sign"></i> <span>환불관리 (이민영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/refund/refundDetail.html}"><i class="la la-minus"></i> <span> 환불정보 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="feather icon-sun"></i> <span>지역별 날씨 정보 관리(김민석)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/traWhether/traWhetherList.html}"><i class="la la-minus"></i> <span> 날씨 정보 </span> </a></li>
+					<li><a th:href="@{/traWhether/traWhetherModify.html}"><i class="la la-minus"></i> <span> 날씨 정보 수정 </span> </a></li>
+					<li><a th:href="@{/traWhether/traWhetherInsert.html}"><i class="la la-minus"></i> <span> 날씨 정보 등록 </span> </a></li>
+				</ul>
+			</li>
+			<li class="sidebar-header"> Extras </li>
+			<li>
+			<a href="#">
+				<i class="la la-share"></i> <span>Multilevel</span>
+				<i class="la la-angle-right down-arrow"></i>
+			</a>
+			<ul class="sidebar-submenu">
+				<li><a href="#"><i class="la la-minus"></i> <span> Level One </span> </a></li>
+				<li>
+					<a href="#"><i class="la la-minus"></i> <span> Level One </span> <i class="la la-angle-right down-arrow"></i></a>
+					<ul class="sidebar-submenu">
+						<li><a href="#"><i class="la la-minus"></i> <span> Level Two </span> </a></li>
+						<li>
+							<a href="#"><i class="la la-minus"></i> <span> Level Two </span> <i class="la la-angle-right down-arrow"></i></a>
+							<ul class="sidebar-submenu">
+								<li><a href="#"><i class="la la-minus"></i> <span> Level Three </span> </a></li>
+								<li><a href="#"><i class="la la-minus"></i> <span> Level Three </span> </a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li><a href="#"><i class="la la-minus"></i> <span> Level One </span> </a></li>
+			</ul>
+		</li>
+	</ul>
+	</div>
+</html>

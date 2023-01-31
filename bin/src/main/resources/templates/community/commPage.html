@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+   <title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+<th:block layout:fragment="customContents">
+   <div class="card bg-info">
+            <div class="card-body text-center">
+               <h2 class="mb-0 mt-2 " th:text="${community.commName} + ' 커뮤니티'"></h2>
+            </div>
+         </div>
+
+   <div class="row">
+      <div class="col-8">
+         <div class="card">
+            <div class="card-header bg-info">
+               <h5>인기포스트</h5>
+            </div>
+            <div class="card-body text-center">
+               <button type="button" class="btn btn-info pull-left">HOT</button>
+               <button type="button" class="btn btn-info ">New</button>
+               <button type="button" class="btn btn-info pull-right">Top</button>
+            </div>
+
+         </div>
+        <div class="card-group" th:if="${not #lists.isEmpty(postList)}" th:each="p: ${postList}">
+			
+				<div class="card col-sm-1 bg-info d-flex ml-0 mr-0 pl-0 pr-0 pt-5">
+					<div class="card-body ml-0 mr-0 pl-0 pr-0 pt-5">
+							<a href="#!" > <i class="la la-caret-up d-flex la-3x justify-content-center text-dark"></i></a>
+							<p class="card-text text-white text-center mb-0 pb-0" th:text="${p.likesCnt}"></p>
+							<p class="card-text text-white text-center mt-0 pt-0">좋아요</p>
+							<a href="#!" > <i class="la la-caret-down d-flex la-3x justify-content-center text-dark"></i></a>
+							
+					</div>
+					
+				</div>
+				<div class="card col-sm-11">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${p.title}"></h5>
+						<p class="card-text" th:text="${p.mainText}"></p>
+						<img th:src="@{'/images/commPost/'+${p.pictureLink}+'.jpg'}" class="card-img"
+							alt="...">
+							
+						
+					
+					</div>
+					<div class="card-foot p-2 text-center border-top">
+						<p class="card-text">
+							<a href="#!" class="text-dark" style="z-index: 2; position: relative;" > <i class="text-dark feather icon-message-circle"></i> 댓글 (20) </a>
+							<a href="#!" class="text-dark" style="z-index: 2; position: relative;"><i class="text-dark la la-share  pl-3" ></i>공유하기</a>
+							<a href="#!" class="text-dark" style="z-index: 2; position: relative;"><i class="text-dark  la la-flag  pl-3"></i>신고하기</a>		
+						 	<a href="/post" class="stretched-link"></a>	
+						</p>
+					</div>
+
+				</div>
+			</div>	
+      </div>
+
+      <div class="col-4">
+         <div class="card">
+            <div class="card-header bg-info">
+               <h5 class="card-title">About Community</h5>
+            </div>
+            
+            <div class="card-body m-0">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th colspan="2">
+                        <div class="card-title" th:text="${community.commName}"></div>
+                     </th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr >
+                     <td colspan="2"><p class="card-text" th:text="${community.commDesc}"></p></td>
+                  </tr>
+                  <tr>
+                     <td><p class="card-text">회원수</p></td>
+                     <td><p class="card-text" th:text="${community.memberCnt}"></p></td>
+                  </tr>
+                  <tr>
+                     <td><p class="card-text">온라인</p></td>
+                     <td><p class="card-text" th:text="${community.onlineMemberCnt}"></p></td>
+                  </tr>
+                  <tr>
+                     <td><p class="card-text">생성날짜</p></td>
+                     <td><p class="card-text" th:text="${community.regDate}"></p></td>
+                  </tr>
+               </tbody>
+            </table>
+            </div>
+           <div class="card-foot p-2 text-center border-top bg-info">
+            	<a href="/commDashboard"
+                     class="btn btn-light active" role="button"
+                     aria-pressed="true">커뮤니티 가입</a> <a href="/createPost"
+                     class="btn btn-light active" role="button"
+                     aria-pressed="true">포스트 만들기</a>
+            </div>
+         </div>
+
+         <div class="card">
+            <div class="card-header bg-info">
+               <h5 class="card-title">커뮤니티 규칙</h5>
+            </div>
+            <div class="card-body m-0">
+               <div class="accordion accordion-box" id="accordionExample">
+                  <div class="card" th:if="${not #lists.isEmpty(ruleList)}" th:each="r,index: ${ruleList}">
+                     <div class="card-header" id="headingTwo-02">
+                        <div class="accordion-title collapsed p-1 bg-info"
+                           data-toggle="collapse" th:attr="data-target='#collapseTwo-' + ${index.index}">  
+                           <p class="mb-0 text-white" th:text="'규칙'+ ${index.index+1} +': ' + ${r.title}">
+                              <i class="zmdi zmdi-help-outline mr-3"></i>
+                           </p>
+                        </div>
+                     </div>
+                     <div th:id="'collapseTwo-'+${index.index}" class="collapse"
+                        aria-labelledby="headingTwo-01" data-parent="#accordionExample">
+                        <div class="card-body">
+                           <p th:text="${r.detail}"></p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="card-foot p-2 text-center border-top bg-info">
+              		<button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal-02">커뮤니티 규칙 추가  </button>
+				</div> 
+         </div>
+         <div class="card">
+            <div class="card-header bg-info">
+               <h5 class="card-title">커뮤니티 테그</h5>
+            </div>
+            <div class="card-body m-0">
+            	
+            	<th:block th:if="${not #lists.isEmpty(tagList)}" th:each="r: ${tagList}">
+               		<button type="button" th:class="'btn '+'pull-left '+'m-1 '+'btn-'+ ${r.tagColor}" th:text="${r.tagName}"></button>
+               	</th:block>
+            	           
+            </div>
+             <div class="card-foot p-2 text-center border-top bg-info">
+               	 	<button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal-03">커뮤니티 테그 추가  </button>
+             </div>
+         </div>
+      </div>
+
+   </div>
+
+           	<!-- Modal -->
+	<div class="modal fade" id="exampleModal-03" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-footer">
+	        <h5 class="modal-title" id="exampleModalLabel">커뮤니티 테그 추가</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body p-5">
+	      <form  class="cmxform" method="post"  th:action="@{/addTag}">
+			  <div class="form-group">
+			  	<input type="hidden" name="commName" id="commName" class="form-control" th:value="${community.commName}"></input>
+			  </div>
+			  <div class="form-group">
+			    <label for="tagName">테그이름</label>
+			    <input id="tagName" name="tagName" type="text" class="form-control" required></input>
+			  </div>
+		
+			 
+			  <div class="form-group">
+				    <label for="tagColor">테그색상</label>
+				    <select class="form-control" id="tagColor" name="tagColor">
+				      <option class="bg-success text-white">초록색</option>
+				      <option class="bg-warning">노랑색</option>
+				      <option class="bg-info text-white">하늘색</option>
+				      <option class="bg-dark text-white">검은색</option>
+				      <option class="bg-light">회색</option>
+				      <option class="bg-danger text-white">빨강색</option>
+				      <option class="bg-primary text-white">파랑색</option>
+				    </select>
+			</div>
+			  <button type="submit" class="btn btn-info pull-right">규칙 추가</button>
+			</form>
+	      </div>
+	    </div>
+	  </div>
+	</div> 
+	<!-- Modal -->
+					<div class="modal fade" id="exampleModal-02" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel">커뮤니티 규칙 추가</h5>
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					          <span aria-hidden="true">&times;</span>
+					        </button>
+					      </div>
+					      <div class="modal-body p-5">
+					      <form  class="cmxform" method="post"  th:action="@{/addRule}">
+							  <div class="form-group">
+							  	<input type="hidden" name="commName" id="commName" class="form-control" th:value="${community.commName}"></input>
+							  </div>
+							  <div class="form-group">
+							    <label for="title">커뮤니티 제목</label>
+							    <input id="title" name="title" type="text" class="form-control" required></input>
+							  </div>
+						
+							 
+							  <div class="form-group">
+							    <label for="detail">규칙 상세 설명</label>
+							   <textarea id="detail" name="detail" class="form-control" rows="10" required></textarea>
+							  </div>
+							  <button type="submit" class="btn btn-info pull-right">규칙 추가</button>
+							</form>
+					      </div>
+					    </div>
+					  </div>
+					</div> 
+
+</th:block>
+
+
+
+
+
+
+<th:block layout:fragment="customBodyScript">
+   <!-- PRISM -->
+   <script th:src="@{/js/prism/prism.js}"></script>
+   <!-- custom -->
+   <script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

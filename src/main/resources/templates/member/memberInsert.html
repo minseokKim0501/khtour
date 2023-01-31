@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   	<th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   	</th:block>
+   	<th:block layout:fragment="contentsTitle">
+		<div class="row">
+			<div class="col">
+				<h2>회원 가입</h2>
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">회원 가입</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+   	</th:block>
+
+	<th:block layout:fragment="customContents">
+	<!-- FAVICON -->
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+	<!-- STYLE -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/lmyCss/addCssLmy.css}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" defer="defer"></script>
+	<script th:src="@{/js/lmyJs/dayjs.min.js}"></script>
+    <script th:src="@{/js/lmyJs/validate.min.js}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
+	<style>
+		#memberInsertForm label.error { color: red; }
+		.loginsnsicon{width:20px;height:20px;margin-right:5px;}
+	</style>
+	<div class="login bg-white py-5 px-5">
+		<div class="title">
+			<h3>회원가입</h3>
+			<p>계정 만들기</p>
+		</div>
+		<form th:action="@{/member/memberInsert}" method="post" id="memberInsertForm">
+			<div class="form-group">
+				<label for="memberId">아이디</label>
+				<input id="memberId" type="text" data-idCheck="false" class="form-control" placeholder="아이디" name="memberId">
+				<div class="check_font" id="idCheck"></div>
+			</div>
+			<div class="form-group">
+				<label for="memberPw">비밀번호</label>
+				<input id="memberPw" type="password" class="form-control" placeholder="비밀번호" required="" name="memberPw">
+			</div>
+			<div class="form-group">
+				<label for="memberPw2">비밀번호 확인</label>
+				<input id="memberPw2" type="password" class="form-control" placeholder="비밀번호 확인" required="" name="memberPw2">
+				&nbsp;<span id="pwCheck"></span>
+				<!-- <div class="check_font" id="pwCheck"></div> -->
+			</div>
+			<div class="form-group">
+				<label for="memberName">성함</label>
+				<input id="memberName" type="text" class="form-control" placeholder="이름" required="" name="memberName">
+			</div>
+			<div class="form-group">
+				<label for="memberGender">성별</label>
+				<select class="custom-select" id="memberGender" name="memberGender">
+					<option value="">::성별선택::</option>
+					<option value="남">남</option>
+					<option value="여">여</option>
+				</select>
+			</div>
+			<div class="form-group">
+					<label for="memberBirthday">생년월일</label> 
+						<input type="text" id="memberBirthday" class="form-control datepicker" name="memberBirthday">
+			</div>
+			<div class="form-group">
+				<label for="memberContact">연락처</label>
+				<input id="memberContact" class="form-control" name="memberContact" type="text">
+			</div>
+			<div class="form-group">
+				<label for="memberCountry">국적</label>
+				<select class="custom-select" id="memberCountry" name="memberCountry">
+					<option value="">::나라선택::</option>
+					<option value="대한민국">대한민국</option>
+					<option value="미국">미국</option>
+					<option value="일본">일본</option>
+					<option value="중국">중국</option>
+					<option value="러시아">러시아</option>
+					<option value="호주">호주</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="memberUserName">닉네임</label>
+				<input id="memberUserName" class="form-control" name="memberUserName" type="text">
+			</div>
+			<div class="form-group">
+				<label for="memberEmail">이메일</label>
+				<input id="memberEmail" class="form-control" name="memberEmail" type="email">
+			</div>
+			<div class="form-group col-12" style=" text-align: center;">
+			<button type="submit" id="memberInsertBtn"  class="btn btn-primary col-5">가입하기</button>
+			</div>
+			<button type="button" class="btn btn-outline-primary btn-block"><img class="loginsnsicon" th:src="@{'/images/login/facebook.png'}"/>페이스북으로 가입하기</button>
+			<button type="button" class="btn btn-outline-secondary btn-block"><img class="loginsnsicon" th:src="@{'/images/login/insta.png'}"/>인스타로 가입하기</button>
+			<button type="button" class="btn btn-outline-warning btn-block"><img class="loginsnsicon" th:src="@{'/images/login/Kakao.png'}"/>카카오톡으로 가입하기</button>
+		</form>
+		<p class="mb-0" >귀하는 당사의 
+			<a href="#" _istranslated="1"> 약관에 동의합니다.</a>
+		</p>
+	</div>
+</th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- bootstrap -->
+      <script th:src="@{/js/bootstrap/bootstrap.bundle.min.js}"></script>
+      <!-- jquery-nicescroll -->
+      <script th:src="@{/js/jquery-nicescroll/jquery.nicescroll.min.js}"></script>
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- Validation -->
+      <script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+      <script th:src="@{/js/lmyJs/datepicker-bs4.js}" defer="defer"></script>
+      <script>
+		document.addEventListener('DOMContentLoaded', function () {
+			jQuery('#start_date, #end_date, #memberBirthday').datepicker({
+
+			});
+		});
+	  </script>
+      <script>
+			
+			$(function(){
+				// 회원가입 validation
+				$('#memberInsertForm').validate({
+					rules : {
+						memberId : {required:true},
+						memberPw : {required:true},
+						memberPw2 : {required:true, equalTo:'#memberPw'},
+						memberName : {required:true},
+						memberGender : {required:true},
+						memberBirthday : {required:true},
+						memberContact : {required:true},
+						memberCountry : {required:true},
+						memberUserName : {required:true},
+						memberEmail : {required:true, email:true}
+					},		
+					messages:{
+						memberId:{
+							required : '아이디를 입력해주세요'
+						},
+						memberPw:{
+							required : '비밀번호를 입력해주세요'
+						},
+						memberPw2:{
+							required : '비밀번호를 입력해주세요',
+							equalTo : '입력하신 비밀번호와 다릅니다'
+						},
+						memberName:{
+							required : '이름을 입력해주세요'
+						},
+						memberGender:{
+							required : '성별을 입력해주세요'
+						},
+						memberBirthday:{
+							required : '생년월일을 입력해주세요'
+						},
+						memberContact:{
+							required : '연락처를 입력해주세요'
+						},
+						memberCountry:{
+							required : '아이디를 입력해주세요'
+						},
+						memberUserName:{
+							required : '닉네임을 입력해주세요'
+						},
+						memberEmail:{
+							required : '이메일을 입력해주세요',
+							email : '이메일의 형식과 다릅니다'
+						}
+					},
+					
+				});
+				
+				  	$('#memberPw,#memberPw2').keyup(function () {
+				        var Pw = $("#memberPw").val();
+				        var Pw2 = $("#memberPw2").val();
+				        
+				       if (Pw != "" || Pw2 != "") {
+				            if (Pw == Pw2) {
+				                $("#pwCheck").text("비밀번호가 일치합니다");
+								$("#pwCheck").css("color", "blue"); 
+								$("#pwCheck").css('display', 'inline');
+								$("#memberPw2-error").css('display', 'none');
+							}
+				            if (Pw != Pw2) {
+				            	$("#pwCheck").css('display', 'none');	
+				            	$("#memberPw2-error").css('display', 'inline');
+				            }
+				       	}
+				  	
+				      });
+				  	
+				$('#memberId').keyup(function(){
+					var memberId = $('input[name="memberId"]').val();
+					
+					console.log(memberId);
+					if(typeof memberId == 'undefined' || memberId == '' || memberId == null){
+						return false;
+					}
+					
+					$.ajax({
+						 url: '/member/idCheck'
+						,type: 'POST'
+						,data: {'memberId' : memberId}
+						,dataType: 'json'
+						,success: function(data){
+							console.log(data);
+							if(data){
+								$('#memberId').attr('data-idcheck', true);
+								$("#idCheck").text("사용가능한 아이디입니다");
+								$("#idCheck").css("color", "blue");
+								$("#memberInsertBtn").attr("disabled", false);
+							}else{
+								$('#memberId').attr('data-idcheck', false);
+								$("#idCheck").text("사용중인 아이디입니다");
+								$("#idCheck").css("color", "red");
+								$("#memberInsertBtn").attr("disabled", true);
+							}
+						},error: function(xhr, status, errorThrown) {
+							console.log(xhr);
+							console.log(errorThrown);
+						}
+					});
+				});
+			});
+				
+				
+	  </script>
+	  
+   </th:block>
+</html>

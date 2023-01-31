@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.MemberMapper">
+
+	<resultMap type="LoginHistory" id="loginResultMap">
+		<result column="login_num"		property="loginNum" />
+		<result column="login_id"		property="loginId" />
+		<result column="login_date"		property="loginDate" />
+		<result column="logout_date"	property="logoutDate" />
+		<association property="member" 			javaType="Member">
+			<id 	column="member_id" 			property="memberId"/>
+			<result column="point_level" 		property="memberPointLevel"/>
+			<result column="total_point_code" 	property="memberTotalPointCode"/>
+			<result column="total_point_used" 	property="memberTotalPointUsed"/>
+			<result column="usable_point" 		property="memberUsablePoint"/>
+			<result column="member_pw" 			property="memberPw"/>
+			<result column="member_status" 		property="memberStatus"/>
+			<result column="member_level" 		property="memberLevel"/>
+			<result column="member_name" 		property="memberName"/>
+			<result column="member_user_name" 	property="memberUserName"/>
+			<result column="contact" 			property="memberContact"/>
+			<result column="gender" 			property="memberGender"/>
+			<result column="birthday" 			property="memberBirthday"/>
+			<result column="email"				property="memberEmail"/>
+			<result column="reg_time"			property="memberRegTime"/>
+			<result column="country"			property="memberCountry"/>
+			<result column="about"				property="memberAbout"/>
+			<result column="avatar_image"		property="memberAvatarImage"/>
+			<result column="banner_image"		property="memberBannerImage"/>
+		</association>
+	</resultMap>
+
+	<resultMap type="Member" id="memberResultMap">
+			<id 	column="member_id" 			property="memberId"/>
+			<result column="point_level" 		property="memberPointLevel"/>
+			<result column="total_point_code" 	property="memberTotalPointCode"/>
+			<result column="total_point_used" 	property="memberTotalPointUsed"/>
+			<result column="usable_point" 		property="memberUsablePoint"/>
+			<result column="member_pw" 			property="memberPw"/>
+			<result column="member_status" 		property="memberStatus"/>
+			<result column="member_level" 		property="memberLevel"/>
+			<result column="member_name" 		property="memberName"/>
+			<result column="member_user_name" 	property="memberUserName"/>
+			<result column="contact" 			property="memberContact"/>
+			<result column="gender" 			property="memberGender"/>
+			<result column="birthday" 			property="memberBirthday"/>
+			<result column="email"				property="memberEmail"/>
+			<result column="reg_time"			property="memberRegTime"/>
+			<result column="country"			property="memberCountry"/>
+			<result column="about"				property="memberAbout"/>
+			<result column="avatar_image"		property="memberAvatarImage"/>
+			<result column="banner_image"		property="memberBannerImage"/>
+	</resultMap>
+	
+	<select id="getLoginHistory" resultMap="loginResultMap" fetchSize="1000">
+		SELECT
+		    l.login_num
+		   ,l.login_id
+		   ,m.member_name
+		   ,m.member_level
+		   ,m.email
+		   ,l.login_date
+		   ,l.logout_date
+		FROM
+		   tb_member AS m
+		   INNER JOIN 
+		   tb_login AS l
+		   on
+		   m.member_id = l.login_id;
+	</select>
+	
+	<select id="getLoginHistory2" resultType="map" fetchSize="1000">
+		SELECT
+		    l.login_num			AS loginNum
+		   ,l.login_id			AS loginId
+		   ,m.member_name		AS memberName
+		   ,m.member_level		AS memberLevel
+		   ,m.email				AS memberEmail
+		   ,l.login_date		AS loginDate
+		   ,l.logout_date		AS logoutDate
+		FROM
+		   tb_member AS m
+		   INNER JOIN 
+		   tb_login AS l
+		   on
+		   m.member_id = l.login_id;
+	</select>
+	
+	<delete id="memberDelete" parameterType="String">
+		/* 회원 삭제 */
+		DELETE
+		FROM
+			tb_member
+		WHERE
+			member_id = #{memberId};
+	</delete>
+	
+	<delete id="removeLoginHistory" parameterType="String">
+		/* 회원의 로그인 이력 삭제 */
+		DELETE
+		FROM
+			tb_login
+		WHERE
+			login_id = #{memberId};
+	</delete>
+	
+	
+	<update id="memberModify" parameterType="Member">
+		/* 회원정보 수정 */
+		UPDATE tb_member 
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="memberPw != null and memberPw != ''">
+				member_pw = #{memberPw},
+			</if>
+			<if test="memberUserName != null and memberUserName != ''">
+				member_user_name = #{memberUserName},
+			</if>
+			<if test="memberContact != null and memberContact != ''">
+				contact = #{memberContact},
+			</if>
+			<if test="memberEmail != null and memberEmail != ''">
+				email = #{memberEmail}
+			</if>
+		</trim>
+		WHERE
+			member_id = #{memberId}; 
+	
+	</update>
+
+	<select id="getMemberInfoById" parameterType="String" resultMap="memberResultMap">
+		/* 회원별 회원정보 조회 */
+		SELECT
+		    m.member_id        
+		   ,m.member_pw        
+		   ,m.member_name      
+		   ,m.member_level    
+		   ,m.gender    
+		   ,m.email     
+		   ,m.contact      
+		   ,m.reg_time  
+		FROM
+		   tb_member AS m
+		WHERE
+		   m.member_id = #{memberId};
+		
+	</select>
+
+	<select id="isIdCheck" parameterType="String" resultType="boolean">
+		/* 회원 아이디 중복 체크 */
+		SELECT
+		   IF(COUNT(1) = 1, 0, 1)
+		FROM 
+		   tb_member AS m
+		WHERE 
+		   m.member_id = #{memberId};
+	</select>
+
+	<select id="getMemberLevelList" resultType="MemberLevel">
+		/* 회원 등급 목록 조회 */
+		SELECT
+		    l.level_num      AS levelNum
+		   ,l.level_name     AS levelName
+		FROM 
+		   tb_member_level AS l;
+	</select>
+
+	<insert id="memberInsert" parameterType="Member">
+		/* 회원 가입 */
+		INSERT INTO tb_member
+		(    member_id
+		   , member_pw
+		   , member_name
+		   , birthday
+		   , member_user_name
+		   , member_level
+		   , member_status
+		   , total_point_code
+		   , total_point_used
+		   , usable_point
+		   , gender
+		   , country
+		   , email
+		   , contact
+		   , reg_time
+		)VALUES (
+		     #{memberId}
+		   , #{memberPw}
+		   , #{memberName}
+		   , #{memberBirthday}
+		   , #{memberUserName}
+		   , '일반회원'
+		   , '정상'
+		   , #{memberTotalPointCode}
+		   , #{memberTotalPointUsed}
+		   , #{memberUsablePoint}
+		   , #{memberGender}
+		   , #{memberCountry}
+		   , #{memberEmail}
+		   , #{memberContact}
+		   , CURDATE()
+		);
+	</insert>
+	
+	<select id="getMemberList" parameterType="String" resultMap="memberResultMap" fetchSize="1000">
+		/* 회원목록조회 */
+		SELECT
+		    m.member_id 
+		   ,m.point_level
+		   ,m.total_point_code
+		   ,m.total_point_used
+		   ,m.usable_point     
+		   ,m.member_status       
+		   ,m.member_name      
+		   ,m.member_level
+		   ,m.gender
+		   ,m.birthday
+		   ,m.email     
+		   ,m.contact 
+		   ,m.country     
+		   ,m.reg_time  
+		FROM
+		   tb_member AS m
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="searchKey != null and searchKey != '' and searchValue != ''">
+				${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+			</if>
+		</trim>;
+	</select>
+
+
+</mapper>

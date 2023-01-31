@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h2>포인트 조회 및 수정</h2>
+</th:block>
+<th:block layout:fragment="customContents">
+
+</th:block>
+<th:block layout:fragment="customBodyScript">
+<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   <th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   </th:block>
+   <th:block layout:fragment="contentsTitle">
+      
+   <!-- 이동경로 확인 (Breadcrumb) -->
+   <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+         <li class="breadcrumb-item active" aria-current="page"><a href="#"><i class="la la-home"></i></a></li>
+      </ol>
+   </nav>
+   </th:block>
+
+   <th:block layout:fragment="customContents">   
+      <table border="1">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>로그인아이디</th>
+					<th>회원이름</th>
+					<th>회원등급</th>
+					<th>회원이메일</th>
+					<th>로그인날짜</th>
+					<th>로그아웃날짜</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${not #lists.isEmpty(loginList)}" th:each="l : ${loginList}">
+					<!-- DTO 방식 -->
+					<td th:text="${l.loginNum}"></td>
+					<td th:text="${l.loginId}"></td>
+					<td th:text="${l.member.memberName}"></td>
+					<td th:text="${l.member.memberLevel}"></td>
+					<td th:text="${l.member.memberEmail}"></td>
+					<td th:text="${l.loginDate}"></td>
+					<td th:text="${l.logoutDate}"></td> 
+					<!-- map 방식
+					<td th:text="${l.get('loginNum')}"></td>
+					<td th:text="${l.get('loginId')}"></td>
+					<td th:text="${l.get('memberName')}"></td>
+					<td th:text="${l.get('memberLevel')}"></td>
+					<td th:text="${l.get('memberEmail')}"></td>
+					<td th:text="${l.get('loginDate')}"></td>
+					<td th:text="${l.get('logoutDate')}"></td> 
+					-->
+				</tr>
+				<tr th:unless="${not #lists.isEmpty(loginList)}">
+					<td colspan="7">로그인 이력이 없습니다.</td>
+				</tr>
+			</tbody>
+		</table>
+   </th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+   </th:block>
+</html>

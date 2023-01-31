@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+<th:block layout:fragment="customScript">
+	<script>
+		$(function() {
+			function validationCheck(data) {
+				if (typeof data == 'undefined' || data == '' || data == null) {
+					return false;
+				}
+				return true;
+			}
+			$('#commName').on('change',
+					function(e) {
+						var commName = $('input[name="commName"]').val();
+						console.log(commName);
+						
+						if(!validationCheck(commName))
+						{
+							$('#nameCheckSuccess').prop('hidden', true);
+							$('#nameCheckFail').prop('hidden', false); 
+							$('#addCommunityBtn').prop('disabled',true);
+						 	
+						}
+						else if(commName == $('#defaultName').val())
+						{
+							$('#nameCheckSuccess').prop('hidden', false);
+							$('#nameCheckFail').prop('hidden', true);
+							$('#addCommunityBtn').prop('disabled',false);
+						}
+						else if (validationCheck(commName)) {
+							$.ajax({
+								url : '/commNameCheck',
+								type : 'post',
+								data : {
+									'commName' : commName
+								},
+								dataType : 'json',
+								success : function(data) {
+									console.log(data);
+									if (data == true) {
+										$('#nameCheckSuccess').prop('hidden', false);
+										$('#nameCheckFail').prop('hidden', true); 
+										$('#addCommunityBtn').prop('disabled',false);
+										
+										
+									} else {
+										$('#nameCheckSuccess').prop('hidden', true);
+										$('#nameCheckFail').prop('hidden', false); 
+										$('#addCommunityBtn').prop('disabled',true);
+									}
+								}
+							});
+						}
+
+					});
+
+			$('#addCommunityBtn').click(function() {
+				var inputList = $('#addCommunityForm input')
+				console.log(inputList);
+				var isGood = true
+				for (var i = 0; i < inputList.length; i++) {
+					var input = inputList[i].value;
+					isGood = validationCheck(inputList[i].value);
+
+				}
+				console.log(isGood);
+				if (isGood) {
+					$('#addCommunityForm').submit();
+				}
+			});
+		});
+	</script>
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<div class="card bg-light">
+		<div class="card-header  bg-primary pb-0">
+			<h4 class="text-white">커뮤니티 수정</h4>
+		</div>
+		<div class="card-body">
+			<form class="cmxform" id="addCommunityForm" method="post" th:action="@{/updateCommunity}">
+				<div class="form-group" th:if="not ${#lists.isEmpty(categoryList)}">
+						<label for="category">수정할 커뮤니티</label> <select class="form-control" id="categoryCode" name="categoryCode">
+							<option th:if="${cl.categoryCode == community.categoryCode}" th:value="${cl.categoryCode}" th:text="${cl.categoryName}" th:each="cl: ${categoryList}" selected="selected"></option>
+							<option th:if="${cl.categoryCode != community.categoryCode}" th:value="${cl.categoryCode}" th:text="${cl.categoryName}" th:each="cl: ${categoryList}"></option>
+						</select>
+					</div>
+				<div class="form-group">
+					<label for="commName">커뮤니티 이름</label>
+					<input id="commName" class="form-control" name="commName" th:value="${community.commName}">
+					<p id='nameCheckSuccess' class='text-success'>사용하실수 있는 커뮤니티 이름입니다. </p>
+					<p id='nameCheckFail' class='text-danger' hidden="hidden">사용하실수 없는 커뮤니티 이름입니다. </p>
+					<input type="hidden" th:value="${community.commCode}" name="commCode">
+					<input type="hidden" th:value="${community.commName}" id="defaultName">
+
+					
+				</div>
+				<div class="form-group">
+					<label for="commDesc">커뮤니티 설명</label>
+					<textarea id="commDesc" name="commDesc" class="form-control" rows="10" required th:text="${community.commDesc}"></textarea>
+				</div>
+				<div class="form-group">
+					<button id="addCommunityBtn" type="button" class="btn btn-primary active pull-right">등록</button>
+					<a href="/commDashboard" class="btn btn-primary active pull-right mr-2" role="button" aria-pressed="true">취소</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="customBodyScript">
+	<!-- jquery mask -->
+	<script src="js/jquery-validation/jquery.validate.min.js"></script>
+	<!-- select2 -->
+	<script src="js/select2/select2.min.js"></script>
+	<script src="js/summernote/summernote.min.js"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

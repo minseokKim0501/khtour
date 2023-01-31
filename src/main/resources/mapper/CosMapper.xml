@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.CosMapper">
+	<resultMap type="Cos" id="cosResultMap">
+		<id column="cos_code" 					property="cosCode" />
+		<result column="member_id" 				property="memberId" />
+		<result column="theme_category_code" 	property="themeCategoryCode" />
+		<result column="theme_category" 		property="themeCategory" />
+		<result column="mus_code" 				property="musCode" />
+		<result column="mus_code1" 				property="musCode1" />
+		<result column="mus_code2" 				property="musCode2" />
+		<result column="mus_code3" 				property="musCode3" />
+		<result column="mus_code4" 				property="musCode4" />
+		<result column="mus_code5" 				property="musCode5" />
+		<result column="cos_area1" 				property="cosArea1" />
+		<result column="cos_area2" 				property="cosArea2" />
+		<result column="file_path" 				property="cosImagePath"/>
+		<result column="cos_name" 				property="cosName" />
+		<result column="cos_regist" 			property="cosRegist" />
+		<result column="cos_open" 				property="cosOpen" />
+		<result column="cos_share" 				property="cosShare" />
+	</resultMap>
+	<resultMap type="Mus" id="musResultMap">
+		<result column="mus_large_cate_code" 	property="musLargeCateCode" />
+		<result column="mus_large_cate_name" 	property="musLargeCateName" />
+		<result column="mus_name" 				property="musName" />
+		<result column="mus_addr" 				property="musAddr" />
+		<result column="mus_detail" 			property="musDetail" />
+		<result column="mus_site" 				property="musSite" />
+		<result column="mus_num" 				property="musNum" />
+		<result column="mus_disclose" 			property="musDisclose" />
+		<result column="mus_start" 				property="musStart" />
+		<result column="mus_end" 				property="musEnd" />
+		<result column="mus_close" 				property="musClose" />
+	</resultMap>
+	<select id="fileInfoByFileIdx" resultType="FileDto">
+      SELECT
+          f.file_idx            AS fileIdx
+         ,f.file_new_name      	AS fileNewName
+         ,f.file_original_name	AS fileOriginalName
+         ,f.file_path         	AS filePath
+         ,f.file_size         	AS fileSize
+      FROM
+         tb_suggest_cos_regist AS h
+         LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         h.cos_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f   
+         ON 
+         f.file_idx = fc.file_idx
+      WHERE
+         h.cos_code = #{cosCode};
+   </select>
+	
+	<!-- 전시회 목록 조회 SQL -->
+	<select id="getMusList" resultMap="musResultMap">
+		SELECT
+		,m.mus_large_cate_code
+		,m.mus_large_cate_name
+		,m.mus_name
+		,m.mus_addr
+		,m.mus_detail
+		,m.mus_site
+		,m.mus_num
+		,m.mus_disclose
+		,m.mus_start
+		,m.mus_end
+		,m.mus_close
+		FROM
+		tb_mus_info AS m
+	</select>
+	
+	<!-- 카테고리 조회 -->
+	<select id="categoryList" resultMap="cosResultMap">
+		SELECT
+			theme_category_code
+			,theme_category
+		FROM
+			tb_theme_category
+	</select>
+	
+	<!-- 코스 등록 SQL -->
+	<insert id="addCos" parameterType="Cos">
+	    <selectKey resultType="string" keyProperty="cosCode" order="BEFORE">
+        SELECT sf_new_cos_code() as cosCode
+      	</selectKey>
+		INSERT INTO tb_suggest_cos_regist
+		(
+		 cos_code
+		,member_id
+		,theme_category_code
+		,theme_category
+		,mus_code1
+		,mus_code2
+		,mus_code3
+		,mus_code4
+		,mus_code5
+		,cos_area1
+		,cos_area2
+		,cos_name
+		,cos_regist
+		,cos_open
+		,cos_share
+		) VALUES (
+		 #{cosCode}
+		,#{memberId}
+		,#{themeCategoryCode}
+		,#{themeCategory}
+		,#{musCode1}
+		,#{musCode2}
+		,#{musCode3}
+		,#{musCode4}
+		,#{musCode5}
+		,#{cosArea1}
+		,#{cosArea2}
+		,#{cosName}
+		,#{cosRegist}
+		,#{cosOpen}
+		,#{cosShare}
+		);
+	</insert>
+	<!-- 코드에 따른 코스 조회 SQL -->
+	<select id="getCosByCode" parameterType="String" resultMap="cosResultMap">
+		SELECT
+			 c.cos_code
+			,c.member_id
+			,c.theme_category_code
+			,c.theme_category
+			,c.mus_code1
+			,c.mus_code2
+			,c.mus_code3
+			,c.mus_code4
+			,c.mus_code5
+			,c.cos_area1
+			,c.cos_area2
+			,c.cos_name
+			,c.cos_regist
+			,c.cos_open
+			,c.cos_share
+			,f.file_path 
+		FROM
+			tb_suggest_cos_regist AS c
+		INNER JOIN
+			tb_member AS m
+			ON
+			c.member_id = m.member_id
+			LEFT JOIN 
+	         tb_file_control AS fc
+	         ON 
+	         c.cos_code = fc.reference_code
+	         LEFT JOIN 
+	         tb_file AS f
+	         ON 
+	         fc.file_idx = f.file_idx
+		WHERE
+			cos_code = #{themeCategory};
+	</select>
+
+	<!-- 코스 목록 조회 SQL -->
+	<select id="getCosList" resultMap="cosResultMap">
+		SELECT
+			 c.cos_code
+			,c.member_id
+			,c.theme_category_code
+			,c.theme_category
+			,c.mus_code1
+			,c.mus_code2
+			,c.mus_code3
+			,c.mus_code4
+			,c.mus_code5
+			,c.cos_area1
+			,c.cos_area2
+			,c.cos_name
+			,c.cos_regist
+			,c.cos_open
+			,c.cos_share
+			,f.file_path
+		FROM
+			tb_suggest_cos_regist AS c
+		INNER JOIN
+			tb_member AS m
+		ON
+		c.member_id = m.member_id
+		LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         c.cos_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f
+         ON 
+         fc.file_idx = f.file_idx
+		 <trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="memberId != null and memberId != ''">
+				c.member_id = #{memberId}
+			</if>
+			<if test="searchKey != null and searchKey != '' and searchValue != ''">
+		 		AND ${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+		 	</if>
+		</trim>
+		ORDER BY c.cos_code;
+	</select>
+
+	<!-- 카테고리역사별 코스 조회 -->
+	<select id="cosHistory" resultMap="cosResultMap">
+		SELECT
+			 c.mus_code1
+			,c.mus_code2
+			,c.mus_code3
+			,c.mus_code4
+			,c.mus_code5
+			,c.cos_area1
+			,c.cos_area2
+			,c.cos_name
+			,c.cos_regist
+			,c.cos_open
+			,c.cos_share
+			,f.file_path
+		FROM
+			tb_suggest_cos_regist AS c
+		INNER JOIN
+			tb_member AS m
+		ON
+			c.member_id = m.member_id
+		LEFT JOIN 
+         	tb_file_control AS fc
+        	ON 
+         	c.cos_code = fc.reference_code
+         	LEFT JOIN 
+         	tb_file AS f
+         	ON 
+         	fc.file_idx = f.file_idx
+		WHERE
+			c.theme_category = '역사';
+	</select>
+	<!-- 카테고리인문별 코스 조회 -->
+	<select id="cosHumanities" resultMap="cosResultMap">
+		SELECT
+			 c.mus_code1
+			,c.mus_code2
+			,c.mus_code3
+			,c.mus_code4
+			,c.mus_code5
+			,c.cos_area1
+			,c.cos_area2
+			,c.cos_name
+			,c.cos_regist
+			,c.cos_open
+			,c.cos_share
+			,f.file_path
+		FROM
+			tb_suggest_cos_regist AS c
+		INNER JOIN
+			tb_member AS m
+		ON
+			c.member_id = m.member_id
+		LEFT JOIN 
+         	tb_file_control AS fc
+        	ON 
+         	c.cos_code = fc.reference_code
+         	LEFT JOIN 
+         	tb_file AS f
+         	ON 
+         	fc.file_idx = f.file_idx
+		WHERE
+			c.theme_category = '인문';
+	</select>
+	<!-- 카테고리전쟁별 코스 조회 -->
+	<select id="cosWar" resultMap="cosResultMap">
+		SELECT
+			 c.mus_code1
+			,c.mus_code2
+			,c.mus_code3
+			,c.mus_code4
+			,c.mus_code5
+			,c.cos_area1
+			,c.cos_area2
+			,c.cos_name
+			,c.cos_regist
+			,c.cos_open
+			,c.cos_share
+			,f.file_path
+		FROM
+			tb_suggest_cos_regist AS c
+		INNER JOIN
+			tb_member AS m
+		ON
+			c.member_id = m.member_id
+		LEFT JOIN 
+         	tb_file_control AS fc
+        	ON 
+         	c.cos_code = fc.reference_code
+         	LEFT JOIN 
+         	tb_file AS f
+         	ON 
+         	fc.file_idx = f.file_idx
+		WHERE
+			c.theme_category = '전쟁';
+	</select>
+	<!-- 카테고리종교사별 코스 조회 -->
+	<select id="cosReligion" resultMap="cosResultMap">
+		SELECT
+			 c.mus_code1
+			,c.mus_code2
+			,c.mus_code3
+			,c.mus_code4
+			,c.mus_code5
+			,c.cos_area1
+			,c.cos_area2
+			,c.cos_name
+			,c.cos_regist
+			,c.cos_open
+			,c.cos_share
+			,f.file_path
+		FROM
+			tb_suggest_cos_regist AS c
+		INNER JOIN
+			tb_member AS m
+		ON
+			c.member_id = m.member_id
+		LEFT JOIN 
+         	tb_file_control AS fc
+        	ON 
+         	c.cos_code = fc.reference_code
+         	LEFT JOIN 
+         	tb_file AS f
+         	ON 
+         	fc.file_idx = f.file_idx
+		WHERE
+			c.theme_category = '종교사';
+	</select>
+	<!-- 카테고리민속별 코스 조회 -->
+	<select id="cosFolklore" resultMap="cosResultMap">
+		SELECT
+			 c.mus_code1
+			,c.mus_code2
+			,c.mus_code3
+			,c.mus_code4
+			,c.mus_code5
+			,c.cos_area1
+			,c.cos_area2
+			,c.cos_name
+			,c.cos_regist
+			,c.cos_open
+			,c.cos_share
+			,f.file_path
+		FROM
+			tb_suggest_cos_regist AS c
+		INNER JOIN
+			tb_member AS m
+		ON
+			c.member_id = m.member_id
+		LEFT JOIN 
+         	tb_file_control AS fc
+        	ON 
+         	c.cos_code = fc.reference_code
+         	LEFT JOIN 
+         	tb_file AS f
+         	ON 
+         	fc.file_idx = f.file_idx
+		WHERE
+			c.theme_category = '민속';
+	</select>
+	
+
+	<!-- 코스 수정 SQL -->
+	<update id="modifyCos" parameterType="Cos">
+		UPDATE tb_suggest_cos_regist
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="cosCode != null and cosCode != ''">
+				cos_code = #{cosCode},
+			</if>
+			<if test="memberId != null and memberId != ''">
+				member_id = #{memberId},
+			</if>
+			<if test="themeCategoryCode != null and themeCategoryCode != ''">
+				theme_category_code = #{themeCategoryCode},
+			</if>
+			<if test="themeCategory != null and themeCategory != ''">
+				theme_category = #{themeCategory},
+			</if>
+			<if test="musCode != null and musCode != ''">
+				musCode = #{musCode},
+			</if>
+			<if test="cosArea1 != null and cosArea1 != ''">
+				cos_area1 = #{cosArea1},
+			</if>
+			<if test="cosArea2 != null and cosArea2 != ''">
+				cos_area2 = #{cosArea2},
+			</if>
+			<if test="cosName != null and cosName != ''">
+				cos_name = #{cosName},
+			</if>
+			<if test="cosRegist != null and cosRegist != ''">
+				cos_regist = #{cosRegist},
+			</if>
+			<if test="cosOpen != null and cosOpen != ''">
+				cos_open = #{cosOpen},
+			</if>
+			<if test="cosShare != null and cosShare != ''">
+				cos_share = #{cosShare},
+			</if>
+		</trim>
+		WHERE
+			cos_code = #{cosCode};
+	</update>
+
+	<!-- 코스 정보 삭제 SQL -->
+	<delete id="removeCos" parameterType="String">
+		DELETE
+		FROM
+			tb_suggest_cos_regist
+		WHERE
+			cos_code = #{cosCode};
+	</delete>
+</mapper>

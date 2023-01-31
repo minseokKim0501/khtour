@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default2}">
+   <th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   </th:block>
+   <th:block layout:fragment="contentsTitle">
+      	<div class="row">
+		<div class="col">
+			<h2>환불 신청 내역</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">환불 신청 내역</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+      	
+   </th:block>
+
+   <th:block layout:fragment="customContents">   
+   <link rel="stylesheet" type="text/css"
+      th:href="@{/js/datatables/buttons.dataTables.min.css}">
+   <link rel="stylesheet" type="text/css"
+      th:href="@{/js/datatables/select.bootstrap4.min.css}">
+   <link rel="stylesheet" type="text/css"
+      th:href="@{/js/datatables/fixedColumns.bootstrap4.min.css}">
+   <link rel="stylesheet" type="text/css"
+      th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+   <link rel="shortcut icon" th:href="@{/images/favicon.ico}" />
+   <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+
+<form id="refundList" th:action="@{/refund/refundList}">
+   <div id="refundList">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-title">
+						<div class="card-title-left">
+							<h4 class="card-title-text">환불 신청 사유</h4>
+						</div>
+					</div>
+					<div class="card-body">
+						<div id="am-solid-gauge"
+							style="height: 400px; position: relative;">
+							<div dir="ltr" class="resize-sensor"
+								style="pointer-events: none; position: absolute; inset: 0px; overflow: hidden; z-index: -1; visibility: hidden; max-width: 100%;">
+								<div class="resize-sensor-expand"
+									style="pointer-events: none; position: absolute; left: 0px; top: 0px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden; max-width: 100%;">
+									<div
+										style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 591px; height: 410px;"></div>
+								</div>
+								<div class="resize-sensor-shrink"
+									style="pointer-events: none; position: absolute; left: 0px; top: 0px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden; max-width: 100%;">
+									<div
+										style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- **********************************  Start ContentsWrap  ********************************** -->
+      
+      <div class="row">
+         <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                 <div class="table-responsive">
+                  <table id="table-fixed-columns" class="table table-striped table-bordered nowrap">
+                    <thead>
+                        <tr>
+                            <th>환불신청 코드</th>
+                            <th>환불신청 아이디</th>
+                            <th>환불 규정 코드</th>
+                            <th>객실결제 코드</th>
+                            <th>결제방법 코드</th>
+                            <th>환불신청 사유</th>
+                            <th>환불신청 날짜</th>
+                            <th>환불 승인 여부</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${not #lists.isEmpty(refundList)}" th:each="ra : ${refundList}">
+                            <td th:text="${ra.refApplyCode}"></td>
+                            <td th:text="${ra.memberId}"></td>
+                            <td th:text="${ra.refRuleCode}"></td>
+                            <td th:text="${ra.pmtCode}"></td>
+                            <td th:text="${ra.pmtWayCode}"></td>
+                            <td th:text="${ra.refApplyReason}"></td>
+                            <td th:text="${ra.refApplyDate}"></td>
+                            <td>
+                            	<button type="button" class="btn btn-overlay-success btn-icon"><i class="fa fa-check"></i> </button>
+                            	<button type="button" class="btn btn-overlay-danger btn-icon"><i class="fa fa-check"></i> </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                   </table>
+                 </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</form>      
+      <!-- **********************************  End ContentsWrap  ********************************** -->
+    
+		
+</th:block>
+   <th:block layout:fragment="customBodyScript">
+   <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+
+	<!-- bootstrap -->
+	<script th:src="@{/js/bootstrap/bootstrap.bundle.min.js}"></script>
+	
+	<!-- jquery-nicescroll -->
+	<script th:src="@{/js/jquery-nicescroll/jquery.nicescroll.min.js}"></script>
+	
+	<!-- amcharts -->
+	<script th:src="@{/js/amcharts/core.js}"></script>
+	<script th:src="@{/js/amcharts/charts.js}"></script>
+	<script th:src="@{/js/amcharts/animated.js}"></script>
+	<script th:src="@{/js/amcharts/amchart.js}"></script>
+	
+	<!-- apexcharts -->
+	<script th:src="@{/js/apexcharts/apexcharts.min.js}"></script>
+	<script th:src="@{/js/apexcharts/apexcharts-custom.js}"></script>
+    <!-- datatables -->
+   <script th:src="@{/js/datatables/datatables.js}"></script>
+   <script th:src="@{/js/datatables/dataTables.buttons.min.js}"></script>
+   <script th:src="@{/js/datatables/buttons.flash.min.js}"></script>
+   <script th:src="@{/js/datatables/jszip.min.js}"></script>
+   <script th:src="@{/js/datatables/pdfmake.min.js}"></script>
+   <script th:src="@{/js/datatables/vfs_fonts.js}"></script>
+   <script th:src="@{/js/datatables/buttons.html5.min.js}"></script>
+   <script th:src="@{/js/datatables/buttons.print.min.js}"></script>
+   <!-- fixedHeader -->
+   <script th:src="@{/js/datatables/dataTables.fixedHeader.min.js}"></script>
+   <!-- dataTables select -->
+   <script th:src="@{/js/datatables/dataTables.select.min.js}"></script>
+   <!-- dataTables.fixedColumns.min -->
+   <script th:src="@{/js/datatables/dataTables.fixedColumns.min.js}"></script>
+   <!-- dataTables.rowGroup.min -->
+   <script th:src="@{/js/datatables/dataTables.rowGroup.min.js}"></script>
+   <!-- custom -->
+   <script th:src="@{/js/custom.js}"></script>
+   </th:block>
+</html>

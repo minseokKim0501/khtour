@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h2>카테고리 관리</h2>
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<div id="cosCate">
+		<div class="card">
+			<div class="card-body">
+				<div class="dd" id="nestable">
+					<ol class="dd-list">
+						<li class="dd-item" data-id="1">
+							<div class="dd-handle">테마별</div>
+							<button type="button" class="btn btn-primary btnhover">추가</button>
+							<ol class="dd-list">
+								<li class="dd-item" data-id="2">
+									<div class="dd-handle"></div>
+									<div class="dd-my">
+										<span>선사시대1</span>
+										<div class="add_del">
+											<button type="button">수정</button>
+											<button type="button">삭제</button>
+										</div>
+									</div>
+								</li>
+								<li class="dd-item" data-id="2">
+									<div class="dd-handle"></div>
+									<div class="dd-my">
+										<span>선사시대2</span>
+										<div class="add_del">
+											<button type="button">수정</button>
+											<button type="button">삭제</button>
+										</div>
+									</div>
+								</li>
+							</ol>
+						</li>
+						<li class="dd-item" data-id="2">
+							<div class="dd-handle">Item 2</div>
+							<button type="button" class="btn btn-primary btnhover">추가</button>
+							<ol class="dd-list">
+								<li class="dd-item" data-id="3"><div class="dd-handle">Item
+										3</div></li>
+								<li class="dd-item" data-id="4"><div class="dd-handle">Item
+										4</div></li>
+								<li class="dd-item" data-id="5">
+									<div class="dd-handle">Item 5</div>
+									<ol class="dd-list">
+										<li class="dd-item" data-id="6"><div class="dd-handle">Item
+												6</div></li>
+										<li class="dd-item" data-id="7"><div class="dd-handle">Item
+												7</div></li>
+										<li class="dd-item" data-id="8"><div class="dd-handle">Item
+												8</div></li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div class="col-12">
+			<div class="add-new text-center mb-5">
+				<a class="btn btn-primary ftbtn" href="#!"> 변경사항 저장 </a>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<script>
+		$(".dd-list").mouseover(function() {
+			$(".btnhover").css("opacity", "1");
+		});
+		$(".dd-list").mouseout(function() {
+			$(".btnhover").css("opacity", "0");
+		});
+		$(".dd-item").mouseover(function() {
+			$(this).find(".itembtnhover").css("background", "red");
+		});
+		$(".dd-item").mouseout(function() {
+			$(this).find(".itembtnhover").css("background", "yellow");
+		});
+		var $add = '<li class="dd-item" data-id="2">'
+				+ '<div class="dd-handle">'
+				+ '<input type="text" class="ips"/>' + '<div class="add_del">'
+				+ '<button type="button">취소</button> '
+				+ '<button type="button">확인</button>' + '</div></div></li>';
+		$(".btnhover").click(function() {
+			$(".dd-list").append($add);
+		});
+	</script>
+	<script th:src="@{/js/nestable/jquery.nestable.js}"></script>
+	<script th:src="@{/js/jquery-nicescroll/jquery.nicescroll.min.js}"></script>
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

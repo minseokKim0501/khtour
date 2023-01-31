@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>전시회</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#" onclick="return false;">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">전시회</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<!-- **********************************  Start ContentsWrap  ********************************** -->
+	<div id="khtour">
+		<div class="exhibBoardList card"><div class="form-row pb-3">
+
+				            <div class="col-md-3 col-sm-3 ">
+
+				               <input class="date-picker form-control searchDatepicker hasDatepicker" placeholder="년도-월-일" type="date" required="required" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)" name="startDate" id="startDate">
+
+					               <script>
+
+					                  function timeFunctionLong(input) {
+
+					                     setTimeout(function() {
+
+					                        input.type = 'text';
+
+					                     }, 60000);
+
+					                  }
+
+					               </script>
+
+				            </div>
+
+				            <div class="align-self-center">
+
+				               <i class="fa fa-minus"></i>
+
+				            </div>
+
+				            
+
+				            <div class="col-md-3 col-sm-3 ">
+
+				               <input class="date-picker form-control searchDatepicker hasDatepicker" placeholder="년도-월-일" type="date" required="required" onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)" name="endDate" id="endDate">
+
+					               <script>
+
+					                  function timeFunctionLong(input) {
+
+					                     setTimeout(function() {
+
+					                        input.type = 'text';
+
+					                     }, 60000);
+
+					                  }
+
+					               </script>
+
+					            </div>
+
+					         </div>
+			<div class="card-body" style="padding-left: 3.4rem;">
+				<div class="tab tab-outline tab-center">
+					<ul class="nav justify-content-center" id="myTab-04" role="tablist">
+						<li class="nav-item"><a class="nav-link active"
+							id="home-tab-04" data-toggle="tab" href="#home-04" role="tab">진행예정</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="profile-tab-04" data-toggle="tab" href="#profile-04" role="tab">진행중</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="contact-tab-12" data-toggle="tab" href="#contact-12" role="tab">완료</a>
+						</li>
+					</ul>
+					<!-- **********************************  Start 진행예정  ********************************** -->
+					<div class="tab-content" id="myTabContent-04">
+						<div class="tab-pane fade active show" id="home-04" role="tabpanel" aria-labelledby="home-tab-04">
+							<div class="row">
+							<div class="col-md-6 col-lg-3" th:if="${not #lists.isEmpty(expectedExhib)}" th:each="l:${expectedExhib}">
+								<div class="blog mb-5">
+									<div class="blog-image">
+										<img class="img-fluid w-100" th:src="@{${#strings.isEmpty(l.exhibImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(l.exhibImagePath,'\','/')}}"/>
+									</div>
+									<div class="blog-info">
+										<div class="blog-date">
+											<a href="#!">[[|${l.exhibStart}~${l.exhibEnd}|]]</a>
+										</div>
+										<div class="blog-title mt-3">
+											<h4 class="mb-3"><a href="#!">[[${l.exhibName}]]</a></h4>
+											<p class="mb-0">[[${l.exhibCon}]]</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						  </div>
+						</div>
+						<!-- **********************************  End 진행예정  ********************************** -->
+						<!-- **********************************  Start 진행중 ******************************* -->
+						<div class="tab-pane fade active" id="profile-04" role="tabpanel" aria-labelledby="profile-tab-04">
+							<div class="row">
+							<div class="col-md-6 col-lg-3" th:if="${not #lists.isEmpty(ingExhib)}" th:each="l:${ingExhib}">
+								<div class="blog mb-5">
+									<div class="blog-image">
+										<img class="img-fluid w-100" th:src="@{${#strings.isEmpty(l.exhibImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(l.exhibImagePath,'\','/')}}"/>
+										
+									</div>
+									<div class="blog-info">
+										<div class="blog-date">
+											<a href="#!">[[|${l.exhibStart}~${l.exhibEnd}|]]</a>
+										</div>
+										<div class="blog-title mt-3">
+											<h4 class="mb-3"><a href="#!">[[${l.exhibName}]]</a></h4>
+											<p class="mb-0">[[${l.exhibCon}]]</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						  </div>
+						</div>
+						<!-- **********************************  End 진행중  ********************************** -->
+						<!-- **********************************  Start 완료 ******************************** -->
+						<div class="tab-pane fade active" id="contact-12" role="tabpanel" aria-labelledby="contact-tab-12">
+							<div class="row">
+							<div class="col-md-6 col-lg-3" th:if="${not #lists.isEmpty(endExhib)}" th:each="l:${endExhib}">
+								<div class="blog mb-5">
+									<div class="blog-image">
+										<img class="img-fluid w-100" th:src="@{${#strings.isEmpty(l.exhibImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(l.exhibImagePath,'\','/')}}"/>
+										
+									</div>
+									<div class="blog-info">
+										<div class="blog-date">
+											<a href="#!">[[|${l.exhibStart}~${l.exhibEnd}|]]</a>
+										</div>
+										<div class="blog-title mt-3">
+											<h4 class="mb-3"><a href="#!">[[${l.exhibName}]]</a></h4>
+											<p class="mb-0">[[${l.exhibCon}]]</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						  </div>
+						</div>
+						<!-- **********************************  End 완료  ********************************** -->
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+      $(document).on('change', '#startDate, #endDate', function(){
+         
+         $('form').remove('#testForm')
+         
+         
+         var startDate = $('input[name="startDate"]').val();
+         var endDate = $('input[name="endDate"]').val();
+         
+         var datepickerForm = $('<form></form>');
+         
+         datepickerForm.attr("id", "testForm");
+         datepickerForm.attr("name", "datepickerForm");
+         datepickerForm.attr("method", "get");
+         datepickerForm.attr("action", "/statistics/getGoodsStatistics");
+         
+         datepickerForm.append($('<input/>', {type: 'hidden', name: 'startDate', value: startDate}));
+         datepickerForm.append($('<input/>', {type: 'hidden', name: 'endDate', value: endDate}));
+         
+         datepickerForm.appendTo('body');
+            
+         if(startDate != null && endDate != null && startDate != '' && endDate != ''){
+            
+            datepickerForm.submit();
+         }
+      });
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+</th:block>
+</html>

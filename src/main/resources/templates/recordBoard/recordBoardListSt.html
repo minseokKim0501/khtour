@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>공유 게시판 리스트(관리자)</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">여행 일정 공유</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 시작 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css" th:href="@{/js/datatables/buttons.dataTables.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/js/datatables/select.bootstrap4.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/js/datatables/fixedColumns.bootstrap4.min.css}">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="table-responsive">
+						<!-- 검색 박스 include -->
+						<div th:include="searchMinSeok/search.html :: searchRecordBoardListStFragment"></div>
+							<!-- 여행 게시글 관리자 테이블 시작 -->
+							<table id="table-selected" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>게시판 코드</th>
+										<th>등록자 아이디</th>
+										<th>게시판 제목</th>
+										<th>여행 상태</th>
+										<th>여행 스타일</th>
+										<th>여행 시작</th>
+										<th>여행 종료</th>
+										<th>게시판 등록 날짜</th>
+										<th>조회수</th>
+										<th>수정/삭제</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:if="${not #lists.isEmpty(recordBoardList)}"
+										th:each="l : ${recordBoardList}">
+										<td th:text="${l.recordBoardCode}"></td>
+										<td th:text="${l.memberId}"></td>
+										<td th:text="${l.recordBoardName}"></td>
+										<td th:text="${l.planStatus.getPlanStatusName()}"></td>									
+										<td th:text="${l.travelStyle}"></td>
+										<td th:text="${l.startDate}"></td>
+										<td th:text="${l.endDate}"></td>
+										<td th:text="${l.regDate}"></td>
+										<td th:text="${l.views}"></td>
+										<td class="text-center">
+										<a
+											class="btn btn-primary btn-icon btn-sm mb-1 mr-2 mb-1"
+											th:if="${session.SLEVEL != '일반회원'}"
+											th:href="@{/recordBoard/recordBoardModify(recordBoardCode=${l.recordBoardCode})}"><i
+												class="la la-edit"></i> </a>
+										<a
+											class="btn btn-primary btn-icon btn-sm mb-1 mr-2 mb-1"
+											th:unless="${session.SLEVEL != '일반회원'}"
+											onclick="alert('일반회원은 문화재 정보를 수정할 수 없습니다.')"><i
+												class="la la-edit"></i> </a>
+											<button class="btn btn-danger btn-icon btn-sm mb-1" 
+												th:if="${session.SLEVEL != '일반회원'}"
+												id="swal-delete-recordBoard" 
+												th:data-recordBoardCd="${l.recordBoardCode}">
+												<i class="fa fa-trash-o"></i>
+											</button>
+											<button class="btn btn-danger btn-icon btn-sm mb-1" 
+												th:unless="${session.SLEVEL != '일반회원'}"
+												onclick="alert('일반회원은 문화재 정보를 수정할 수 없습니다.')">
+												<i class="fa fa-trash-o"></i>
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<!-- 여행 게시글 관리자 테이블 종료 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- delbtn -->
+	<script th:src="@{/js/sweetalert2/sweetalert2.min.js}" aria-hidden="true"></script>
+	<script th:src="@{/js/sweetalert2/sweetalert2-custom.js}" aria-hidden="true"></script>
+	<!-- datatables -->
+	<script th:src="@{/js/datatables/datatables.js}"></script>
+	<script th:src="@{/js/datatables/dataTables.buttons.min.js}"></script>
+	<script th:src="@{/js/datatables/buttons.flash.min.js}"></script>
+	<script th:src="@{/js/datatables/jszip.min.js}"></script>
+	<script th:src="@{/js/datatables/pdfmake.min.js}"></script>
+	<script th:src="@{/js/datatables/vfs_fonts.js}"></script>
+	<script th:src="@{/js/datatables/buttons.html5.min.js}"></script>
+	<script th:src="@{/js/datatables/buttons.print.min.js}"></script>
+	<!-- fixedHeader -->
+	<script th:src="@{/js/datatables/dataTables.fixedHeader.min.js}"></script>
+	<!-- dataTables select -->
+	<script th:src="@{/js/datatables/dataTables.select.min.js}"></script>
+	<!-- dataTables.fixedColumns.min -->
+	<script th:src="@{/js/datatables/dataTables.fixedColumns.min.js}"></script>
+	<!-- dataTables.rowGroup.min -->
+	<script th:src="@{/js/datatables/dataTables.rowGroup.min.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+
+<script>
+		$(function(){
+			$(document).on('click','#swal-delete-recordBoard',function(){
+				var recordBoardCd = $(this).attr('data-recordBoardCd');
+			      const swalWithBootstrapButtons = swal.mixin({
+			          confirmButtonClass: 'btn btn-success',
+			          cancelButtonClass: 'btn btn-danger',
+			          buttonsStyling: false,
+			        });
+
+			        swalWithBootstrapButtons({
+			          title: '정말 삭제 하시겠습니까?',
+			          text: "삭제 클릭시 해당 정보는 복구 할 수 없습니다.",
+			          type: 'warning',
+			          showCancelButton: true,
+			          confirmButtonText: '네',
+			          cancelButtonText: '아니오',
+			          reverseButtons: false
+			        }).then((result) => {
+			          if (result.value) {
+			            swalWithBootstrapButtons(
+			              '삭제완료',
+			              '파일이 안전하게 삭제되었습니다.',
+			              'success'
+			            )
+			            location.href = '/recordBoard/recordBoardRemove?recordBoardCode=' + recordBoardCd;
+			          } else if (
+			            // Read more about handling dismissals
+			            result.dismiss === swal.DismissReason.cancel
+			          ) {
+			            swalWithBootstrapButtons(
+			              '취소',
+			              '사진은 안전하게 보호됩니다.',
+			              'error'
+			            )
+			          }
+			        });
+
+				    			
+			});
+			
+		});
+	</script>
+
+</th:block>
+</html>

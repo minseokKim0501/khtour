@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   <th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   </th:block>
+   <th:block layout:fragment="contentsTitle">
+      
+   </th:block>
+
+   <th:block layout:fragment="customContents">
+	<div class="login bg-white py-5 px-5">
+		<div class="title">
+			<h3 _msthash="1548898" _msttexthash="53835730">계정 복구</h3>
+			<p _msthash="1495234" _msttexthash="27313416">계정 복구</p>
+		</div>
+		<form>
+			<div class="row">
+				<div class="form-group col">
+					<input type="text" class="form-control" placeholder="이름" required="" _mstplaceholder="9585628">
+				</div>
+				<div class="form-group col">
+					<input type="text" class="form-control" placeholder="성" required="" _mstplaceholder="4500587">
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" placeholder="휴대전화 번호" required="" _mstplaceholder="10300316">
+			</div>
+			<a href="#" class="btn btn-primary" _msthash="1557361" _msttexthash="9318920">아이디 찾기</a>
+		</form>
+	</div>
+</th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+   </th:block>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>숙박업소 리스트</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">숙박업소 목록</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<style>
+.blog-info {
+	height: 200px;
+}
+
+.form-control {
+	margin-top: 1rem !important;
+}
+
+.mb-0 {
+	font-size: 12px;
+}
+
+.btn-outline-danger:hover {
+	background-color: #cb4946 !important;
+}
+.accoInfo {
+	display: flex;jhghgvh
+	font-size: 18px;
+	padding-bottom: 3px;
+}
+.feather {
+	padding-right: 5px;
+}
+</style>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<!-- 숙박업소 상세 검색  -->
+					<form th:action="@{/accommodation/accommodationList}" method="get">
+						<div class="form row">
+							<div class="form-group col-12">
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<select class="form-control" id="exampleFormControlSelect1"
+											name="searchKey" style="font-size: 14px;">
+											<option>전체 조회</option>
+											<option value="ldgAddr">지역별</option>
+											<option value="ldgName">숙박업소이름</option>
+											<option value="ldgType">숙박업소종류</option>
+										</select>
+									</div>
+									<input type="text" name="searchValue" class="form-control"
+										id="formGroupExampleInput" placeholder="검색 키워드를 입력하세요."
+										style="font-size: 14px;">
+									<div class="input-group-prepend">
+										<button type="submit" class="btn btn-outline-danger"
+											style="font-size: 14px; background: #ec5552; color: #fff;margin-top: 13px;">검색</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- 숙박업소 상세검색 -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-body">
+			<!-- 숙박업소 리스트 영역 -->
+			<div class="row row-cols-1 row-cols-md-3">
+				<div class="blog mb-5" style="padding: 3px;"
+					th:if="${not #lists.isEmpty(accommodationList)}"
+					th:each="l : ${accommodationList}">
+					<div class="embed-responsive embed-responsive-4by3">
+						<img
+							th:src="@{${#strings.isEmpty(l.ldgImagePath) ? '/images/heritage/서울 숭례문.jpg': '/' + #strings.replace(l.ldgImagePath,'\','/')}}"
+							class="card-img-top h-20 embed-responsive-item" alt="...">
+					</div>
+					<div class="blog-info">
+						<div class="blog-title mt-3">
+							<h5 class="card-title">
+								<i class="feather icon-navigation" style="color: red;"></i><a
+									th:href="@{/accommodation/acoommodationInfo(ldgCode=${l.ldgCode})}"
+									th:text="${l.ldgName}"></a>
+							</h5>
+							<div class="accoInfo">
+							<i class="feather icon-home" style="color: #28a745;"></i><p class="mb-0" th:text="${l.ldgType}"></p>
+							</div>
+							<div class="accoInfo">
+							<i class="feather icon-map-pin" style="color: #53cad8;"></i><p class="mb-0" th:text="${l.ldgAddr}"></p>
+							</div>
+							<div class="accoInfo">
+							<i class="feather icon-phone" style="color: #ffc107;"></i><p class="mb-0" id="me_phone" th:text="${l.ldgTel}"></p>
+							</div>
+							<div class="accoInfo" style="justify-content: flex-end;r">
+							<i class="feather icon-message-circle" style="color: #8000FF;"></i><span style="display: inline-block; float: left; font-size: 12px;">([[${l.reviewCnt}]]개)</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 숙박업소 리스트 페이징 -->
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+					<li class="page-item disabled"><a class="page-link" href="#"
+						tabindex="-1">이전</a></li>
+					<li class="page-item"><a class="page-link" href="#">1</a></li>
+					<li class="page-item"><a class="page-link" href="#">2</a></li>
+					<li class="page-item"><a class="page-link" href="#">3</a></li>
+					<li class="page-item"><a class="page-link" href="#">4</a></li>
+					<li class="page-item"><a class="page-link" href="#">5</a></li>
+					<li class="page-item"><a class="page-link" href="#">다음</a></li>
+				</ul>
+			</nav>
+			<!-- 숙박업소 리스트 페이징 끝 -->
+		</div>
+	</div>
+</th:block>
+
+<!-- javascript 삽입 시작 -->
+<th:block layout:fragment="customBodyScript">
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+	<script th:src="@{/js/rangelider/ion.rangeSlider.min.js}"></script>
+	<script th:src="@{/js/prism/prism.js}"></script>
+</th:block>
+<!-- javascript 삽입 종료 -->
+</th:block>
+</html>

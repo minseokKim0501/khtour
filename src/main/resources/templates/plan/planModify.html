@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>여행 계획 수정</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a 
+			th:href="@{/plan/planListSt}">여행계획 리스트(관리자)</a></li>
+			<li class="breadcrumb-item active" aria-current="page">여행 계획 수정</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<link th:href="@{https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/datedropper.css}" rel="stylesheet">
+<style>
+		/* datepicker 버튼 색 */
+		.btn-outline-warning {
+		    color: #F44336 !important;
+		    background-color: #fff;
+		    background-image: none;
+		    border-color: #ed433e !important
+</style>
+<!-- 첫번째 Row 시작 -->
+	<div class="row justify-content-center">
+		<div class="col-12 col-la-10 col-xl-7">
+			<div class="card text-center" data-select2-id="6">
+				<div class="card-title">
+					<div class="card-title-left">
+						<h4 class="card-title-text">여행 계획 설정</h4>
+					</div>
+				</div>
+				<div class="card-body" data-select2-id="5">
+					<form id="modifyPlanForm" th:action="@{/plan/planModify}"
+						method="post">
+						<input type="hidden" class="form-control" id="planCode"
+							name="planCode" th:value="${plan.planCode}">
+						
+						<div class="form-group">
+							<label for="planName">여행 이름</label> <input type="text"
+								class="form-control" id="planName" name="planName" th:value="${plan.planName}">
+						</div>
+						<div class="form-group">
+							<label for="planLocation">여행 지역</label> <input type="text"
+								class="form-control inputwt" id="planLocation" 
+								name="planLocation" th:value="${plan.planLocation}">
+						</div>
+						<div class="form-group">
+							<label for="startDate"> 여행 시작 </label>
+							<div class="input-group mb-3">
+								<input id="startDate" type="text" class="form-control input-text" th:value="${plan.startDate}">
+								<div class="input-group-append">
+									<button class="btn btn-outline-warning btn-lg" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="endDate"> 여행 종료</label>
+							<div class="input-group mb-3">
+								<input id="endDate" type="text" class="form-control input-text" th:value="${plan.endDate}">
+								<div class="input-group-append">
+									<button class="btn btn-outline-warning btn-lg" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="planMaterials">여행 준비물</label> <input type="text"
+								class="form-control" id="planMaterials" name="planMaterials" th:value="${plan.planMaterials}"
+								required="">
+						</div>
+						<div class="form-group">
+							<label for="soloParty">여행 인원수 </label> <input type="text"
+								class="form-control" id="soloParty" name="soloParty" required="" th:value="${plan.soloParty}">
+						</div>
+						<div class="form-group">
+							<label for="planExpenses">여행 총 경비</label> <input type="text"
+								class="form-control" id="planExpenses" name="planExpenses" th:value="${plan.planExpenses}"
+								required="">
+						</div>
+						<button type="submit" class="btn btn-primary">정보수정 완료	</button>
+						<a type="button" class="btn btn-danger"
+							th:href="@{/plan/planListSt}">취소</a>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 첫번째 Row 종료 -->
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<!-- jquery-nicescroll -->
+	<script th:src="@{/js/jquery-nicescroll/jquery.nicescroll.min.js}"></script>
+	<!-- bootstrap-datepicker -->
+	<script th:src="@{/js/moment.min.js}"></script>
+	<script th:src="@{/js/datepicker/daterangepicker.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/datedropper.js}"></script>
+	<!-- 출발 날짜 datepciker 자바스크립트 시작 -->
+	<script>
+		$(document).ready(function() {
+
+			$("#startDate").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "m/d/Y",
+				lang : "en",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold'
+			});
+		});
+	</script>
+	<!-- 출발 날짜 datepciker 자바스크립트 종료 -->
+	<!-- 도착 날짜 datepciker 자바스크립트 시작 -->
+	<script>
+		$(document).ready(function() {
+
+			$("#endDate").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "m/d/Y",
+				lang : "en",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold'
+			});
+		});
+	</script>
+	<!-- 도착 날짜 datepciker 자바스크립트 종료 -->
+</th:block>
+</html>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.BoardMapper">
+	<resultMap type="Board" 				id="boardResultMap">
+	<id 	column="board_code" 			property="boardCode"/>
+	<result column="board_re_ref" 			property="boardReRef"/>
+	<result column="member_id" 				property="memberId"/>
+	<result column="board_type" 			property="boardType"/>
+	<result column="board_title" 			property="boardTitle"/>
+	<result column="board_content"			property="boardContent"/>
+	<result column="board_hit"				property="boardHit"/>
+	<result column="board_date"				property="boardDate"/>
+	<association property="member" 			javaType="Member">
+		<id 	column="member_id"			property="memberId"/>
+		<result column="member_user_name"	property="memberUserName"/>
+		<result column="member_name"		property="memberName"/>
+	</association>
+	</resultMap>
+	
+	<resultMap type="BoardReply" 			id="boardReplyResultMap">
+	<id 	column="board_reply_code"       property="boardReplyCode"/>
+	<result column="board_code"  			property="boardCode"/>
+	<result column="member_id"  			property="memberId"/>
+	<result column="board_reply_content"  	property="boardReplyContent"/>
+	<result column="reply_date"  			property="replyDate"/>
+	<association property="member" 			javaType="Member">
+		<id 	column="member_id"			property="memberId"/>
+		<result column="member_user_name"	property="memberUserName"/>
+		<result column="member_name"		property="memberName"/>
+	</association>
+	</resultMap>
+	
+	<!-- 1:1문의게시판 리스트 조회 SQL -->
+	<select id="getBoardList" resultMap="boardResultMap">
+        	SELECT
+				 b.board_code
+		   		,b.board_re_ref     
+		   		,b.member_id
+		   		,b.board_type  
+		   		,b.board_title   
+		   		,b.board_content
+		   		,b.board_hit
+		   		,b.board_date
+		   		,m.member_user_name   
+			FROM
+				tb_board AS b
+			INNER JOIN
+				tb_member AS m
+			ON
+				b.member_id = m.member_id;
+    </select>
+
+ 	<!-- 코드에 따른 1:1문의 게시판 조회 SQL -->
+   	<select id="getBoardByCode" parameterType="String" resultMap="boardResultMap">
+      	SELECT
+			b.board_code
+		   ,b.board_re_ref     
+		   ,b.member_id
+		   ,b.board_type  
+		   ,b.board_title   
+		   ,b.board_content
+		   ,b.board_hit
+		   ,b.board_date
+		   ,m.member_user_name  
+      	FROM
+       		tb_board AS b
+       	INNER JOIN
+			tb_member AS m
+		ON
+			b.member_id = m.member_id
+      	WHERE
+         	board_code = #{boardCode};
+   	</select>
+   	
+   	<!-- 1:1문의 등록 SQL -->
+	<insert id="addBoard" parameterType="Board">
+	<selectKey resultType="String" keyProperty="boardReRef" order="BEFORE">  
+        SELECT IFNULL(MAX(board_re_ref), 0) + 1 
+        FROM tb_board    
+    </selectKey>
+    INSERT 
+   	INTO tb_board
+	(   
+		 board_code  
+		,board_re_ref
+		,board_type
+		,member_id
+		,board_title
+		,board_content
+		,board_date
+    ) 
+    VALUES 
+    (
+    	 sf_board_code()
+        ,#{boardReRef}
+		,#{boardType}
+		,#{memberId}
+		,#{boardTitle}
+		,#{boardContent}
+		,CURDATE()
+	)
+	</insert>
+
+	<!-- 1:1문의 조회수 업데이트 SQL -->
+	<update id="boardHitUpdate" parameterType="String"> 
+		UPDATE 
+			tb_board 
+	 	SET 
+	 		board_hit = board_hit + 1 
+		WHERE
+	 		board_code = #{boardCode};
+	</update>
+	
+	<!-- 1:1문의 답변 SQL 부분 -->
+	
+	<!-- 게시글 코드에 따른 1:1문의게시판 답글 조회 SQL -->
+	<select id="getBoardReplyList" resultMap="boardReplyResultMap">
+        	SELECT
+		   		 br.board_reply_code     
+		   		,br.board_code
+		   		,br.member_id   
+		   		,br.board_reply_content
+		   		,br.reply_date
+		   		,m.member_user_name   
+			FROM
+				tb_board_reply AS br
+			INNER JOIN
+				tb_member AS m
+			ON
+				br.member_id = m.member_id
+			WHERE
+			    br.board_code = #{boardCode};
+    </select>
+    
+    <!-- 1:1문의 답글 등록 -->
+    <insert id="addBoardReply" parameterType="BoardReply">
+    	INSERT INTO
+    		tb_board_reply
+    	(
+    		 board_reply_code
+    		,board_code
+    		,member_id
+    		,board_reply_content
+    		,reply_date
+    	)
+    	VALUES
+    	(
+    		 sf_board_reply_code()
+    		,#{boardCode}
+    		,#{memberId}
+    		,#{boardReplyContent}
+			,CURDATE()
+    	);
+    </insert>
+    
+    <!-- 1:1문의 답글 삭제 -->
+  	<delete id="deleteReply" parameterType="String">
+  	
+  		DELETE 
+  		FROM 
+  			tb_board_reply
+  		WHERE 
+  			board_reply_code = #{boardReplyCode};
+  		
+  	</delete>
+
+
+
+</mapper>

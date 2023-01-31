@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.CommunityMapper">
+
+	<resultMap type="Community" id="communityResultMap">
+		<id column="comm_name" property="commName"/>
+		<result column="member_id" property="memberId"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="category" property="category"/>
+		<result column="banner" property="banner"/>
+		<result column="avatar" property="avatar"/>
+		<result column="member_cnt" property="memberCnt"/>
+		<result column="online_member_cnt" property="onlineMemberCnt"/>
+		<result column="comm_desc" property="commDesc"/>
+	</resultMap> 
+	<resultMap type="CommPost" id="postResultMap">
+		<id column="post_code" property="postCode"/>
+		<result column="comm_name" property="commName"/>
+		<result column="member_id" property="memberId"/>
+		<result column="tag_code" property="tagCode"/>
+		<result column="title" property="title"/>
+		<result column="reg_time" property="regTime"/>
+		<result column="main_text" property="mainText"/>
+		<result column="reader_cnt" property="readerCnt"/>
+		<result column="picture_link" property="pictureLink"/>
+		<result column="video_link" property="videoLink"/>
+		<result column="likes_cnt" property="likesCnt"/>
+		<result column="dislikes_cnt" property="dislikesCnt"/>
+		<result column="report_cnt" property="reportCnt"/>
+		<result column="point_gain" property="pointGain"/>
+	</resultMap> 
+	<resultMap type="Rule" id="ruleResultMap">
+		<id column="rule_code" property="ruleCode"/>
+		<result column="comm_name" property="commName"/>
+		<result column="title" property="title"/>
+		<result column="detail" property="detail"/>
+		<result column="reg_time" property="reg_time"/>
+	</resultMap>
+	<resultMap type="CommTag" id="tagResultMap">
+		<id column="tag_code" property="tagCode"/>
+		<result column="comm_name" property="commName"/>
+		<result column="member_id" property="memberId"/>
+		<result column="tag_name" property="tagName"/>
+		<result column="tag_color" property="tagColor"/>
+		<result column="reg_time" property="regTime"/>
+	</resultMap>
+
+	<!-- <select id="getCommunityList" resultMap="communityResultMap"> -->
+	<select id="getCommunityList"  resultMap="communityResultMap">
+			SELECT
+				c.comm_name
+				,c.member_id		 
+				,c.reg_date
+				,c.category
+				,c.banner	 
+				,c.avatar    
+				,c.member_cnt
+				,c.online_member_cnt
+				,c.comm_desc
+			FROM
+				tb_community AS c
+			Order BY 
+				c.member_cnt DESC;	
+	</select>
+	<select id="getPostList"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_name		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.report_cnt
+				,p.point_gain
+			FROM
+				tb_comm_post AS p
+			Order BY 
+				p.likes_cnt DESC;	
+	</select>
+	<select id="getDailyPostList"  resultMap="postResultMap" fetchSize="4">
+			SELECT
+				p.post_code
+				,p.comm_name		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.report_cnt
+				,p.point_gain
+			FROM
+				tb_comm_post AS p
+			Order BY 
+				p.likes_cnt DESC
+			LIMIT 4;	
+	</select>
+	<select id="getCommunityByName"  resultMap="communityResultMap">
+			SELECT
+				c.comm_name
+				,c.member_id		 
+				,c.reg_date
+				,c.category
+				,c.banner	 
+				,c.avatar    
+				,c.member_cnt
+				,c.online_member_cnt
+				,c.comm_desc
+			FROM
+				tb_community AS c
+			Where
+				c.comm_name = #{commName};	
+	</select>
+	<select id="getRuleListByCommName"  resultMap="ruleResultMap">
+			SELECT
+				r.rule_code
+				,r.comm_name
+				,r.title
+				,r.detail
+				,r.reg_time
+			FROM
+			 	tb_comm_rules AS r
+			WHERE 
+				r.comm_name = #{commName};
+	</select>
+	
+	<select id="getTagListByCommName"  resultMap="tagResultMap">
+			SELECT
+				t.tag_code
+				,t.comm_name
+				,t.member_id
+				,t.tag_name
+				,t.tag_color
+				,t.reg_time
+			FROM
+			 tb_comm_tag AS t
+			WHERE 
+				t.comm_name = #{commName};
+	</select>
+	
+	
+	<insert id="addCommPost" parameterType="CommPost">
+		/*회원가입*/
+		INSERT INTO tb_comm_post
+			(	post_code
+				,comm_name		 
+				,member_id
+				,tag_code
+				,title	 
+				,reg_time    
+				,main_text
+				,reader_cnt
+				,picture_link
+				,video_link
+				,likes_cnt
+				,dislikes_cnt
+				,report_cnt
+				,point_gain
+		)VALUES (
+			#{postCode}
+			, #{memberId}
+			, #{tag_code}
+			, #{title}
+			, NOW()
+			, #{mainText}
+			, 0
+			, #{pictureLink}
+			, #{videoLink}
+			, 0
+			, 0
+			, 0
+			, #{pointGain}
+		);
+	</insert>
+	<insert id="addCommunity" parameterType="Community">
+		/*회원가입*/
+		INSERT INTO tb_community
+			(	 comm_name
+				,member_id		 
+				,reg_date
+				,category
+				,banner	 
+				,avatar    
+				,member_cnt
+				,online_member_cnt
+				,comm_desc
+		)VALUES (
+			#{commName}
+			, #{memberId}
+			, CURDATE()
+			, #{category}
+			, #{banner}
+			, #{avatar}
+			, #{memberCnt}
+			, #{onlineMemberCnt}
+			, #{commDesc}
+		);
+	</insert>
+	<insert id="addRule" parameterType="Rule">
+		/*회원가입*/
+		INSERT INTO tb_comm_rules
+			(	 rule_code
+				,comm_name		 
+				,title
+				,detail
+				,reg_time	 
+		)VALUES (
+			  sf_new_rule_code()
+			, #{commName}
+			, #{title}
+			, #{detail}
+			, NOW()
+		);
+	</insert>
+	<insert id="addTag" parameterType="CommTag">
+		/*회원가입*/
+		INSERT INTO tb_comm_tag
+			(	 tag_code
+				,comm_name
+				,member_id
+				,tag_name
+				,tag_color
+				,reg_time
+		)VALUES (
+			  sf_new_tag_code()
+			, #{commName}
+			, #{memberId}
+			, #{tagName}
+			, #{tagColor}
+			, NOW()
+		);
+	</insert>
+	
+	<select id="commNameCheck" parameterType="String" resultType="boolean">
+		SELECT
+			if(Count(1) = 1,0,1)
+		FROM
+			tb_community AS c
+		where
+			c.comm_name = #{commName};	
+	</select>
+
+
+
+	
+</mapper>

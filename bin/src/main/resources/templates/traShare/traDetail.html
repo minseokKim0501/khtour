@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col-11">
+			<h2 class="p-2 mb-2 bg-primary text-white">포스트 상세 페이지</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a
+						th:href="@{/traShare/traShareList}">여행일정 공유 게시판</a></li>
+					<li class="breadcrumb-item active" aria-current="page">포스트 상세</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="customContents">
+
+	<div class="row justify-content-center">
+		<div class="col">
+			<div class="card ">
+				<div class="card-body">
+					<a th:href="@{/traShare/traShareInsert}" type="button"
+						class="btn btn-primary"> <i class="feather icon-plus"></i>포스트
+						수정
+					</a> <a th:href="@{/traShare/traShareInsert}" type="button"
+						class="btn btn-primary"> <i class="feather icon-plus"></i>포스트
+						삭제
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row user-profile mb-4">
+<div class="col-3">
+				<div class="user-detail border-radius shadow-sm">
+					<div class="avatar avatar-xll d-block mx-auto">
+						<img class="img-fluid" src="images/team/04.jpg" alt="">
+					</div>
+					<div class="user-name mt-3 text-center">
+						<h5>김민석</h5>
+						<div>
+						<span>이메일 :  <strong class="text-primary"> klm7637@naver.com </strong></span>
+						</div>
+						<div>
+						<span>별명 :  <strong class="text-primary"> ㅁㄴㅇ </strong></span>
+						</div>
+					</div>
+					<div class="user-info mt-4">
+						<h5>사용자 정보</h5>
+						<div class="my-3 ">
+							<h6>팔로우</h6>
+															<div class="user-like text-left">
+									<a href="#"> <i class="fa fa-heart-o"></i> 2.5k</a>
+								</div>
+						</div>
+						<div class="my-3 ">
+							<h6>좋아요 수</h6>
+															<div class="user-like text-left">
+									<a href="#"> <i class="fa fa-heart-o"></i> 2.5k</a>
+								</div>
+						</div>
+					</div>
+											<div class="my-3 ">
+							<h6>방문 명소</h6>
+															<div class="user-like text-left">
+									<a href="#"> 5 개</a>
+								</div>
+						</div>
+					
+					
+					
+					<div class="user-completion">
+						<div class="progress-top-content">
+							<span>Profile Completion</span>
+							<span>89%</span>
+						</div>
+						<div class="progress progress-h-5">
+							<div class="progress-bar" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<div class="col-9">
+
+			<div class="card tab">
+				<div class="card-title pt-3">
+					<div class="card-title">
+						<h1
+							class="card-title-text position-absolute top-0 start-50 translate-middle">여행
+							일지</h1>
+					</div>
+					<ul class="nav" role="tablist">
+						<li class="nav-item"><a class="nav-link active" id="home-tab"
+							data-toggle="tab" href="#home" role="tab" aria-controls="home"
+							aria-selected="true">스토리</a></li>
+						<li class="nav-item"><a class="nav-link" id="profile-tab"
+							data-toggle="tab" href="#profile" role="tab"
+							aria-controls="profile" aria-selected="false">지도</a></li>
+					</ul>
+				</div>
+				<div class="card-body tab-content">
+					<div class="tab-pane fade active show" id="home" role="tabpanel"
+						aria-labelledby="home-tab">
+						<div class="user-about border-radius shadow-sm">
+							<div class="border " style="padding: 10px">
+								<div class="mb-4 ">
+									<h1 class="mb-3">제주도민 아니어도 무료인데 안 갈꺼?</h1>
+									<p>제주도엔 입장료도 없는데 시선 강탈하는 예쁜 곳들이 수두룩 해~ 그 중 정말 가보고 싶은 곳들만
+										추려봤어! 진짜 이건 꿀정보다!!</p>
+									<p>여행시작일 : 2016-07-12 1 명 여행 전 나홀로 여행</p>
+									<p>처음 만든 날 : 2016-06-10 마지막 수정한 날 : 2017-10-23 조회수 : 104.9K</p>
+
+											<!--  댓글  -->
+											<div class="pt-3">
+												<label for="content">댓글 작성</label>
+												<form name="commentInsertForm">
+													<div class="input-group">
+														<input type="hidden" name="bno" value="${detail.bno}" /> <input
+															type="text" class="form-control" id="content"
+															name="content" placeholder="내용을 입력하세요."> <span
+															class="input-group-btn">
+															<button class="btn btn-default" type="button"
+																name="commentInsertBtn">등록</button>
+														</span>
+													</div>
+												</form>
+											</div>
+
+								</div>
+							</div>
+							<div class="user-activites border-radius shadow-sm">
+
+								<ul class="timeline-left">
+									<li>
+										<div class="time">
+											<span>03:45 AM</span> <span>1Days</span>
+										</div>
+										<div class="icon bg-info">
+											<i class="zmdi zmdi-camera"></i>
+										</div>
+										<div class="info w-50">
+											<h3>해바라기 가득~</h3>
+
+											<div class="embed-responsive embed-responsive-4by3">
+												<img th:src="@{/images/traShare/신세경.gif}"
+													class="card-img-top h-10 img-thumbnail embed-responsive-item"
+													alt="...">
+											</div>
+
+											KOREA HERITAGETOUR (T)
+											<div class="pt-3">
+												<h5>해바라기 농장을 운영하시는 농장주의 넓은 아량 덕분에 이렇게 예쁜!</h5>
+											</div>
+
+
+
+
+
+										</div>
+									</li>
+									
+								</ul>
+								<a class="btn btn-primary btn-block mt-5" href="#">맨위로 </a>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="profile" role="tabpanel"
+						aria-labelledby="profile-tab">
+
+						<div class="user-about border-radius shadow-sm">
+							<!-- 지도 -->
+							지도 들어갈 부분
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h2>포인트 조회</h2>
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/js/datatables/select.bootstrap4.min.css}">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/js/datatables/fixedColumns.bootstrap4.min.css}">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/js/datatables/buttons.dataTables.min.css}">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/datepicker/daterangepicker.css}">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<div id="pointList">
+		<!-- **********************************  Start 달력  ********************************** -->
+		<div class="daterangepicker ltr show-calendar opensright"
+			style="top: 276.484px; left: 304.562px; right: auto; display: block; display: none;">
+			<div class="ranges"></div>
+			<div class="drp-calendar left">
+				<div class="calendar-table">
+					<table class="table-condensed">
+						<thead>
+							<tr>
+								<th class="prev available"><span></span></th>
+								<th colspan="5" class="month">Mar 2022</th>
+								<th></th>
+							</tr>
+							<tr>
+								<th>Su</th>
+								<th>Mo</th>
+								<th>Tu</th>
+								<th>We</th>
+								<th>Th</th>
+								<th>Fr</th>
+								<th>Sa</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="weekend off available" data-title="r0c0">27</td>
+								<td class="off available" data-title="r0c1">28</td>
+								<td class="available" data-title="r0c2">1</td>
+								<td class="available" data-title="r0c3">2</td>
+								<td class="available" data-title="r0c4">3</td>
+								<td class="available" data-title="r0c5">4</td>
+								<td class="weekend available" data-title="r0c6">5</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r1c0">6</td>
+								<td class="available" data-title="r1c1">7</td>
+								<td class="available" data-title="r1c2">8</td>
+								<td class="available" data-title="r1c3">9</td>
+								<td class="available" data-title="r1c4">10</td>
+								<td class="available" data-title="r1c5">11</td>
+								<td class="weekend available" data-title="r1c6">12</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r2c0">13</td>
+								<td class="available" data-title="r2c1">14</td>
+								<td class="available" data-title="r2c2">15</td>
+								<td class="available" data-title="r2c3">16</td>
+								<td class="available" data-title="r2c4">17</td>
+								<td class="today active start-date active end-date available"
+									data-title="r2c5">18</td>
+								<td class="weekend available" data-title="r2c6">19</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r3c0">20</td>
+								<td class="available" data-title="r3c1">21</td>
+								<td class="available" data-title="r3c2">22</td>
+								<td class="available" data-title="r3c3">23</td>
+								<td class="available" data-title="r3c4">24</td>
+								<td class="available" data-title="r3c5">25</td>
+								<td class="weekend available" data-title="r3c6">26</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r4c0">27</td>
+								<td class="available" data-title="r4c1">28</td>
+								<td class="available" data-title="r4c2">29</td>
+								<td class="available" data-title="r4c3">30</td>
+								<td class="available" data-title="r4c4">31</td>
+								<td class="off available" data-title="r4c5">1</td>
+								<td class="weekend off available" data-title="r4c6">2</td>
+							</tr>
+							<tr>
+								<td class="weekend off available" data-title="r5c0">3</td>
+								<td class="off available" data-title="r5c1">4</td>
+								<td class="off available" data-title="r5c2">5</td>
+								<td class="off available" data-title="r5c3">6</td>
+								<td class="off available" data-title="r5c4">7</td>
+								<td class="off available" data-title="r5c5">8</td>
+								<td class="weekend off available" data-title="r5c6">9</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="calendar-time" style="display: none;"></div>
+			</div>
+			<div class="drp-calendar right">
+				<div class="calendar-table">
+					<table class="table-condensed">
+						<thead>
+							<tr>
+								<th></th>
+								<th colspan="5" class="month">Apr 2022</th>
+								<th class="next available"><span></span></th>
+							</tr>
+							<tr>
+								<th>Su</th>
+								<th>Mo</th>
+								<th>Tu</th>
+								<th>We</th>
+								<th>Th</th>
+								<th>Fr</th>
+								<th>Sa</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="weekend off available" data-title="r0c0">27</td>
+								<td class="off available" data-title="r0c1">28</td>
+								<td class="off available" data-title="r0c2">29</td>
+								<td class="off available" data-title="r0c3">30</td>
+								<td class="off available" data-title="r0c4">31</td>
+								<td class="available" data-title="r0c5">1</td>
+								<td class="weekend available" data-title="r0c6">2</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r1c0">3</td>
+								<td class="available" data-title="r1c1">4</td>
+								<td class="available" data-title="r1c2">5</td>
+								<td class="available" data-title="r1c3">6</td>
+								<td class="available" data-title="r1c4">7</td>
+								<td class="available" data-title="r1c5">8</td>
+								<td class="weekend available" data-title="r1c6">9</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r2c0">10</td>
+								<td class="available" data-title="r2c1">11</td>
+								<td class="available" data-title="r2c2">12</td>
+								<td class="available" data-title="r2c3">13</td>
+								<td class="available" data-title="r2c4">14</td>
+								<td class="available" data-title="r2c5">15</td>
+								<td class="weekend available" data-title="r2c6">16</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r3c0">17</td>
+								<td class="available" data-title="r3c1">18</td>
+								<td class="available" data-title="r3c2">19</td>
+								<td class="available" data-title="r3c3">20</td>
+								<td class="available" data-title="r3c4">21</td>
+								<td class="available" data-title="r3c5">22</td>
+								<td class="weekend available" data-title="r3c6">23</td>
+							</tr>
+							<tr>
+								<td class="weekend available" data-title="r4c0">24</td>
+								<td class="available" data-title="r4c1">25</td>
+								<td class="available" data-title="r4c2">26</td>
+								<td class="available" data-title="r4c3">27</td>
+								<td class="available" data-title="r4c4">28</td>
+								<td class="available" data-title="r4c5">29</td>
+								<td class="weekend available" data-title="r4c6">30</td>
+							</tr>
+							<tr>
+								<td class="weekend off available" data-title="r5c0">1</td>
+								<td class="off available" data-title="r5c1">2</td>
+								<td class="off available" data-title="r5c2">3</td>
+								<td class="off available" data-title="r5c3">4</td>
+								<td class="off available" data-title="r5c4">5</td>
+								<td class="off available" data-title="r5c5">6</td>
+								<td class="weekend off available" data-title="r5c6">7</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="calendar-time" style="display: none;"></div>
+			</div>
+			<div class="drp-buttons">
+				<span class="drp-selected">03/18/2022 - 03/18/2022</span>
+				<button class="cancelBtn btn btn-sm btn-default" type="button">Cancel</button>
+				<button class="applyBtn btn btn-sm btn-primary" type="button">Apply</button>
+			</div>
+		</div>
+		<!-- **********************************  End 달력  ************************************ -->
+		<!-- **********************************  Start ContentsWrap  ********************************** -->
+		<style>
+.point_num h3 {
+	font-size: 50px;
+}
+table{text-align:center;}
+</style>
+		<div class="row">
+			<div class="col-6 text-center">
+				<div class="card">
+					<div class="card-body point_num">
+						<span>보유 포인트</span>
+						<h3>
+							<i class="fa fa-money"></i> 1304포인트
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="form-row">
+							<div class="form-group col-6">
+								<input style="letter-spacing: 1em;" type="text" name="daterange"
+									value="01/01/2021 - 01/15/2021" class="form-control" />
+							</div>
+							<div class="form-group col-4">
+								<select class="form-control" id="exampleFormControlSelect1">
+									<option>:: 상태 ::</option>
+									<option>적립</option>
+									<option>사용</option>
+								</select>
+							</div>
+							<div class="form-group col-2">
+								<button class="btn btn-primary" type="button">검색</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-centered table-hover mb-0">
+								<tbody>
+									<tr>
+										<th scope="row">적립</th>
+										<td>2022-03-20</td>
+										<td>구매 적립</td>
+										<td>숙박</td>
+										<td>+310</td>
+										<td><a class="btn btn-danger btn-icon btn-sm mb-1" href="#"><i class="fa fa-trash-o"></i> </a></td>
+									</tr>
+									<tr>
+										<th scope="row">사용</th>
+										<td>2022-03-20</td>
+										<td>결제 시 사용</td>
+										<td>숙박</td>
+										<td>-310</td>
+										<td><a class="btn btn-danger btn-icon btn-sm mb-1" href="#"><i class="fa fa-trash-o"></i> </a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- **********************************  End ContentsWrap  ********************************** -->
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- datatables -->
+	<!-- 달력  -->
+	<script th:src="@{/js/moment.min.js}"></script>
+	<script th:src="@{/js/datepicker/daterangepicker.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

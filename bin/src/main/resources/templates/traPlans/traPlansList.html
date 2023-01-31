@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+	
+    
+<th:block layout:fragment="contentsCss">
+    <link rel=" shortcut icon" th:href="@{/images/calendar_minseok/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/vendor/css/bootstrap-datetimepicker.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<h1>Hello, Oxoury</h1>
+	<p>The best to you each morning.</p>
+</th:block>
+
+<th:block layout:fragment="customContents">
+<div class="card">
+	<div class="card-body">
+		<p style="margin-top:-12px">
+		    <em class="link">
+		        <a href="javascript:void(0);" onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+		            혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요.
+		        </a>
+		    </em>
+		</p>
+		<div id="map" style="width:100%;height:350px;"></div>
+	</div>
+</div>
+
+
+</th:block>
+<th:block layout:fragment="customBodyScript">
+
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	
+	
+</th:block>
+</html>

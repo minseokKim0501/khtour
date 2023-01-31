@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>객실정보 상세관리</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">객실정보
+						상세관리</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customContents">
+	<style>
+.blog-info {
+	height: 200px;
+}
+
+.form-control {
+	margin-top: 1rem !important;
+}
+
+.roomName {
+	font-size: 1.5rem;
+}
+
+.roomSummary {
+	font-size: 1rem;
+}
+
+.roomPersonnel {
+	font-size: 0.8rem;
+	opacity: 0.5;
+}
+
+.roomCheckIn {
+	font-size: 1rem;
+}
+
+.price {
+	font-size: 20px;
+}
+
+.discount {
+	color: red;
+}
+
+.feather {
+	color: yellow;
+	font-size: 20px;
+}
+
+.card .card-footer {
+	padding: 0.5rem 0;
+}
+.star {
+	font-size: 1.0rem;
+	line-height: 1.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+</style>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<!-- 객실정보 상세검색  -->
+					<form>
+						<div class="form-row">
+							<div class="col-md-4 mb-4">
+								<label for="validationDefault01">여행 지역 선택</label> <select
+									class="form-control border border-secondary"
+									id="exampleFormControlSelect1">
+									<option>전체</option>
+									<option>서울특별시</option>
+									<option>인천광역시</option>
+									<option>대전광역시</option>
+									<option>대구광역시</option>
+									<option>울산광역시</option>
+									<option>부산광역시</option>
+									<option>광주광역시</option>
+									<option>강원도</option>
+									<option>경기도</option>
+									<option>충청남도</option>
+									<option>충청북도</option>
+									<option>경상북도</option>
+									<option>경상남도</option>
+									<option>전라북도</option>
+									<option>전라남도</option>
+									<option>제주도</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-4">
+								<label for="validationDefault01">여행 도시 선택</label> <select
+									class="form-control border border-secondary"
+									id="exampleFormControlSelect1">
+									<option>전체</option>
+									<option>강남구</option>
+									<option>종로구</option>
+									<option>용산구</option>
+									<option>강릉시</option>
+									<option>안동시</option>
+									<option>포항시</option>
+									<option>거제시</option>
+									<option>공주시</option>
+									<option>천안시</option>
+									<option>전주시</option>
+									<option>군산시</option>
+									<option>제주시</option>
+									<option>서귀포시</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-4">
+								<label for="validationDefault02">숙박시설 종류 선택</label> <select
+									class="form-control border border-secondary"
+									id="exampleFormControlSelect1">
+									<option>전체</option>
+									<option>호텔</option>
+									<option>펜션</option>
+									<option>모텔</option>
+									<option>리조트</option>
+									<option>게스트하우스</option>
+									<option>캥핑장</option>
+								</select>
+							</div>
+							<div class="col-md-12">
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="swimmingPool" value="checked"> <label
+										class="custom-control-label" for="swimmingPool">수영장</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="smoking" value="checked"> <label
+										class="custom-control-label" for="smoking">흡연가능</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="solitary" value="checked"> <label
+										class="custom-control-label" for="solitary">독채</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input" id="onDol"
+										value="checked"> <label class="custom-control-label"
+										for="onDol">온돌방</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input" id="tub"
+										value="checked"> <label class="custom-control-label"
+										for="tub">개별욕조</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="amenities" value="checked"> <label
+										class="custom-control-label" for="amenities">어메니티</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input" id="pet"
+										value="checked"> <label class="custom-control-label"
+										for="pet">반려동물</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input" id="wifi"
+										value="checked"> <label class="custom-control-label"
+										for="wifi">와이파이</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input" id="bbq"
+										value="checked"> <label class="custom-control-label"
+										for="bbq">바베큐</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="cooking" value="checked"> <label
+										class="custom-control-label" for="cooking">개별취사</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input" id="paking"
+										value="checked"> <label class="custom-control-label"
+										for="paking">주차장</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="addpeople" value="checked"> <label
+										class="custom-control-label" for="addpeople">인원추가</label>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="input-group mb-3">
+									<input name="zip" type="text" class="form-control"
+										aria-label="Recipient's username"
+										aria-describedby="button-addon">
+									<button class="btn btn-primary"
+										style="margin-top: 1rem !important;" onclick="" type="button">검색</button>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- 객실정보 상세검색 -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<!-- 호텔에 맞는 객실 정보 리스트 -->
+		<div class="roomInfo col-lg-12 col-md-12 col-sm-12">
+			<div class="card">
+				<div class="card-body">
+					<!-- 호텔 대표 이미지 등록 -->
+					<div class="embed-responsive embed-responsive-16by9">
+						<img class="embed-responsive-item"
+							th:src="@{/images/aco/sinlastayBusan1.png}" alt="">
+					</div>
+					<!-- 호텔 대표 이미지 끝 -->
+					<!-- 호텔 기본 정보 및 리뷰 -->
+					<p style="margin-top: 1rem;">비지니스 호텔</p>
+					<h2>신라스테이 해운대</h2>
+					<!-- <a th:href="">-->
+					<div class="">
+						<span class=""><i class="feather icon-star-on"></i></span><span
+							class="">4.7</span> <span class="">/5</span>
+					</div>
+					<span class=""> 후기 <b>1,600</b> 개
+					</span>
+					<!-- 호텔 기본 정보 및 리뷰 끝 -->
+					<div class="card-footer"></div>
+					<div class="row">
+						<!-- 호텔 객실 세부 내역 -->
+						<div class="col-1" style="margin: 100px 0px;">
+							<input type="checkbox">
+						</div>
+						<div class="col-4" style="padding-left: 0px; cursor: pointer;"
+							onclick="location.href='roomPayment';">
+							<div class="blog-image">
+								<img class="img-fluid w-100"
+									th:src="@{/images/room/sinlaroom1.jpg}" alt="">
+							</div>
+						</div>
+						<div class="col-7" style="padding-left: 0px; cursor: pointer;"
+							onclick="location.href='roomPayment';">
+							<div class="">
+								<h3 class="roomName">스텐다드 체크인시 배정 시티뷰</h3>
+							</div>
+							<h4 class="roomSummary">숙박 불가 4시간 STAY</h4>
+							<h5 class="roomPersonnel">기준 2명 / 최대 2명</h5>
+							<div class="" style="margin-top: 1.5rem;">
+								<h4 style="display: inline;">숙박</h4>
+								<span id="checkInTime"
+									style="margin-top: 0.3rem; opacity: 0.5; display: inline;">15:00부터</span>
+								<span id="roomPrice"
+									style="float: right; margin-top: 0.3rem; opacity: 0.5; padding-right: 30px;">400,000</span>
+							</div>
+							<div class="" style="float: right; padding-right: 30px;">
+								판매가</div>
+							<div class="col-12"
+								style="text-align: right; float: right; padding-right: 30px;">
+								<span class="price"> <span class="discount">87 <small>%</small>
+								</span> 58,060 <small>원</small>
+								</span>
+							</div>
+						</div>
+					</div>
+					<!-- 호텔 객실 세부 내역 끝 -->
+					<!-- 객실 정보 및 지도 -->
+					<div class="card-footer"></div>
+					<h2>숙소 소개</h2>
+					<div>
+						<p style="font-size: 15px;">휴양과 레저, 문화 관광이 어우러진 글로벌 관광도시 해운대에
+							신라스테이를 선보입니다</p>
+						<br>
+						<p style="font-size: 15px;">모던한 인테리어의 407개의 객실에서 편안함과 쾌적함이
+							인상적인 최상의 휴식을 누려보세요.</p>
+						<br>
+						<p style="font-size: 15px;">천혜의 절경과 어우러진 해운대해수욕장, 동백섬, 달맞이 언덕
+							등 부산 관광명소의 접근이 용이합니다.</p>
+						<br>
+					</div>
+					<div class="card-footer"></div>
+					<h2>위치 안내</h2>
+					<div>
+						<div id="map" style="width:100%;height:350px;"></div>
+						<p id="addr" style="font-size: 15px; display: inline;">
+							<i class="feather icon-map-pin" style="color: blue;"></i>부산광역시 해운대구 해운대로570번길 46
+						</p>
+						<span style="display: inline; float: right; font-size: 15px;"><a
+							type="button" id="copy_btn">주소복사</a></span>
+					</div>
+					<div class="card-footer"></div>
+					<!-- 객실 정보 및 지도 끝 -->
+					<div>
+						<button type="button" class="btn btn-primary"
+							onclick="location.href='roomInsert'"
+							style="margin: auto; display: block;">객실신규등록</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 호텔에 대한 리뷰 표시 영역 -->
+		<div class="roomInfo col-lg-12 col-md-12 col-sm-12">
+			<div class="card">
+				<div class="card-body">
+					<div>
+						<h2 style="display: inline; float: left;">후기</h2>
+						<span style="display: inline-block; float: left; font-size: 20px;">(1,600개)</span>
+						<div class="col-12 col-md-12"></div>
+					</div>
+				</div>
+				<div style="display: flex; justify-content: space-between;">
+					<div style="padding: 18.577px;">
+						<span><i class="feather icon-star-on" style="font-size: 30px;"></i></span>
+						<span style="font-size: 40px;">4.7</span> 
+						<span style="opacity: 0.5; font-size: 20px;">/5</span>
+						<p style="text-align: right; opacity: 0.5;">최근 12개월 누적 평점</p>
+					</div>
+					<div class="col-8 col-md-8 col-lg-8" style="float: right;">
+						<ul style="list-style: none; padding-left: 0px;">
+							<li class="star"><span style="padding-right: 0.5rem;">청결도</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+							<div class="progress-bar" role="progressbar" style="width: 75%; background-color: yellow;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+							<span style="padding-left: 0.5rem;">4.8</span>
+							</li>
+							<li class="star"><span style="padding-right: 0.5rem;">친절도</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+							<div class="progress-bar" role="progressbar" style="width: 75%; background-color: yellow;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+							<span style="padding-left: 0.5rem;">4.8</span>
+							</li>
+							<li class="star"><span style="padding-right: 0.5rem;">편의성</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+							<div class="progress-bar" role="progressbar" style="width: 75%; background-color: yellow;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+							<span style="padding-left: 0.5rem;">4.8</span>
+							</li>
+							<li class="star"><span style="padding-right: 0.5rem;">위치만족도</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+							<div class="progress-bar" role="progressbar" style="width: 75%; background-color: yellow;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+							<span style="padding-left: 0.5rem;">4.8</span>
+							</li>
+							<li class="star"><span style="padding-right: 0.5rem;">가격만족도</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+							<div class="progress-bar" role="progressbar" style="width: 75%; background-color: yellow;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+							<span style="padding-left: 0.5rem;">4.8</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="card-footer"></div>
+				<article class="ReviewBox">
+					<div class="ReviewContentsBox">
+						<span></span>
+					</div>
+					
+				</article>
+			</div>
+		</div>
+	</div>
+	
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<!-- 지도API 스크립트  -->
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7cec08e17fcfb480dd452f2d9dd9df4c"></script>
+		<script>
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		    mapOption = { 
+		        center: new kakao.maps.LatLng(35.15979674782372, 129.15873069031613), // 지도의 중심좌표
+		        level: 3 // 지도의 확대 레벨
+		    };
+		
+		var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+		
+		// 마커가 표시될 위치입니다 
+		var markerPosition  = new kakao.maps.LatLng(35.15979674782372, 129.15873069031613); 
+		
+		// 마커를 생성합니다
+		var marker = new kakao.maps.Marker({
+		    position: markerPosition
+		});
+		
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(map);
+		
+		// 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+		// marker.setMap(null);    
+	</script>
+	<!-- 클립보드 복사 script -->
+	<script>
+		$(function() {
+			$('#copy_btn').click(function() {
+				var pAddr = document.getElementById('addr'); //복사할 텍스트를 선택
+				var range = document.createRange();
+				console.log($(pAddr));
+
+				range.selectNode(pAddr.childNodes[2]);
+				var selectP = window.getSelection();
+				selectP.removeAllRanges();
+				selectP.addRange(range);
+				document.execCommand("copy"); //클립보드 복사 실행
+				selectP.removeRange(range);
+				alert('copy');
+
+			})
+		})
+	</script>
+	
+</th:block>
+</html>

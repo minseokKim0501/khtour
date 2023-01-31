@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>객실정보 수정</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">객실정보 수정</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<style>
+.form-group {
+	float: left;
+}
+</style>
+
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/datepicker/daterangepicker.css}">
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="card-title">
+						<form id="modifyRoomForm" 
+						th:action="@{/room/modifyRoom}" method="post">
+							<div class="card-title-left">
+								<h4 class="card-title-text">등록 정보 입력</h4>
+								<div class="form-group col-12 col-md-12 col-lg-12">
+									<label for="ldgCode">숙박업소 코드</label>
+									<input type="hidden" class="form-control" name="ldgCode" th:value="${room.ldgCode}" readonly="readonly">
+									<input type="hidden" class="form-control" name="roomCode" th:value="${room.roomCode}" readonly="readonly">
+								</div>
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="roomName">객실 이름</label> <input
+										type="text" class="form-control" th:value="${room.roomName}">
+								</div>
+								<div class="form-group col-12 col-md-6 col-lg-6">
+									<label for="roomExplain">객실 상세설명</label> <input type="text"
+										class="form-control" name="roomExplain" th:value="${room.roomExplain}">
+								</div>
+								<div class="form-group col-12 col-md-4 col-lg-4">
+									<label for="roomPersonnel">객실 기준인원</label> 
+									<select class="form-control border border-secondary"
+										id="exampleFormControlSelect1" name="roomPersonnel">
+										<option value="기준 2명 / 최대 2명">기준 2명 / 최대 2명</option>
+										<option value="기준 2명 / 최대 3명">기준 2명 / 최대 3명</option>
+										<option value="기준 2명 / 최대 4명">기준 2명 / 최대 4명</option>
+										<option value="기준 2명 / 최대 6명">기준 2명 / 최대 6명</option>
+										<option value="기준 2명 / 최대 8명">기준 2명 / 최대 8명</option>
+										<option value="기준 2명 / 최대 10명">기준 2명 / 최대10명</option>
+										<option value="기준 2명 / 최대 12명">기준 2명 / 최대 12명</option>
+									</select>
+								</div>
+								<div class="form-group col-12 col-md-4 col-lg-4">
+									<label for="roomType">객실 타입</label> 
+									<select class="form-control border border-secondary"
+										id="exampleFormControlSelect1" name="roomType">
+										<option value="숙박">숙박</option>
+										<option value="대실">대실</option>
+									</select>
+								</div>
+								<div class="form-group col-12 col-md-4 col-lg-4">
+									<label for="roomCheckin">입실 시간</label> 
+									<select class="form-control border border-secondary"
+										id="exampleFormControlSelect1" name="roomCheckin">
+										<option value="13:00">13:00</option>
+										<option value="14:00">14:00</option>
+										<option value="15:00">15:00</option>
+										<option value="16:00">16:00</option>
+										<option value="17:00">17:00</option>
+										<option value="18:00">18:00</option>
+									</select>
+								</div>
+								<div class="form-group ccol-12 col-md-4 col-lg-4">
+									<label for="roomPrice">객실 가격</label> <input type="text"
+										class="form-control" name="roomPrice" th:value="${room.roomPrice}">
+								</div>
+								<div class="form-group col-12 col-md-4 col-lg-4">
+									<label for="roomDiscount">객실 할인율</label> <input type="text"
+										class="form-control" name="roomDiscount" th:value="${room.roomDiscount}">
+								</div>
+							</div>
+							<button type="submit" class="btn btn-primary">수정완료</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- summernote -->
+	<script th:src="@{js/summernote/summernote.min.js}"></script>
+	<!-- summernote -->
+	<script th:src="@{js/simplemde/simplemde.min.js}"></script>
+	<script th:src="@{js/simplemde/simplemde.js}"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+	<script th:src="@{js/dropzone/dropzone.min.js}"></script>
+	<script th:src="@{/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+	<script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+
+</th:block>
+</html>

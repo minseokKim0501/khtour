@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>문화재 상세 페이지</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a th:href="@{/heritage/heritageListByItem}">문화재 종목별 검색 리스트</a></li>
+			<li class="breadcrumb-item active" aria-current="page">문화재 상세페이지</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<!-- 첫번째 Row 시작 -->
+		<!-- 문화재 타이틀  시작 -->
+		<div class="row justify-content-center">
+			<div class="col-md-10">
+				<div class="card text-center">
+					<div class="card-body">
+						<p class="card-text" th:text="${heritage.heritageCategory}"></p>
+						<h1 th:text="${heritage.heritageName}"></h1>
+						<h3 th:text="${heritage.heritageSubName}"></h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 문화재 타이틀 종료 -->
+		
+	
+		
+	<!-- 두번째 Row 시작 -->
+	<div class="row justify-content-center">
+		<!-- 문화재 이미지 시작 -->
+		<div class="col-md-5">
+			<div class="card">
+				<div class="card-body text-center">
+					<div class="blog-image">
+						<img th:src="@{${#strings.isEmpty(heritage.heritageImagePath) ? '/images/heritage/서울 숭례문.jpg': '/' + #strings.replace(heritage.heritageImagePath,'\','/')}}" class="img-fluid"
+							style="height: 420px; line-height: 280px;" alt="...">
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 문화재 이미지 종료 -->
+		
+		<!-- 문화재 상세정보 시작 -->
+		<div class="col-md-5">
+			<div class="card">
+				<div class="card-body">
+						<h3>기본정보</h3>
+					<div class="table-responsive text-center">
+						<table class="table">
+							<colgroup>
+								<col style="width: 125px">
+								<col>
+							</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row">분 류</th>
+									<td th:text="${heritage.heritageClassification}"></td>
+								</tr>
+								<tr>
+									<th scope="row">수량 / 면적</th>
+									<td th:text="${heritage.heritageArea}"></td>
+								</tr>
+								<tr>
+									<th scope="row">지정(등록)일</th>
+									<td th:text="${heritage.heritageDesignation}"></td>
+								</tr>
+								<tr>
+									<th scope="row">소 재 지</th>
+									<td th:text="${heritage.heritageLocation}"></td>
+								</tr>
+								<tr>
+									<th scope="row">시 대</th>
+									<td th:text="${heritage.heritageEra}"></td>
+								</tr>
+								<tr>
+									<th scope="row">소유자(소유단체)</th>
+									<td th:text="${heritage.heritageOwner}"></td>
+								</tr>
+								<tr>
+									<th scope="row">관리자(관리단체)</th>
+									<td th:text="${heritage.heritageManager}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 문화재 상세정보 종료 -->
+	</div>
+	
+	
+	
+	
+	<!-- 세번째 Row 시작 -->
+		<!--  문화재 설명 및 지도 시작 -->
+		<div class="row justify-content-center">
+			<div class="col-10">
+				<div class="card">
+					<div class="card-body">
+						<!-- 문화재 설명 시작 -->
+						<div class="tab tab-outline">
+							<ul class="nav" id="myTab-02" role="tablist">
+								<li class="nav-item"><a class="nav-link active"
+									id="home-tab-02" data-toggle="tab" href="#home-02" role="tab"
+									aria-controls="home" aria-selected="true"> 문화재 설명</a></li>
+							</ul>
+							<div class="tab-content" id="myTabContent-02">
+								<div class="tab-pane fade show active" id="home-02"
+									role="tabpanel" aria-labelledby="home-tab-02">
+									<p th:text="${heritage.heritageDetail}"></p>
+								</div>
+							</div>
+						</div>
+						<!-- 문화재 설명 종료 -->
+						<!-- 문화재 지도 시작 -->
+						<div class="tab tab-outline">
+							<ul class="nav" id="myTab-02" role="tablist">
+								<li class="nav-item"><a class="nav-link active"
+									id="home-tab-02" data-toggle="tab" href="#home-02" role="tab"
+									aria-controls="home" aria-selected="true"> 지도</a></li>
+							</ul>
+							<div class="tab-content" id="myTabContent-02">
+								<div class="tab-pane fade show active" id="home-02"
+									role="tabpanel" aria-labelledby="home-tab-02">
+									<p style="margin-top: -12px">
+										<em class="link"> <a href="javascript:void(0);"
+											onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+												혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요. </a>
+										</em>
+									</p>
+									<div id="map" style="width: 100%; height: 450px;"></div>
+								</div>
+							</div>
+						</div>
+						<!-- 문화재 지도 종료 -->
+					</div>
+				</div>
+			</div>
+		</div>
+</th:block>
+
+
+<th:block layout:fragment="customBodyScript">
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<!-- 카카오맵 키 -->
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7cec08e17fcfb480dd452f2d9dd9df4c&libraries=services"></script>
+	<!-- 카카오맵 자바스크립트 -->
+	<script th:inline="javascript">
+	/*<![CDATA[*/ 
+	var heritageLocation = /*[[ ${heritage.heritageLocation} ]]*/;
+	/*]]*/ 	
+	
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		mapOption = {
+			center : new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+			level : 3
+		// 지도의 확대 레벨
+		};
+
+		// 지도를 생성합니다    
+		var map = new kakao.maps.Map(mapContainer, mapOption);
+
+		// 주소-좌표 변환 객체를 생성합니다
+		var geocoder = new kakao.maps.services.Geocoder();
+
+		// 주소로 좌표를 검색합니다
+		geocoder
+				.addressSearch( 
+						
+						heritageLocation,
+						function(result, status) {
+							// 정상적으로 검색이 완료됐으면 
+							if (status === kakao.maps.services.Status.OK) {
+
+								var coords = new kakao.maps.LatLng(result[0].y,
+										result[0].x);
+
+								// 결과값으로 받은 위치를 마커로 표시합니다
+								var marker = new kakao.maps.Marker({
+									map : map,
+									position : coords
+								});
+
+								// 인포윈도우로 장소에 대한 설명을 표시합니다
+								var infowindow = new kakao.maps.InfoWindow(
+										{
+											content : '<div style="width:150px;text-align:center;padding:6px 0;">[[ ${heritage.heritageName} ]]</div>'
+										});
+								infowindow.open(map, marker);
+
+								// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+								map.setCenter(coords);
+							}
+							else{
+								alert('정확한 위치를 표기해주세요.')
+							}
+						});
+	</script>
+	
+</th:block>
+</html>

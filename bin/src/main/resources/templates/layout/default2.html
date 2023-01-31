@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	  
+<head th:replace="fragments/head :: headFragment"></head>
+
+<body>
+		<!-- start : header -->
+		<div th:replace="fragments/header :: headerFragment"></div>
+		<!--  end : header -->
+		<!-- start : wrapper -->
+		<div class="wrapper">
+			<!-- start : sidebar -->		
+			<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+			<!-- end : sidebar -->
+			
+			<div class="main-panel">
+				<!-- start : contents-heading  -->
+				<div class="panel-hedding">
+					<div class="row justify-content-center mb-4">
+						<div class="col-12 col-la-12 col-xl-12">
+							<th:block layout:fragment="contentsTitle">
+							</th:block>
+						</div>
+					</div>
+				</div>
+				<!-- end : contents-heading  -->
+				<!-- start : contents  -->
+				<div class="row justify-content-center">
+					<div class="col-12 col-la-12 col-xl-12">
+						<th:block layout:fragment="customContents">
+						</th:block>
+					</div>
+				</div>
+				<!-- end : contents  -->
+			</div>
+		</div>
+		<!-- end : wrapper -->
+		<!-- **********  Javascript  ********** -->
+
+		<!-- jquery -->
+		<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+		
+		<!-- bootstrap -->
+		<script th:src="@{/js/bootstrap/bootstrap.bundle.min.js}"></script>
+		
+		<!-- jquery-nicescroll -->
+		<script th:src="@{/js/jquery-nicescroll/jquery.nicescroll.min.js}"></script>
+		
+		<th:block layout:fragment="customBodyScript"></th:block>
+		
+		<!-- 커스텀 스크립트 추가 -->
+		<th:block layout:fragment="customScript"></th:block>
+</body>
+
+</html>

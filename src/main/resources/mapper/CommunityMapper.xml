@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.CommunityMapper">
+
+	<resultMap type="Community" id="communityResultMap">
+		<id column="comm_code" property="commCode"/>
+		<result column="comm_name" property="commName"/>
+		<result column="member_id" property="memberId"/>
+		<result column="reg_date" property="regDate"/>
+		<result column="category_code" property="categoryCode"/>
+		<result column="banner" property="banner"/>
+		<result column="avatar" property="avatar"/>
+		<result column="member_cnt" property="memberCnt"/>
+		<result column="online_member_cnt" property="onlineMemberCnt"/>
+		<result column="comm_desc" property="commDesc"/>
+	</resultMap> 
+	<resultMap type="CommPost" id="postResultMap">
+		<id column="post_code" property="postCode"/>
+		<result column="comm_code" property="commCode"/>
+		<result column="member_id" property="memberId"/>
+		<result column="tag_code" property="tagCode"/>
+		<result column="title" property="title"/>
+		<result column="reg_time" property="regTime"/>
+		<result column="main_text" property="mainText"/>
+		<result column="reader_cnt" property="readerCnt"/>
+		<result column="picture_link" property="pictureLink"/>
+		<result column="video_link" property="videoLink"/>
+		<result column="likes_cnt" property="likesCnt"/>
+		<result column="dislikes_cnt" property="dislikesCnt"/>
+		<result column="comments_cnt" property="commentsCnt"/>
+		<result column="report_cnt" property="reportCnt"/>
+		<result column="point_gain" property="pointGain"/>
+		<result column="result_cnt" property="resultCnt"/>
+		<result column="daily_likes_cnt" property="dailyLikesCnt"/>
+	</resultMap> 
+	<resultMap type="Rule" id="ruleResultMap">
+		<id column="rule_code" property="ruleCode"/>
+		<result column="comm_code" property="commCode"/>
+		<result column="title" property="title"/>
+		<result column="detail" property="detail"/>
+		<result column="reg_time" property="reg_time"/>
+	</resultMap>
+	<resultMap type="CommTag" id="tagResultMap">
+		<id column="tag_code" property="tagCode"/>
+		<result column="comm_code" property="commCode"/>
+		<result column="member_id" property="memberId"/>
+		<result column="tag_name" property="tagName"/>
+		<result column="tag_color" property="tagColor"/>
+		<result column="reg_time" property="regTime"/>
+	</resultMap>
+	
+	<resultMap type="CommCategory" id="categoryResultMap">
+		<id column="category_code" property="categoryCode"/>
+		<result column="category_name" property="categoryName"/>
+		<result column="reg_time" property="regTime"/>
+		<result column="banner_img" property="bannerImg"/>
+		<result column="total_member_cnt" property="totalMemberCnt"/>
+	</resultMap>
+	
+	<resultMap type="CommReply" id="replyResultMap">
+		<id column="reply_code" property="replyCode"/>
+		<result column="member_id" property="memberId"/>
+		<result column="member_name" property="memberName"/>
+		<result column="post_code" property="postCode"/>
+		<result column="parent_reply_code" property="parentReplyCode"/>
+		<result column="likes_cnt" property="likesCnt"/>
+		<result column="dislikes_cnt" property="dislikesCnt"/>
+		<result column="main_text" property="mainText"/>
+		<result column="reg_time" property="regTime"/>
+		<result column="comments_cnt" property="commentsCnt"/>
+		<result column="result_cnt" property="resultCnt"/>
+	</resultMap>
+	
+	<resultMap type="LikesDislikes" id="likesDislikesResultMap">
+		<id column="likes_dislikes_code" property="likesDislikesCode"/>
+		<result column="member_id" property="memberId"/>
+		<result column="post_code" property="postCode"/>
+		<result column="reply_code" property="parentReplyCode"/>
+		<result column="reg_time" property="regTime"/>
+		<result column="likes_dislikes_cate" property="likesDislikesCate"/>
+	</resultMap>
+	
+	<resultMap type="CommMemberReg" id="commMemberRegResultMap">
+		<id column="comm_member_reg_code" property="commMemberRegCode"/>
+		<result column="comm_code" property="commCode"/>
+		<result column="member_id" property="memberId"/>
+		<result column="comm_member_level" property="commMemberLevel"/>
+		<result column="reg_time" property="regTime"/>
+	</resultMap>
+
+	<select id="getCommunityList"  resultMap="communityResultMap">
+			SELECT
+				c.comm_code
+				,c.comm_name
+				,c.member_id		 
+				,c.reg_date
+				,c.category_code
+				,c.banner	 
+				,c.avatar    
+				,c.member_cnt
+				,c.online_member_cnt
+				,c.comm_desc
+			FROM
+				tb_community AS c
+			Order BY 
+				c.member_cnt DESC;	
+	</select>
+	<select id="getCommunityListByCommCodeList" parameterType="list" resultMap="communityResultMap">
+			
+			SELECT
+				c.comm_code
+				,c.comm_name
+				,c.member_id		 
+				,c.reg_date
+				,c.category_code
+				,c.banner	 
+				,c.avatar    
+				,c.member_cnt
+				,c.online_member_cnt
+				,c.comm_desc
+			FROM
+				tb_community AS c
+			WHERE	
+			<foreach collection="list" item="commCode" separator="or">
+				c.comm_code = #{commCode}	
+			</foreach>
+			;
+	</select>
+
+	<select id="getFileControllerByPostCode" parameterType="String" resultType="String">
+			SELECT
+				f.file_path AS filePath
+			FROM
+				tb_file_control AS f
+			WHERE
+				f.reference_code = #{postCode};			
+	</select>
+	
+	<update id="addCommentCnt" parameterType="String">
+		UPDATE tb_comm_post
+			SET
+			comments_cnt = comments_cnt + 1	
+				 
+		WHERE
+			post_code=#{postCode};	
+	</update>
+	<update id="subtractCommentCnt" parameterType="String">
+		UPDATE tb_comm_post
+			SET
+			comments_cnt = comments_cnt - 1	
+				 
+		WHERE
+			post_code=#{postCode};	
+	</update>
+	
+	<update id="addCommunityMemberCnt" parameterType="String">
+		UPDATE tb_community
+			SET
+			member_cnt = member_cnt + 1	
+				 
+		WHERE
+			comm_code=#{commCode};	
+	</update>
+	<update id="addCategoryMemberCnt" parameterType="String">
+		UPDATE tb_comm_category
+			SET
+			total_member_cnt = total_member_cnt + 1	
+				 
+		WHERE
+			category_code=#{categoryCode};	
+	</update>
+	
+	
+	<update id="addPostLikesCnt" parameterType="String">
+		UPDATE tb_comm_post
+			SET
+			likes_cnt = likes_cnt + 1
+			,result_cnt = result_cnt+1
+			,daily_likes_cnt = daily_likes_cnt +1		 
+		WHERE
+			post_code=#{postCode};	
+	</update>
+	<update id="addPostDislikesCnt" parameterType="String">
+		UPDATE tb_comm_post
+			SET
+			dislikes_cnt = dislikes_cnt + 1	
+			,result_cnt = result_cnt-1	 
+			,daily_likes_cnt = daily_likes_cnt +1
+		WHERE
+			post_code=#{postCode};	
+	</update>
+	<update id="addReplyLikesCnt" parameterType="String">
+		UPDATE tb_community_reply
+			SET
+			likes_cnt = likes_cnt + 1	
+			,result_cnt = result_cnt + 1	 
+		WHERE
+			reply_code=#{replyCode};	
+	</update>
+	<update id="addReplyDislikesCnt" parameterType="String">
+		UPDATE tb_community_reply
+			SET
+			dislikes_cnt = dislikes_cnt + 1	
+			,result_cnt = result_cnt-1	 
+		WHERE
+			reply_code=#{replyCode};	
+	</update>
+	
+	<select id="getPostResultCnt" resultType="int">
+		Select 
+			c.result_cnt  AS resultCnt
+		FROM
+			tb_comm_post as c
+		WHERE
+			c.post_code=#{postCode};	
+	</select>
+	<select id="getReplyResultCnt" resultType="int">
+		Select 
+			r.result_cnt AS resultCnt
+		FROM
+			tb_community_reply as r
+		WHERE
+			reply_code=#{replyCode};	
+	</select>
+	
+	<update id="addCommentCntOfComments" parameterType="String">
+		UPDATE tb_community_reply
+			SET
+			comments_cnt = comments_cnt + 1		 
+		WHERE
+			reply_code=#{replyCode};	
+	</update>
+	
+	<update id="subtractCommentCntOfComments" parameterType="String">
+		UPDATE tb_community_reply
+			SET
+			comments_cnt = comments_cnt - 1		 
+		WHERE
+			reply_code=#{replyCode};	
+	</update>
+	
+	
+	
+	<select id="getCommReplyByReplyCode"  resultMap="replyResultMap">
+			SELECT
+				r.reply_code
+				,r.member_id
+				,r.member_name
+				,r.comments_cnt
+				,r.parent_reply_code
+				,r.main_text
+				,r.post_code
+			FROM
+				tb_community_reply AS r
+			WHERE
+				r.reply_code = #{replyCode}
+	</select>
+	
+	<select id="getCommCodeListByMemberId"    resultType="String">
+			SELECT
+				r.comm_code AS commCode
+			FROM
+				tb_comm_member_reg AS r
+			WHERE
+				r.member_id = #{memberId}
+	</select>
+	
+	<select id = "checkLikeDislikeByMemberIdAndPostCode" parameterType="String" resultType="String">
+			SELECT
+				ld.likes_dislikes_cate
+			FROM
+				tb_likes_dislikes AS ld
+			WHERE
+				ld.member_id = #{memberId}
+			AND
+				ld.post_code = #{postCode};
+	</select>
+	
+	<select id = "checkLikeDislikeByMemberIdAndReplyCode" parameterType="String" resultType="String">
+			SELECT
+				ld.likes_dislikes_cate
+			FROM
+				tb_likes_dislikes AS ld
+			WHERE
+				ld.member_id = #{memberId}
+			AND
+				ld.reply_code = #{replyCode};
+	</select>
+	
+	<update id="updatePostLikeToDislike" parameterType="String">
+		UPDATE tb_likes_dislikes
+			SET
+			likes_dislikes_cate = 'dislike'	
+			,reg_time = now()	 
+		WHERE
+			member_id = #{memberId}
+		AND
+			post_code = #{postCode};	
+	</update>
+	<update id="updatePostDislikeToLike" parameterType="String">
+		UPDATE tb_likes_dislikes
+			SET
+			likes_dislikes_cate = 'like'	
+			,reg_time = now()	 
+		WHERE
+			member_id = #{memberId}
+		AND
+			post_code = #{postCode};	
+	</update>
+	<update id="updateReplyLikeToDislike" parameterType="String">
+		UPDATE tb_likes_dislikes
+			SET
+			likes_dislikes_cate = 'dislike'	
+			,reg_time = now()	 
+		WHERE
+			member_id = #{memberId}
+		AND
+			reply_code = #{replyCode};	
+	</update>
+	<update id="updateReplyDislikeToLike" parameterType="String">
+		UPDATE tb_likes_dislikes
+			SET
+			likes_dislikes_cate = 'like'	
+			,reg_time = now()	 
+		WHERE
+			member_id = #{memberId}
+		AND
+			reply_code =#{replyCode};
+	</update>
+	
+	<select id="getCommReplyListByPostCode"  resultMap="replyResultMap">
+			SELECT
+				r.reply_code
+				,r.member_id
+				,r.post_code		 
+				,r.parent_reply_code
+				,r.likes_cnt
+				,r.dislikes_cnt	 
+				,r.main_text    
+				,r.reg_time
+				,r.comments_cnt
+				,r.result_cnt
+				,r.member_name
+			FROM
+				tb_community_reply AS r
+			WHERE
+				r.post_code = #{postCode}
+			Order BY 
+				r.reg_time DESC;	
+	</select>
+	<select id="getChildrenReplyListByReplyCode"  resultMap="replyResultMap">
+			SELECT
+				r.reply_code
+				,r.member_id
+				,r.post_code		 
+				,r.parent_reply_code
+				,r.likes_cnt
+				,r.dislikes_cnt	 
+				,r.main_text    
+				,r.reg_time
+				,r.comments_cnt
+				,r.result_cnt
+			FROM
+				tb_community_reply AS r
+			WHERE
+				r.parent_reply_code = #{replyCode}
+			Order BY 
+				r.reg_time DESC;	
+	</select>
+	
+	<select id="getCommCategoryList"  resultMap="categoryResultMap">
+			SELECT
+				c.category_code
+				,c.category_name
+				,c.reg_time		 
+				,c.banner_img
+				,c.total_member_cnt
+			FROM
+				tb_comm_category AS c
+			Order BY 
+				c.total_member_cnt DESC;	
+	</select>
+
+	<select id="getPostList"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_code		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.report_cnt
+				,p.comments_cnt
+				,p.point_gain
+				,p.result_cnt
+				,p.daily_likes_cnt
+			FROM
+				tb_comm_post AS p
+			Order BY 
+				p.result_cnt DESC;	
+	</select>
+	<select id="getPostListHot"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_code		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.report_cnt
+				,p.comments_cnt
+				,p.point_gain
+				,p.result_cnt
+				,p.daily_likes_cnt
+			FROM
+				tb_comm_post AS p
+			Order BY 
+				p.daily_likes_cnt DESC;	
+	</select>
+	<select id="getPostListNew"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_code		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.report_cnt
+				,p.comments_cnt
+				,p.point_gain
+				,p.result_cnt
+				,p.daily_likes_cnt
+			FROM
+				tb_comm_post AS p
+			Order BY 
+				p.reg_time DESC;	
+	</select>
+	<select id="getPostListByCommCode"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_code		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.comments_cnt
+				,p.report_cnt
+				,p.point_gain
+				,p.result_cnt
+				,p.daily_likes_cnt
+			FROM
+				tb_comm_post AS p
+			WHERE
+				p.comm_code = #{commCode}
+			Order BY 
+				p.likes_cnt DESC;	
+	</select>
+	<select id="getPostCodeListByTagCode"  resultType="String">
+			SELECT
+				p.post_code
+			FROM
+				tb_comm_post AS p
+			WHERE
+				p.tag_code = #{tagCode};	
+	</select>
+	<select id="getPostCodeListByCommCode"  resultType="String">
+			SELECT
+				p.post_code
+			FROM
+				tb_comm_post AS p
+			WHERE
+				p.comm_code = #{commCode};	
+	</select>
+	<select id="getPostListByCommCodeHot"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_code		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.comments_cnt
+				,p.report_cnt
+				,p.point_gain
+				,p.result_cnt
+				,p.daily_likes_cnt
+			FROM
+				tb_comm_post AS p
+			WHERE
+				p.comm_code = #{commCode}
+			Order BY 
+				p.daily_likes_cnt DESC;	
+	</select>
+	<select id="getPostListByCommCodeNew"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_code		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.comments_cnt
+				,p.report_cnt
+				,p.point_gain
+				,p.result_cnt
+				,p.daily_likes_cnt
+			FROM
+				tb_comm_post AS p
+			WHERE
+				p.comm_code = #{commCode}
+			Order BY 
+				p.reg_time DESC;	
+	</select>
+	
+	
+	<select id="getDailyPostList"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_code		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.comments_cnt
+				,p.report_cnt
+				,p.point_gain
+				,p.result_cnt
+				,p.daily_likes_cnt
+			FROM
+				tb_comm_post AS p
+			Order BY 
+				p.daily_likes_cnt DESC
+			LIMIT 4;	
+	</select>
+	<select id="getPostByPostCode"  resultMap="postResultMap">
+			SELECT
+				p.post_code
+				,p.comm_code		 
+				,p.member_id
+				,p.tag_code
+				,p.title	 
+				,p.reg_time    
+				,p.main_text
+				,p.reader_cnt
+				,p.picture_link
+				,p.video_link
+				,p.likes_cnt
+				,p.dislikes_cnt
+				,p.comments_cnt
+				,p.report_cnt
+				,p.point_gain
+				,p.result_cnt
+				,p.daily_likes_cnt
+			FROM
+				tb_comm_post AS p
+			WHERE
+				p.post_code = #{postCode};
+			
+	</select>
+	<select id="getCommunityByCommCode"  resultMap="communityResultMap">
+			SELECT
+				c.comm_code
+				,c.comm_name
+				,c.member_id		 
+				,c.reg_date
+				,c.category_code
+				,c.banner	 
+				,c.avatar    
+				,c.member_cnt
+				,c.online_member_cnt
+				,c.comm_desc
+			FROM
+				tb_community AS c
+			Where
+				c.comm_code = #{commCode};	
+	</select>
+	
+	<select id="getCommunityListByCategoryCode"  resultMap="communityResultMap">
+			SELECT
+				c.comm_code
+				,c.comm_name
+				,c.member_id		 
+				,c.reg_date
+				,c.category_code
+				,c.banner	 
+				,c.avatar    
+				,c.member_cnt
+				,c.online_member_cnt
+				,c.comm_desc
+			FROM
+				tb_community AS c
+			Where
+				c.category_code = #{categoryCode}
+			Order BY 
+				c.member_cnt DESC;	
+	</select>
+	<select id="getRuleListByCommCode"  resultMap="ruleResultMap">
+			SELECT
+				r.rule_code
+				,r.comm_code
+				,r.title
+				,r.detail
+				,r.reg_time
+			FROM
+			 	tb_comm_rules AS r
+			WHERE 
+				r.comm_code = #{commCode};
+	</select>
+	<select id="getRuleByRuleCode"  resultMap="ruleResultMap">
+			SELECT
+				r.rule_code
+				,r.comm_code
+				,r.title
+				,r.detail
+				,r.reg_time
+			FROM
+			 	tb_comm_rules AS r
+			WHERE 
+				r.rule_code = #{ruleCode};
+	</select>
+	
+	<select id="getTagListByCommCode"  resultMap="tagResultMap">
+			SELECT
+				t.tag_code
+				,t.comm_code
+				,t.member_id
+				,t.tag_name
+				,t.tag_color
+				,t.reg_time
+			FROM
+			 tb_comm_tag AS t
+			WHERE 
+				t.comm_code = #{commCode};
+	</select>
+	<select id="getCommTagByTagCode"  resultMap="tagResultMap">
+			SELECT
+				t.tag_code
+				,t.comm_code
+				,t.member_id
+				,t.tag_name
+				,t.tag_color
+				,t.reg_time
+			FROM
+			 tb_comm_tag AS t
+			WHERE 
+				t.tag_code = #{tagCode};
+	</select>
+	
+	
+	<select id="getNextPostCode"  resultType="String">
+		SELECT `sf_new_post_code`() AS postCode;
+	</select>
+	
+	<select id="getNextCommCode"  resultType="String">
+		SELECT `sf_new_community_code`() AS commCode;
+	</select>
+	
+	<insert id="addCommPost" parameterType="CommPost">
+		INSERT INTO tb_comm_post
+			(	post_code
+				,comm_code		 
+				,member_id
+				,tag_code
+				,title	 
+				,reg_time    
+				,main_text
+				,reader_cnt
+				,picture_link
+				,video_link
+				,likes_cnt
+				,dislikes_cnt
+				,comments_cnt
+				,report_cnt
+				,point_gain
+				,daily_likes_cnt
+		)VALUES (
+			 #{postCode}
+			, #{commCode}
+			, #{memberId}
+			, #{tagCode}
+			, #{title}
+			, NOW()
+			, #{mainText}
+			, 0
+			, #{pictureLink}
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+		);
+	</insert>
+	<insert id="addCommunity" parameterType="Community">
+		INSERT INTO tb_community
+			(	comm_code
+				,comm_name
+				,member_id		 
+				,reg_date
+				,category_code
+				,banner	 
+				,avatar    
+				,member_cnt
+				,online_member_cnt
+				,comm_desc
+		)VALUES (
+			sf_new_community_code()
+			,#{commName}
+			, #{memberId}
+			, CURDATE()
+			, #{categoryCode}
+			, #{banner}
+			, #{avatar}
+			, #{memberCnt}
+			, #{onlineMemberCnt}
+			, #{commDesc}
+		);
+	</insert>
+	<update id="updateCommunity" parameterType="Community">
+		UPDATE tb_community
+			SET
+			comm_name = #{commName}	
+			,category_code = #{categoryCode}
+			,comm_desc = #{commDesc}	 
+		WHERE
+			comm_code = #{commCode};	
+	</update>
+	<update id="updatePost" parameterType="CommPost">
+		UPDATE tb_comm_post
+			SET
+			tag_code = #{tagCode}	
+			,title = #{title}
+			,main_text = #{mainText}	 
+		WHERE
+			post_code = #{postCode};	
+	</update>
+	
+	
+	
+	<insert id="addRule" parameterType="Rule">
+		INSERT INTO tb_comm_rules
+			(	 rule_code
+				,comm_code		 
+				,title
+				,detail
+				,reg_time	 
+		)VALUES (
+			  sf_new_rule_code()
+			, #{commCode}
+			, #{title}
+			, #{detail}
+			, NOW()
+		);
+	</insert>
+	<update id="updateRule" parameterType="Rule">
+		UPDATE tb_comm_rules
+			SET
+			title = #{title}	
+			,detail = #{detail} 
+		WHERE
+			rule_code = #{ruleCode};	
+	</update>
+	
+	<delete id="deleteRule" parameterType="String">
+		DELETE FROM 
+			tb_comm_rules
+		WHERE 
+			rule_code = #{ruleCode};
+	</delete>
+	<delete id="deleteRuleByCommCode" parameterType="String">
+		DELETE FROM 
+			tb_comm_rules
+		WHERE 
+			comm_code = #{commCode};
+	</delete>
+	<delete id="deleteCommunityByCommCode" parameterType="String">
+		DELETE FROM 
+			tb_community
+		WHERE 
+			comm_code = #{commCode};
+	</delete>
+	<delete id="deleteCommMemberRegByCommCode" parameterType="String">
+		DELETE FROM 
+			tb_comm_member_reg
+		WHERE 
+			comm_code = #{commCode};
+	</delete>
+	<delete id="deleteTag" parameterType="String">
+		DELETE FROM 
+			tb_comm_tag
+		WHERE 
+			tag_code = #{tagCode};
+	</delete>
+	<delete id="deleteTagByCommCode" parameterType="String">
+		DELETE FROM 
+			tb_comm_tag
+		WHERE 
+			comm_code = #{commCode};
+	</delete>
+	<delete id="deleteCommReply" parameterType="String">
+		DELETE FROM 
+			tb_community_reply
+		WHERE 
+			reply_code = #{replyCode};
+	</delete>
+	<delete id="deleteLikesDislikesByReplyCode" parameterType="String">
+		DELETE FROM 
+			tb_likes_dislikes
+		WHERE 
+			reply_code = #{replyCode};
+	</delete>
+	<delete id="deleteLikesDislikesByPostCode" parameterType="String">
+		DELETE FROM 
+			tb_likes_dislikes
+		WHERE 
+			post_code = #{postCode};
+	</delete>
+	<delete id="deleteCommPostByPostCode" parameterType="String">
+		DELETE FROM 
+			tb_comm_post
+		WHERE 
+			post_code = #{postCode};
+	</delete>
+	
+	
+	
+	
+	
+	
+	<update id="updateTag" parameterType="CommTag">
+		UPDATE tb_comm_tag
+			SET
+			tag_name = #{tagName}	
+			,tag_color = #{tagColor} 
+		WHERE
+			tag_code = #{tagCode};	
+	</update>
+	<update id="updateReply" parameterType="CommReply">
+		UPDATE tb_community_reply
+			SET
+			main_text = #{mainText}	
+		WHERE
+			reply_code = #{replyCode};	
+	</update>
+	
+	
+	<insert id="addCommMemberReg" parameterType="commMemberReg"> 
+		INSERT INTO tb_comm_member_reg
+			(	 comm_member_reg_code
+				,comm_code		 
+				,member_id
+				,comm_member_level
+				,reg_time	 
+		)VALUES (
+			  sf_new_comm_member_reg_code()
+			, #{commCode}
+			, #{memberId}
+			, #{commMemberLevel}
+			, NOW()
+		);
+	</insert>
+	
+	<insert id="addlikesDislikes" parameterType="LikesDislikes">
+		INSERT INTO tb_likes_dislikes
+			(	 likes_dislikes_code
+				,member_id		 
+				,post_code
+				,reply_code
+				,reg_time	 
+				,likes_dislikes_cate	 
+		)VALUES (
+			  	sf_new_likes_dislikes_code()
+			, #{memberId}
+			, #{postCode}
+			, #{replyCode}
+			, NOW()
+			, #{likesDislikesCate}
+		);
+	</insert>
+	
+	<insert id="addTag" parameterType="CommTag">
+		INSERT INTO tb_comm_tag
+			(	 tag_code
+				,comm_code
+				,member_id
+				,tag_name
+				,tag_color
+				,reg_time
+		)VALUES (
+			  sf_new_tag_code()
+			, #{commCode}
+			, #{memberId}
+			, #{tagName}
+			, #{tagColor}
+			, NOW()
+		);
+	</insert>
+	
+	<insert id="addCommReply"  parameterType="CommReply">
+			INSERT INTO tb_community_reply
+			(
+				reply_code
+				,member_id
+				,post_code		 
+				,parent_reply_code
+				,likes_cnt
+				,dislikes_cnt	 
+				,main_text    
+				,reg_time
+				,comments_cnt
+				,result_cnt
+				,member_name
+			)
+			VALUES(
+				sf_new_reply_code()
+				,#{memberId}
+				,#{postCode}
+				,#{parentReplyCode}
+				,0
+				,0
+				,#{mainText}
+				,NOW()	
+				,0		
+				,0
+				,#{memberName}
+			);
+	</insert>
+	
+	<select id="commNameCheck" parameterType="String" resultType="boolean">
+		SELECT
+			if(Count(1) = 1,0,1)
+		FROM
+			tb_community AS c
+		where
+			c.comm_Name = #{commName};	
+	</select>
+	
+	<update id="resetDailyLikeCnt">
+		UPDATE tb_comm_post 
+			SET
+			daily_likes_cnt = 0;	
+	</update>
+	
+	
+</mapper>

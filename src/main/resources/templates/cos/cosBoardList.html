@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>코스</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#" onclick="return false;">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">코스</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/plugins/KmyCss/addCssKmy.css}">
+	<!-- **********************************  Start ContentsWrap  ********************************** -->
+	<div id="khtour">
+		<div class="cosBoard card">
+			<div class="card-body" style="padding-left: 3.4rem;">
+				<div class="tab tab-outline tab-center">
+					<ul class="nav justify-content-center" id="myTab-04" role="tablist">
+						<li class="nav-item"><a class="nav-link active"
+							id="home-tab-04" data-toggle="tab" href="#home-04" role="tab">역사</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="profile-tab-04" data-toggle="tab" href="#profile-04" role="tab">인문</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="contact-tab-12" data-toggle="tab" href="#contact-12" role="tab">전쟁</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab">종교사</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<a class="nav-link" id="settings-tab" data-toggle="tab" href="#profile-05" role="tab">민족</a>
+						</li>
+					</ul>
+					<!-- **********************************  Start 역사  ********************************** -->
+					<div class="tab-content" id="myTabContent-04">
+						<div class="tab-pane fade active show" id="home-04" role="tabpanel" aria-labelledby="home-tab-04">
+							<div class="row row-cols-1 row-cols-md-3 g-4">
+								<div class="col" th:if="${not #lists.isEmpty(cosHistory)}" th:each="c : ${cosHistory}">
+									<div class="card">
+									<div class="card-title">역사</div>
+										<img th:src="@{${#strings.isEmpty(c.cosImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(c.cosImagePath,'\','/')}}"
+										class="img-fluid" alt="...">
+										<div class="card-body">
+											<p class="cos-title" th:text="${c.cosName}"></p>
+											<p class="musCos" th:text="|${c.musCode1}-${c.musCode2}-${c.musCode3}-${c.musCode4}-${c.musCode5}|"></p>
+											<p th:text="${c.cosRegist}"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- **********************************  End 역사  ********************************** -->
+						<!-- **********************************  Start 인문 ******************************* -->
+						<div class="tab-pane fade active" id="profile-04" role="tabpanel" aria-labelledby="profile-tab-04">
+							<div class="row row-cols-1 row-cols-md-3 g-4">
+								<div class="col" th:if="${not #lists.isEmpty(cosHumanities)}" th:each="c : ${cosHumanities}">
+									<div class="card">
+									<div class="card-title">인문</div>
+										<img th:src="@{${#strings.isEmpty(c.cosImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(c.cosImagePath,'\','/')}}"
+										class="img-fluid" alt="...">
+										<div class="card-body">
+											<p class="cos-title" th:text="${c.cosName}"></p>
+											<p class="musCos" th:text="|${c.musCode1}-${c.musCode2}-${c.musCode3}-${c.musCode4}-${c.musCode5}|"></p>
+											<p th:text="${c.cosRegist}"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- **********************************  End 인문  ********************************** -->
+						<!-- **********************************  Start 전쟁 ******************************** -->
+						<div class="tab-pane fade active" id="contact-12" role="tabpanel" aria-labelledby="contact-tab-12">
+							<div class="row row-cols-1 row-cols-md-3 g-4">
+								<div class="col" th:if="${not #lists.isEmpty(cosWar)}" th:each="c : ${cosWar}">
+									<div class="card">
+									<div class="card-title">전쟁</div>
+										<img th:src="@{${#strings.isEmpty(c.cosImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(c.cosImagePath,'\','/')}}"
+										class="img-fluid" alt="...">
+										<div class="card-body">
+											<p class="cos-title" th:text="${c.cosName}"></p>
+											<p class="musCos" th:text="|${c.musCode1}-${c.musCode2}-${c.musCode3}-${c.musCode4}-${c.musCode5}|"></p>
+											<p th:text="${c.cosRegist}"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- **********************************  End 전쟁  ********************************** -->
+						<!-- **********************************  Start 종교사 ******************************* -->
+						<div class="tab-pane fade active" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+							<div class="row row-cols-1 row-cols-md-3 g-4">
+								<div class="col" th:if="${not #lists.isEmpty(cosReligion)}" th:each="c : ${cosReligion}">
+									<div class="card">
+									<div class="card-title">종교사</div>
+										<img th:src="@{${#strings.isEmpty(c.cosImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(c.cosImagePath,'\','/')}}"
+										class="img-fluid" alt="...">
+										<div class="card-body">
+											<p class="cos-title" th:text="${c.cosName}"></p>
+											<p class="musCos" th:text="|${c.musCode1}-${c.musCode2}-${c.musCode3}-${c.musCode4}-${c.musCode5}|"></p>
+											<p th:text="${c.cosRegist}"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- **********************************  End 종교사  ********************************** -->
+						<!-- **********************************  Start 민족 ******************************* -->
+						<div class="tab-pane fade active" id="profile-05" role="tabpanel" aria-labelledby="profile-tab-05">
+							<div class="row row-cols-1 row-cols-md-3 g-4">
+								<div class="col" th:if="${not #lists.isEmpty(cosFolklore)}" th:each="c : ${cosFolklore}">
+									<div class="card">
+									<div class="card-title">민족</div>
+										<img th:src="@{${#strings.isEmpty(c.cosImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(c.cosImagePath,'\','/')}}"
+										class="img-fluid" alt="...">
+										<div class="card-body">
+											<p class="cos-title" th:text="${c.cosName}"></p>
+											<p class="musCos" th:text="|${c.musCode1}-${c.musCode2}-${c.musCode3}-${c.musCode4}-${c.musCode5}|"></p>
+											<p th:text="${c.cosRegist}"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- **********************************  End 민족  ********************************** -->
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+</th:block>
+</html>

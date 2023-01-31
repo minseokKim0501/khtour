@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<!-- 회원목록 검색 바 -->
+	<div th:fragment="searchMemberFragment">
+		<form th:action="@{/member/memberList}" method="get">
+			<select	name="searchKey">
+				<option value="memberId">아이디</option>
+				<option value="memberName">이름</option>
+				<option value="memberAddr">주소</option>
+			</select>
+			<input type="text" name="searchValue" placeholder="검색 키워드를 입력해주세요."/>
+			<button type="submit">검색</button>
+		</form>
+	</div>
+	
+	<!-- 상품목록 검색 바 -->
+	<div th:fragment="searchGoodsFragment">
+		<form th:action="@{/goods/goodsList}" method="get">
+			<select	name="searchKey">
+				<option value="goodsName">상품명</option>
+				<option th:if="${session.SLEVEL == '1'}" value="goodsSellerId">판매자</option>
+			</select>
+			<input type="text" name="searchValue" placeholder="검색 키워드를 입력해주세요."/>
+			<button type="submit">검색</button>
+		</form>
+	</div>
+
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>숙박업소 상세 관리</h2>
+			<div class="col-2" style="display: inline-block; float: right;">
+				<button type="button" class="btn btn-primary" onclick="location.href='accommodationInsert'">신규등록</button>
+			</div>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">숙박업소 관리</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="customContents">
+<style>
+.blog-info {
+	height: 200px;
+}
+.form-control {
+	margin-top: 1rem!important;
+}
+</style>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<!-- 숙박업소 상세 검색  -->
+					<form>
+						<div class="form-row">
+							<div class="col-md-4 mb-4">
+								<label for="validationDefault01">여행 지역 선택</label> <select
+									class="form-control border border-secondary"
+									id="exampleFormControlSelect1">
+									<option>전체</option>
+									<option>서울특별시</option>
+									<option>인천광역시</option>
+									<option>대전광역시</option>
+									<option>대구광역시</option>
+									<option>울산광역시</option>
+									<option>부산광역시</option>
+									<option>광주광역시</option>
+									<option>강원도</option>
+									<option>경기도</option>
+									<option>충청남도</option>
+									<option>충청북도</option>
+									<option>경상북도</option>
+									<option>경상남도</option>
+									<option>전라북도</option>
+									<option>전라남도</option>
+									<option>제주도</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-4">
+								<label for="validationDefault01">여행 도시 선택</label> <select
+									class="form-control border border-secondary"
+									id="exampleFormControlSelect1">
+									<option>전체</option>
+									<option>강남구</option>
+									<option>종로구</option>
+									<option>용산구</option>
+									<option>강릉시</option>
+									<option>안동시</option>
+									<option>포항시</option>
+									<option>거제시</option>
+									<option>공주시</option>
+									<option>천안시</option>
+									<option>전주시</option>
+									<option>군산시</option>
+									<option>제주시</option>
+									<option>서귀포시</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-4">
+								<label for="validationDefault02">숙박시설 종류 선택</label> <select
+									class="form-control border border-secondary"
+									id="exampleFormControlSelect1">
+									<option>전체</option>
+									<option>호텔</option>
+									<option>펜션</option>
+									<option>모텔</option>
+									<option>리조트</option>
+									<option>게스트하우스</option>
+									<option>캥핑장</option>
+								</select>
+							</div>
+							<div class="col-md-12">
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="swimmingPool" value="checked"> <label
+										class="custom-control-label" for="swimmingPool">수영장</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="smoking" value="checked"> <label
+										class="custom-control-label" for="smoking">흡연가능</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="solitary" value="checked"> <label
+										class="custom-control-label" for="solitary">독채</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="onDol" value="checked"> <label
+										class="custom-control-label" for="onDol">온돌방</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="tub" value="checked"> <label
+										class="custom-control-label" for="tub">개별욕조</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="amenities" value="checked"> <label
+										class="custom-control-label" for="amenities">어메니티</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="pet" value="checked"> <label
+										class="custom-control-label" for="pet">반려동물</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="wifi" value="checked"> <label
+										class="custom-control-label" for="wifi">와이파이</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="bbq" value="checked"> <label
+										class="custom-control-label" for="bbq">바베큐</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="cooking" value="checked"> <label
+										class="custom-control-label" for="cooking">개별취사</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="paking" value="checked"> <label
+										class="custom-control-label" for="paking">주차장</label>
+								</div>
+								<div class="custom-control custom-checkbox mb-1 col-md-2"
+									style="float: right;">
+									<input type="checkbox" class="custom-control-input"
+										id="addpeople" value="checked"> <label
+										class="custom-control-label" for="addpeople">인원추가</label>
+								</div>
+							</div>
+								<div class="col-12">
+								<div class="input-group mb-3">
+									<input name="zip" type="text" class="form-control"
+										aria-label="Recipient's username"
+										aria-describedby="button-addon">
+									<button class="btn btn-primary" style="margin-top: 1rem!important;" onclick=""
+										type="button">검색</button>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- 숙박업소 상세검색 -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-body">
+			<!-- 숙박업소 리스트 영역 -->
+			<div class="row">
+				<div class="col-md-4 col-lg-4">
+					<div class="blog mb-5">
+						<div class="blog-image">
+							<img class="img-fluid w-100" th:src="@{/images/aco/sinla.jpg}"
+								alt="">
+						</div>
+						<div class="blog-info">
+							<div class="blog-title mt-3">
+								<h4 class="mb-3">
+									<a th:href="@{/accommodation/acoommodationInfo}">신라스테이 해운대</a>
+								</h4>
+								<p class="mb-0">Maxime dolorem nihil minus, quasi, dicta
+									cupiditate aut magni ea veniam natus provident.</p>
+							</div>
+						</div>
+						<div class="blog-bottom">
+							<ul class="list-inline mb-0">
+								<li><button type="button" class="btn btn-outline-light">수정</button></li>
+								<li><button type="button" class="btn btn-outline-light">삭제</button></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-lg-4">
+					<div class="blog mb-5">
+						<div class="blog-image">
+							<img class="img-fluid w-100"
+								th:src="@{/images/aco/parkhyatt.jpg}" alt="">
+						</div>
+						<div class="blog-info">
+							<div class="blog-title mt-3">
+								<h4 class="mb-3">
+									<a href="#!">파크하얏트 강남</a>
+								</h4>
+								<p class="mb-0">강남 파크하얏트</p>
+							</div>
+						</div>
+						<div class="blog-bottom">
+							<ul class="list-inline mb-0">
+								<li><button type="button" class="btn btn-outline-light">수정</button></li>
+								<li><button type="button" class="btn btn-outline-light">삭제</button></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-lg-4">
+					<div class="blog mb-5">
+						<div class="blog-image">
+							<img class="img-fluid w-100" th:src="@{/images/aco/gyengju.png}"
+								alt="">
+						</div>
+						<div class="blog-info">
+							<div class="blog-title mt-3">
+								<h4 class="mb-3">
+									<a href="#!">경주 황남관 한옥호텔</a>
+								</h4>
+								<p class="mb-0">Maxime dolorem nihil minus, quasi, dicta
+									cupiditate aut magni ea veniam natus provident.</p>
+							</div>
+						</div>
+						<div class="blog-bottom">
+							<ul class="list-inline mb-0">
+								<li><button type="button" class="btn btn-outline-light">수정</button></li>
+								<li><button type="button" class="btn btn-outline-light">삭제</button></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-lg-4">
+					<div class="blog mb-5">
+						<div class="blog-image">
+							<img class="img-fluid w-100" th:src="@{/images/aco/pohang.png}"
+								alt="">
+						</div>
+						<div class="blog-info">
+							<div class="blog-title mt-3">
+								<h4 class="mb-3">
+									<a href="#!">포항 스타스케이프 풀빌라</a>
+								</h4>
+								<p class="mb-0">Maxime dolorem nihil minus, quasi, dicta
+									cupiditate aut magni ea veniam natus provident.</p>
+							</div>
+						</div>
+						<div class="blog-bottom">
+							<ul class="list-inline mb-0">
+								<li><button type="button" class="btn btn-outline-light">수정</button></li>
+								<li><button type="button" class="btn btn-outline-light">삭제</button></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-lg-4">
+					<div class="blog mb-5">
+						<div class="blog-image">
+							<img class="img-fluid w-100" th:src="@{/images/aco/jejuyega.png}"
+								alt="">
+						</div>
+						<div class="blog-info">
+							<div class="blog-title mt-3">
+								<h4 class="mb-3">
+									<a href="#!">제주 애월여가한옥</a>
+								</h4>
+								<p class="mb-0">Maxime dolorem nihil minus, quasi, dicta
+									cupiditate aut magni ea veniam natus provident.</p>
+							</div>
+						</div>
+						<div class="blog-bottom">
+							<ul class="list-inline mb-0">
+								<li><button type="button" class="btn btn-outline-light">수정</button></li>
+								<li><button type="button" class="btn btn-outline-light">삭제</button></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-lg-4">
+					<div class="blog mb-5">
+						<div class="blog-image">
+							<img class="img-fluid w-100"
+								th:src="@{/images/aco/jeonjuKing.png}" alt="">
+						</div>
+						<div class="blog-info">
+							<div class="blog-title mt-3">
+								<h4 class="mb-3">
+									<a href="#!">전주 왕의지밀</a>
+								</h4>
+								<p class="mb-0">Maxime dolorem nihil minus, quasi, dicta
+									cupiditate aut magni ea veniam natus provident.</p>
+							</div>
+						</div>
+						<div class="blog-bottom">
+							<ul class="list-inline mb-0">
+								<li><button type="button" class="btn btn-outline-light">수정</button></li>
+								<li><button type="button" class="btn btn-outline-light">삭제</button></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 숙박업소 리스트 페이징 -->
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">
+			<li class="page-item disabled"><a class="page-link" href="#"
+				tabindex="-1">이전</a></li>
+			<li class="page-item"><a class="page-link" href="#">1</a></li>
+			<li class="page-item"><a class="page-link" href="#">2</a></li>
+			<li class="page-item"><a class="page-link" href="#">3</a></li>
+			<li class="page-item"><a class="page-link" href="#">4</a></li>
+			<li class="page-item"><a class="page-link" href="#">5</a></li>
+			<li class="page-item"><a class="page-link" href="#">다음</a></li>
+		</ul>
+	</nav>
+	<!-- 숙박업소 리스트 페이징 끝 -->
+</th:block>
+
+<!-- javascript 삽입 시작 -->
+<th:block layout:fragment="customBodyScript">
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+
+	<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+	<script th:src="@{/js/rangelider/ion.rangeSlider.min.js}"></script>
+	<script th:src="@{/js/prism/prism.js}"></script>
+</th:block>
+<!-- javascript 삽입 종료 -->
+</th:block>
+</html>

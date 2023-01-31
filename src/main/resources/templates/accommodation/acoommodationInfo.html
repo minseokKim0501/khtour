@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>숙박업소 상세 정보</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">숙박업소 상세 정보</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customContents">
+	<style>
+.blog-info {
+	height: 200px;
+}
+
+.form-control {
+	margin-top: 1rem !important;
+}
+
+.roomSummary {
+	font-size: 1rem;
+}
+
+.roomPersonnel {
+	font-size: 0.8rem;
+	opacity: 0.5;
+}
+
+.roomCheckIn {
+	font-size: 1rem;
+}
+
+.price {
+	font-size: 20px;
+}
+
+.discount {
+	color: red;
+}
+
+.feather {
+	color: #FFB900;
+	font-size: 20px;
+}
+
+.feather-on {
+	color: #FFB900;
+	font-size: 20px;
+}
+
+.feather-off {
+	color: #f0f1f6;
+	font-size: 20px;
+}
+
+.card .card-footer {
+	padding: 0.5rem 0;
+}
+
+.star {
+	font-size: 1.0rem;
+	line-height: 1.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.ReviewContentsBox {
+	display: flex;
+	position: relative;
+	align-items: center;
+}
+
+.ReviewIcon {
+	width: 3.8rem;
+	height: 3.8rem;
+	display: inline-block;
+	margin-right: 1.4rem;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.ReviewRoomName::before {
+	content: "|";
+	border: none;
+	border-right: 1px;
+	height: 1rem;
+	margin: 0 0.6rem;
+	display: inline-block;
+}
+
+.ReviewContentsBox-ReviewContent {
+	font-size: 1.5rem;
+	line-height: 2.2rem;
+	max-height: 8.8rem;
+	overflow: hidden;
+	position: relative;
+	color: #616161;
+	white-space: pre-wrap;
+	word-break: break-all;
+	padding-left: 18.577px;
+	padding-bottom: 18.577px;
+	display: flex;
+}
+</style>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<form class="roomform">
+						<!-- 호텔 대표 이미지 등록 -->
+						<div class="embed-responsive embed-responsive-16by9">
+							<img class="embed-responsive-item"
+								th:src="@{/images/aco/sinlastayBusan1.png}" alt="">
+						</div>
+						<!-- 호텔 대표 이미지 끝 -->
+						<p style="margin-top: 1rem;" th:text="${accommodation.ldgType}"></p>
+						<h2 th:text="${accommodation.ldgName}"></h2>
+						<div class="">
+							<span><i class="feather icon-star-on"></i></span><span
+								th:text="${avgGrade}"></span> <span class="">/5</span>
+						</div>
+						<span class=""> 후기 <b th:text="${accommodation.reviewCnt}"></b>
+							개
+						</span>
+						<!-- 호텔 기본 정보 및 리뷰 끝 -->
+						<div class="row card-footer"
+							th:if="${not #lists.isEmpty(roomList)}"
+							th:each="r,index: ${roomList}"
+							style="justify-content: space-between;"
+							th:onclick="'location.href=\''+ @{/room/roomPayment(roomCode=${r.roomCode})} + '\''">
+							<!-- 호텔 객실 세부 내역 -->
+							<div class="col-12 col-md-5 col-lg-5" style="cursor: pointer;">
+								<div class="embed-responsive embed-responsive-4by3">
+									<img
+										th:src="@{${#strings.isEmpty(r.roomImagePath) ? '/images/heritage/서울 숭례문.jpg': '/' + #strings.replace(r.roomImagePath,'\','/')}}"
+										class="card-img-top h-20 embed-responsive-item" alt="...">
+								</div>
+							</div>
+							<div class="col-12 col-md-7 col-lg-7" style="cursor: pointer;">
+								<div class="">
+									<h3 class="roomName" th:text="${r.roomName}"></h3>
+								</div>
+								<h4 class="roomSummary" th:text="${r.roomExplain}"></h4>
+								<h5 class="roomPersonnel" th:text="${r.roomPersonnel}"></h5>
+								<div class="" style="margin-top: 1.5rem;">
+									<h4 style="display: inline;" th:text="${r.roomType}"></h4>
+									<span id="checkInTime"
+										style="margin-top: 0.3rem; opacity: 0.5; display: inline;"
+										th:text="${r.roomCheckin}"></span> <span id="roomPrice"
+										style="float: right; margin-top: 0.3rem; opacity: 0.5; padding-right: 30px;"
+										th:text="${r.roomPrice}"></span>
+								</div>
+								<div class="" style="float: right; padding-right: 30px;">
+									판매가</div>
+								<div class="col-12"
+									style="text-align: right; float: right; padding-right: 30px;">
+									<span class="discount" th:text="${r.roomDiscount}"
+										style="font-size: 20px;"> </span> <span class="finalprice"
+										th:text="${r.roomFinalPrice}" style="font-size: 20px;">
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- 호텔 객실 세부 내역 끝 -->
+						<div class="card-footer"></div>
+						<!-- 객실 정보 및 지도 -->
+						<h2>숙소 소개</h2>
+						<div>
+							<p style="font-size: 15px;"
+								th:text="${accommodation.ldgExplain1}"></p>
+						</div>
+						<div>
+							<p style="font-size: 15px;"
+								th:text="${accommodation.ldgExplain2}"></p>
+						</div>
+						<div>
+							<p style="font-size: 15px;"
+								th:text="${accommodation.ldgExplain3}"></p>
+						</div>
+						<div>
+							<p style="font-size: 15px;"
+								th:text="${accommodation.ldgExplain4}"></p>
+						</div>
+						<div class="card-footer"></div>
+						<h2>위치 안내</h2>
+						<div>
+							<div id="map" style="width: 100%; height: 300px;"></div>
+							<p style="font-size: 15px; display: inline;">
+								<i class="feather icon-map-pin" style="color: blue;"><span
+									class="addr" style="color: black; font-size: 15px;"
+									th:text="${accommodation.ldgAddr}"></span></i>
+							</p>
+							<span style="font-size: 15px; display: inline; float: right;"
+								data-toggle="modal" data-target="#exampleModal-04"><a
+								type="button" id="copy_btn">주소복사</a></span>
+							<!-- 주소복사 모달 창 실행 -->
+							<div class="modal modal-success fade" id="exampleModal-04"
+								tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-body text-center p-5">
+											<h2>클립보드에 주소가 복사 됐어요!</h2>
+											<button type="button" class="btn btn-success" data-dismiss="modal">완료</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer"></div>
+						<!-- 객실 정보 및 지도 끝 -->
+						<div class="text-center">
+							<a role="button" class="btn btn-primary"
+								th:if="${session.SLEVEL != '일반회원'}"
+								th:href="@{/room/roomInsert(ldgCode=${accommodation.ldgCode},ldgName=${accommodation.ldgName})}">객실신규등록</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- 호텔에 대한 리뷰 표시 영역 -->
+		<div class="roomInfo col-lg-12 col-md-12 col-sm-12">
+			<div class="card">
+				<div class="card-body" style="padding-bottom: 0;">
+					<div>
+						<h2 style="display: inline; float: left;">후기</h2>
+						<span style="display: inline-block; float: left; font-size: 20px;">([[${accommodation.reviewCnt}]]개)</span>
+						<div class="col-12 col-md-12"></div>
+					</div>
+				</div>
+				<div style="display: flex; justify-content: space-between;">
+					<div class="col-6 col-md-4 col-lg-4"
+						style="padding: 18.577px; padding-right: 0; padding-bottom: 0;">
+						<span><i class="feather icon-star-on"
+							style="font-size: 30px;"></i></span> <span style="font-size: 40px;"
+							th:text="${avgGrade}"></span> <span
+							style="opacity: 0.5; font-size: 20px;">/5</span>
+						<p style="opacity: 0.5;">최근 12개월 누적 평점</p>
+					</div>
+					<div class="col-6 col-md-8 col-lg-8"
+						style="float: right; padding-left: 0;">
+						<ul style="list-style: none; padding-left: 0px;">
+							<li class="star"><span style="padding-right: 0.5rem;">청결도</span>
+								<div class="progress progress-h-5" style="width: 5rem;">
+									<div th:if="${not #strings.isEmpty(avgCleanliness)}" class="progress-bar" th:style="'width: ' + ${avgCleanliness}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+									<div th:if="${#strings.isEmpty(avgCleanliness)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+								</div> <span style="padding-left: 0.5rem;" th:text="${avgCleanliness}"></span></li>
+							<li class="star"><span style="padding-right: 0.5rem;">친절도</span>
+								<div class="progress progress-h-5" style="width: 5rem;">
+									<div th:if="${not #strings.isEmpty(avgKindness)}" class="progress-bar" th:style="'width: ' + ${avgKindness}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+									<div th:if="${#strings.isEmpty(avgKindness)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+								</div> <span style="padding-left: 0.5rem;" th:text="${avgKindness}"></span></li>
+							<li class="star"><span style="padding-right: 0.5rem;">편의성</span>
+								<div class="progress progress-h-5" style="width: 5rem;">
+									<div th:if="${not #strings.isEmpty(avgConvenience)}" class="progress-bar" th:style="'width: ' + ${avgConvenience}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+									<div th:if="${#strings.isEmpty(avgConvenience)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+								</div> <span style="padding-left: 0.5rem;" th:text="${avgConvenience}"></span></li>
+							<li class="star"><span style="padding-right: 0.5rem;">위치만족도</span>
+								<div class="progress progress-h-5" style="width: 5rem;">
+									<div th:if="${not #strings.isEmpty(avgLocation)}" class="progress-bar" th:style="'width: ' + ${avgLocation}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+									<div th:if="${#strings.isEmpty(avgLocation)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+								</div> <span style="padding-left: 0.5rem;" th:text="${avgLocation}"></span></li>
+							<li class="star"><span style="padding-right: 0.5rem;">가격만족도</span>
+								<div class="progress progress-h-5" style="width: 5rem;">
+									<div th:if="${not #strings.isEmpty(avgPriceSta)}" class="progress-bar" th:style="'width: ' + ${avgPriceSta}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+									<div th:if="${#strings.isEmpty(avgPriceSta)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+								</div> <span style="padding-left: 0.5rem;" th:text="${avgPriceSta}"></span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="card-footer"></div>
+				<article class="ReviewBox"
+					th:if="${not #lists.isEmpty(reviewBydate)}"
+					th:each="al,index: ${reviewBydate}">
+					<div class="ReviewContentsBox" style="padding: 18.577px;">
+						<span class="ReviewIcon"><i class="fa fa-smile-o"
+							style="font-size: 50px; color: #FFB900;"></i></span>
+						<div class="ReviewHeader">
+							<div class="rating"
+								style="position: relative; display: inline-flex;"
+								data-rate="${al.ldgGrade}">
+								<th:block th:each="num : ${#numbers.sequence(1,5)}">
+									<i
+										th:if="${num <= #conversions.convert(al.ldgGrade, 'java.lang.Integer')}"
+										class="feather icon-star-on feather-on"
+										style="font-size: 1.2rem;"></i>
+									<i
+										th:unless="${num <= #conversions.convert(al.ldgGrade, 'java.lang.Integer')}"
+										class="feather icon-star-on feather-off"
+										style="font-size: 1.2rem;"></i>
+								</th:block>
+							</div>
+							<div class="ReviewTime"
+								style="display: inline-block; font-size: 1.2rem;">
+								<span style="font-weight: 100; margin-left: 0.8rem;"></span> <span
+									style="position: absolute; right: 0; line-height: 1.8rem; padding-right: 15px; font-size: 13px; opacity: 0.5;"
+									th:text="${al.reviewTime}"> </span>
+							</div>
+							<div class="ReviewNicknameInfo" style="opacity: 0.5;">
+								<span th:text="${al.member.memberUserName}"></span> <span
+									class="ReviewRoomName" th:text="${accommodation.ldgName}"></span>
+							</div>
+						</div>
+					</div>
+					<div class="ReviewContentsBox-ReviewContent">
+						<p th:text="${al.reviewContents}"></p>
+					</div>
+					<div class="card-footer"></div>
+				</article>
+				<section
+					style="padding: 20px; text-align: center; font-size: 20px; color: blue;">
+					<a
+						th:href="@{/accomreview/accomreviewList(ldgCode=${accommodation.ldgCode})}">전체
+						후기 보기</a>
+				</section>
+			</div>
+		</div>
+		<!-- 호텔 리뷰 표시 영역 끝 -->
+	</div>
+
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<!-- 클립보드 복사 script -->
+	<script>
+		$(function() {
+			$('#copy_btn').click(function() {
+				var pAddr = document.querySelector('.addr'); //복사할 텍스트를 선택
+				var range = document.createRange();
+				console.log($(pAddr));
+
+				range.selectNode(pAddr.childNodes[0]);
+				var selectP = window.getSelection();
+				selectP.removeAllRanges();
+				selectP.addRange(range);
+				document.execCommand("copy"); //클립보드 복사 실행
+				selectP.removeRange(range);
+
+			});
+		});
+	</script>
+	<!-- 카카오맵 키 -->
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7cec08e17fcfb480dd452f2d9dd9df4c&libraries=services"></script>
+	<!-- 카카오맵 자바스크립트 -->
+	<script th:inline="javascript">
+	/*<![CDATA[*/ 
+	var accommodationLocation = /*[[ ${accommodation.ldgAddr} ]]*/;
+	/*]]*/ 	
+	
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		mapOption = {
+			center : new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+			level : 3
+		// 지도의 확대 레벨
+		};
+
+		// 지도를 생성합니다    
+		var map = new kakao.maps.Map(mapContainer, mapOption);
+
+		// 주소-좌표 변환 객체를 생성합니다
+		var geocoder = new kakao.maps.services.Geocoder();
+
+		// 주소로 좌표를 검색합니다
+		geocoder
+				.addressSearch( 
+						
+						accommodationLocation,
+						function(result, status) {
+							// 정상적으로 검색이 완료됐으면 
+							if (status === kakao.maps.services.Status.OK) {
+
+								var coords = new kakao.maps.LatLng(result[0].y,
+										result[0].x);
+
+								// 결과값으로 받은 위치를 마커로 표시합니다
+								var marker = new kakao.maps.Marker({
+									map : map,
+									position : coords
+								});
+
+								// 인포윈도우로 장소에 대한 설명을 표시합니다
+								var infowindow = new kakao.maps.InfoWindow(
+										{
+											content : '<div style="width:150px;text-align:center;padding:6px 0;">[[ ${accommodation.ldgDetailAddr} ]]</div>'
+										});
+								infowindow.open(map, marker);
+
+								// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+								map.setCenter(coords);
+							}
+							else{
+								alert('정확한 위치를 표기해주세요.')
+							}
+						});
+	</script>
+
+</th:block>
+</html>

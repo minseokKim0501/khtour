@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+
+<th:block layout:fragment="customScript">
+	
+	<script>
+
+	$(function() {
+		$(".upVote").on("click",function(){
+			var postCode = $(this).attr('data-postCode');
+			var resultCnt = $(this).parent().find('#resultCnt');
+			var upVote = $(this);
+			var downVote = $(this).parent().find('.downVote');
+	       			$.ajax({
+						url : '/likesDislikesCheck',
+						type : 'post',
+						data : {
+							'postCode' : postCode
+						},
+						dataType : 'text',
+						success : function(data) {
+							console.log(data);
+							 if(data=='available')
+							{
+								 $.ajax({
+										url : '/addLikes',
+										type : 'post',
+										data : {
+											'postCode' : postCode
+										},
+										dataType : 'text',
+										success : function(data1) {
+											resultCnt.text(data1);	
+											upVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-success pb-5"></i>');
+											
+										}
+								 }); 
+								
+							}
+							 else if(data=='dislike')
+							{
+								 $.ajax({
+										url : '/updateLikeDislike',
+										type : 'post',
+										data : {
+											'postCode' : postCode,
+											'likeDislike' : 'dislike'
+										},
+										dataType : 'text',
+										success : function(data2) {
+											resultCnt.text(data2);	
+											upVote.empty();
+											downVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-success pb-5"></i>');
+											downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-white"></i>');
+										}
+								 }); 
+								
+							}
+						}
+					}); 
+					
+	        
+		})
+	});
+	$(function() {
+		$(".downVote").on("click",function(){
+			var postCode = $(this).attr('data-postCode');
+			var resultCnt = $(this).parent().find('#resultCnt');
+			var downVote = $(this);
+			var upVote = $(this).parent().find('.upVote');
+	       	console.log(postCode);
+			$.ajax({
+				url : '/likesDislikesCheck',
+				type : 'post',
+				data : {
+					'postCode' : postCode
+				},
+				dataType : 'text',
+				success : function(data) {
+					console.log(data);
+					 if(data=='available')
+					{
+						 $.ajax({
+								url : '/addDislikes',
+								type : 'post',
+								data : {
+									'postCode' : postCode
+								},
+								dataType : 'text',
+								success : function(data1) {
+									resultCnt.text(data1);	
+									downVote.empty();
+									downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i>');
+								}
+						 }); 
+						
+					}
+					 else if(data=='like')
+					{
+						 $.ajax({
+								url : '/updateLikeDislike',
+								type : 'post',
+								data : {
+									'postCode' : postCode,
+									'likeDislike' : 'like'
+								},
+								dataType : 'text',
+								success : function(data2) {
+									resultCnt.text(data2);	
+									downVote.empty();
+									upVote.empty();
+									upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-white pb-5"></i>');
+									downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i>');
+								}
+						 }); 
+							 
+					}
+				}
+			}); 
+	        
+		})
+	});
+ 
+	</script>
+</th:block>
+
+
+
+<th:block layout:fragment="customContents">
+
+			<div class="row justify-content-center">
+				<div class="card" style="width:1000px">
+					<div class="card-header bg-primary pb-1">
+						<h5 class="text-white">오늘의 인기포스트</h5>
+						
+					</div>
+					<div class="card-body m-0 p-0">
+						<div class="card-group">
+							<div class="card pt-2 m-1 img-fluid" th:if="${not #lists.isEmpty(dailyPostList)}" style="border: none; height:250px" th:each="dp: ${dailyPostList}">
+								<div  th:if="${not #strings.isEmpty(dp.pictureLink)}" style = "opacity:.3;">
+									<img th:src="@{${dp.pictureLink}}" class="card-img-top" alt="...">
+								</div>
+								<div class="card-img-overlay" >
+									<h5 class="card-title" th:text="${dp.title}"></h5>
+									<p style="display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;" class="card-text" th:text="${dp.mainText}"></p>
+									<a th:href="@{/post(postCode=${dp.postCode})}" class="stretched-link"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				<div class="card-footer ml-0 pb-0">
+					<div class=row>
+					<div class="col-md-8" >
+						<div class="card" >
+							<div class="card-header bg-primary pb-1">
+								<h5 class="text-white">인기 포스트</h5>
+							</div>
+						<div class="card-body text-center pt-3 pb-3">
+							<a th:href="@{/commDashboard(order='hot')}" class="btn btn-primary btn-sm mr-5 pl-4 pr-4" role="button" aria-pressed="true"><i class="fa fa-heart-o"></i>HOT</a> 
+							<a th:href="@{/commDashboard(order='new')}" class="btn btn-primary btn-sm mr-5 ml-5 pl-4 pr-4" role="button" aria-pressed="true"><i class="fa fa-heart-o"></i>NEW</a> 
+							<a th:href="@{/commDashboard(order='top')}" class="btn btn-primary btn-sm ml-5 pl-4 pr-4" role="button" aria-pressed="true"><i class="fa fa-heart-o"></i>TOP</a> 
+						</div>
+						</div>
+					<div th:replace="community/singlePost :: singlePost"></div>
+				</div>
+				<div class="col-md-4 pr-0">
+					<div class="card-header bg-primary pb-1">
+							<h5 class="text-white">인기 커뮤니티</h5>
+						</div>
+					<div class="card">
+						<div class="card-body m-0 pt-0 pb-0">
+							<div class="table-responsive">
+								<table class="table table-centered table-hover mb-0">
+									<tbody>
+										<tr th:if="${not #lists.isEmpty(communityList)}" th:each="l,index : ${communityList}" style="transform: rotate(0);">
+
+											<th scope="row"><a th:href="@{/commPage(commCode=${l.commCode})}" class="stretched-link" th:text="${index.index}+1"></a></th>
+											<td><div class="d-inline-block text-truncate" style="max-width: 120px;">
+													<a th:text="${l.commName}"></a>
+												</div>
+											</td>
+											<td class="text-right pl-0 pr-0">
+											<a th:href="@{/addCommMemberReg(memberId=${session.SID},commCode=${l.commCode})}" class="btn btn-primary btn-sm" role="button" aria-pressed="true" style="z-index: 2; position: relative;">가입</a> 
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="card-foot p-3 text-center border-top">
+							<a href="/commRanking" class="btn active btn-sm btn-primary"
+								role="button" aria-pressed="true">전체 커뮤니티</a>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header bg-primary pb-1">
+							<h5 class="text-white">HOME  [[${status}]]</h5>
+						</div>
+						<div class="card-body m-0 text-center">				
+							<a th:href="@{/createPost(memberId=${session.SID})}" class="btn btn-sm btn-primary active mt-0 mb-0 mr-4" role="button" aria-pressed="true">포스트 등록 </a> 
+							<a th:href="@{/addCommunity(memberId=${session.SID})}" class="btn btn-sm btn-primary active mt-0 mb-0" role="button" aria-pressed="true">커뮤니티등록</a>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			</div>
+			</div>
+		</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

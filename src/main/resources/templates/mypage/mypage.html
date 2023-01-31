@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>마이페이지</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">마이페이지</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<div class="row justify-content-center">
+		<!-- 로그인 된 회원의 정보 표시 시작 -->
+		<div class="col-6">
+			<div class="card">
+				<div class="card-body">
+					<div class="text-center my-6">
+						<a th:href="@{/member/memberList}"> <img class="rounded-circle" style="width: 150px;"
+							alt="..." th:src="@{/images/heritage/member.jpg}">
+						</a>
+						<!-- Title -->
+						<a th:href="@{/member/memberModify}" class="d-block h5 pt-3" style="font-size: 20px;" th:text="'이름: '+ ${session.SNAME}"></a>
+						<hr>
+						<div class="text-left">
+						<div class="pb-1" style="padding-left: 200px" th:text="'아이디 : '+ ${session.SID}"></div>
+						<hr>
+						<div class="pb-1" style="padding-left: 200px" th:text="'이메일 : '+ ${session.SEMAIL}"></div>
+						<hr>
+						<div class="pb-1" style="padding-left: 200px" th:text="'권한 : '+ ${session.SLEVEL}"></div>
+						<hr>
+						<div class="pb-1" style="padding-left: 200px" th:text="'전화번호 : '+ ${session.SCONTACT}"></div>
+						<hr>
+						<!-- Subtitle -->
+						</div>
+						<a type="button" class="btn btn-primary" th:href="@{/member/memberModify}">
+							<i class="feather icon-plus"></i>회원 정보 수정
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 로그인 된 회원의 정보 표시 종료 -->
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-title">
+					<div class="card-title-left">
+						<h4 class="card-title-text">위시리스트</h4>
+					</div>
+				</div>
+				<div class="card-body">
+					<div class="tab tab-vertical">
+						<ul class="nav nav-pills" id="myTab-07" role="tablist">
+							<li class="nav-item"><a class="nav-link" id="home-tab-07"
+								data-toggle="tab" href="#home-07" role="tab"
+								aria-controls="home" aria-selected="false"> <i
+									class="fa fa-home"></i>나의 여행 기록
+							</a></li>
+							<li class="nav-item"><a class="nav-link" id="profile-tab-07"
+								data-toggle="tab" href="#profile-07" role="tab"
+								aria-controls="profile" aria-selected="false"> <i
+									class="fa fa-user-o"></i>나의 여행 일정
+							</a></li>
+						</ul>
+						<div class="tab-content" id="myTabContent-07">
+							<!-- 첫번째 tap 시작 -->
+							<div class="tab-pane fade" id="home-07" role="tabpanel"
+								aria-labelledby="home-tab-07">
+								<div class="row pb-5 border"  th:if="${not #lists.isEmpty(recordBoardList)}" th:each="l : ${recordBoardList}"  th:unless="${session.SID != l.memberId}">
+										<div class="col-lg-4 col-md-12">
+											<div class="row g-0">
+												<div class="col-md-6">
+											<img th:src="@{${#strings.isEmpty(l.recordBoardImagePath) ? '/images/heritage/서울 숭례문.jpg': '/' + #strings.replace(l.recordBoardImagePath,'\','/')}}"
+												style="padding-top:25px;" class="card-img" alt="...">
+												</div>
+												<div class="col-md-6">
+													<div class="card-body">
+														<a style="font-size:20px;" class="card-title " th:href="@{/recordBoard/feedList(recordBoardCode=${l.recordBoardCode})}" th:text="${l.recordBoardSubName}"></a>
+														<p class="card-text">
+															<span class="text-muted" th:text="${l.planStatus.getPlanStatusName()}"></span>
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									<div class="col-lg-4 col-md-12">
+										<div class="card-body">
+											<ul style="overflow: hidden;list-style: none;">
+										        <li style="float: left; color:blue;">여행이름</li>
+										        <li style="padding-left: 5%;float: left;" th:text="${l.recordBoardName}"></li>
+										    </ul>
+										    <ul style="overflow: hidden;list-style: none;">
+										        <li style="float: left; color:blue;">여행일자</li>
+										        <li style="padding-left: 5%;float: left;" th:text="${l.startDate} + ' ~ ' + ${l.endDate}"></li>
+										    </ul>
+									    </div>
+									</div>
+									<div class="col-lg-4 col-md-12">
+										<div class="card-body">
+											<ul style="overflow: hidden;list-style: none;">
+										        <li style="float: left; color:blue;">등록 날짜</li>
+										        <li style="padding-left: 5%;float: left;" th:text="${l.regDate}"></li>
+										    </ul>
+										    <ul style="overflow: hidden;list-style: none;">
+										        <li style="float: left; color:blue;">여행 유형</li>
+										        <li style="padding-left: 5%;float: left;" th:text="${l.travelStyle}"></li>
+										    </ul>
+									    </div>
+									</div>
+								</div>
+								<br>
+								<div class="text-center">
+									    <a type="button" class="btn btn-primary text-center">
+													여행 기록 공유하러 가기
+													</a>
+								</div>
+							</div>
+							<!-- 첫번째 tap 종료 -->
+							<!-- 두번째 tap 시작 -->
+							<div class="tab-pane fade" id="profile-07" role="tabpanel"
+								aria-labelledby="profile-tab-07">
+								<div class="row pb-5 border"  th:if="${not #lists.isEmpty(planList)}" th:each="p : ${planList}" th:unless="${session.SID != p.memberId}">
+									<div class="col-lg-4 col-md-12">
+										<div class="row g-0">
+											<div class="col-md-6">
+												<img th:src="@{/images/traShare/travel.jpeg}" style="padding-top:20px"
+													class="card-img-top h-10 embed-responsive-item" alt="...">
+											</div>
+											<div class="col-md-6">
+												<div class="card-body">
+													<a href="#" style="font-size:20px" class="card-title" th:text="${p.planLocation}"></a>
+													<p class="card-text">
+														<span class="text-muted" th:text="${p.soloParty}"></span>
+													</p>
+													<p class="card-text" th:text="'준비물: '+${p.planMaterials}"></p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-12">
+										<div class="card-body">
+											<ul style="overflow: hidden;list-style: none;">
+										        <li style="float: left; color:blue;">여행이름</li>
+										        <li style="padding-left: 5%;float: left;" th:text="${p.planName}">여행이름</li>
+										    </ul>
+										    <ul style="overflow: hidden;list-style: none;">
+										        <li style="float: left; color:blue;">여행일자</li>
+										        <li style="padding-left: 5%;float: left;" th:text="${p.startDate} + ' ~ ' + ${p.endDate}"></li>
+										    </ul>
+									    </div>
+									</div>
+									<div class="col-lg-4 col-md-12">
+										<div class="card-body">
+											<ul style="overflow: hidden;list-style: none;">
+										        <li style="float: left; color:blue;">등록 날짜</li>
+										        <li style="padding-left: 5%;float: left;" th:text="${p.regDate}"></li>
+										    </ul>
+										    <ul style="overflow: hidden;list-style: none;">
+										        <li style="float: left; color:blue;">여행 경비</li>
+										        <li style="padding-left: 5%;float: left;" th:text="${p.planExpenses} + ' 만원'"></li>
+										    </ul>    
+									    </div>
+									</div>
+								</div>
+								<br>
+								<div class="text-center">
+									    <a type="button" class="btn btn-primary text-center">
+													여행 일정 만들러 가기
+													</a>
+								</div>
+							</div>
+							<!-- 두번째 tap 종료 -->
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

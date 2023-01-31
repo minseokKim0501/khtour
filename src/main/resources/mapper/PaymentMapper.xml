@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.PaymentMapper">
+	
+	<resultMap type="Payment" id="paymentResultMap">
+		<id 	column="room_pmt_code" 			property="pmtCode"/> 			<!-- 객실결제 코드 -->
+		<result	column="room_resv_code"			property="pmtResvCode"/>		<!-- 객실예약 코드 -->
+		<result	column="pmt_way_code"			property="pmtWayCode"/>			<!-- 결제방법 코드 -->
+		<result	column="member_id"				property="memberId"/>			<!-- 아이디 -->
+		<result	column="total_pmt_amount"		property="pmtTotalAmount"/>		<!-- 결제 전 계산 -->
+		<result	column="point_use"				property="pmtPointUse"/>		<!-- 포인트 사용 -->
+		<result	column="subtotal_pmt_amount"	property="pmtSubTotalAmount"/>	<!-- 최종결제 금액 -->
+		<result	column="point_gain"				property="pmtPointGain"/>		<!-- 포인트 적립(0.5%) -->
+		<result	column="pmt_date"				property="pmtDate"/>			<!-- 결제 일시 -->
+		<result	column="pmt_status"				property="pmtStatus"/>			<!-- 결제 상태 -->
+		<result	column="pmt_ip"					property="pmtIp"/>				<!-- 결제IP -->
+	</resultMap>
+	
+	<select id="getPayDetail" parameterType="String" resultMap="paymentResultMap" fetchSize="1000">
+	/* 결제목록조회 */
+	SELECT
+		 d.room_pmt_code
+		,d.room_resv_code
+		,d.pmt_way_code
+		,d.member_id
+		,d.total_pmt_amount
+		,d.point_use
+		,d.subtotal_pmt_amount
+		,d.point_gain
+		,d.pmt_date
+		,d.pmt_status
+		,d.pmt_ip
+	FROM
+		tb_member AS m
+		INNER JOIN 
+		tb_room_pmt AS d
+		on
+		m.member_id = d.member_id;
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				<if test="searchKey != null and searchKey != '' and searchValue != ''">
+					${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+				</if>
+			</trim>;
+	 </select>
+</mapper>

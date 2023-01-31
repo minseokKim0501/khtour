@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/maindefault}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>여행 계획 등록</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a th:href="@{/plan/planListSt}">여행 계획 리스트(관리자)</a></li>
+			<li class="breadcrumb-item active" aria-current="page">여행 계획 등록</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<link th:href="@{https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/datedropper.css}" rel="stylesheet">
+
+	<!-- 카카오맵 css 추가 시작 -->
+	<style>
+		.map_wrap, .map_wrap * {
+			margin: 0;
+			padding: 0;
+			font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+			font-size: 12px;
+		}
+		
+		.map_wrap a, .map_wrap a:hover, .map_wrap a:active {
+			color: #000;
+			text-decoration: none;
+		}
+		
+		.map_wrap {
+			position: relative;
+			width: 100%;
+			height: 500px;
+		}
+		
+		#menu_wrap {
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			width: 280px;
+			margin: 10px 0 30px 10px;
+			padding: 5px;
+			overflow-y: auto;
+			background: rgba(255, 255, 255, 0.7);
+			z-index: 1;
+			font-size: 12px;
+			border-radius: 10px;
+		}
+		
+		.bg_white {
+			background: #fff;
+		}
+		
+		#menu_wrap hr {
+			display: block;
+			height: 1px;
+			border: 0;
+			border-top: 2px solid #5F5F5F;
+			margin: 3px 0;
+		}
+		
+		#menu_wrap .option {
+			text-align: center;
+		}
+		
+		#menu_wrap .option p {
+			margin: 10px 0;
+		}
+		
+		#menu_wrap .option button {
+			margin-left: 5px;
+		}
+		
+		#placesList li {
+			list-style: none;
+		}
+		
+		#placesList .item {
+			position: relative;
+			border-bottom: 1px solid #888;
+			overflow: hidden;
+			cursor: pointer;
+			min-height: 65px;
+		}
+		
+		#placesList .item span {
+			display: block;
+			margin-top: 4px;
+		}
+		
+		#placesList .item h5, #placesList .item .info {
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+		
+		#placesList .item .info {
+			padding: 10px 0 10px 55px;
+		}
+		
+		#placesList .info .gray {
+			color: #8a8a8a;
+		}
+		
+		#placesList .info .jibun {
+			padding-left: 26px;
+			background:
+				url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png)
+				no-repeat;
+		}
+		
+		#placesList .info .tel {
+			color: #009900;
+		}
+		
+		#placesList .item .markerbg {
+			float: left;
+			position: absolute;
+			width: 36px;
+			height: 37px;
+			margin: 10px 0 0 10px;
+			background:
+				url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png)
+				no-repeat;
+		}
+		
+		#placesList .item .marker_1 {
+			background-position: 0 -10px;
+		}
+		
+		#placesList .item .marker_2 {
+			background-position: 0 -56px;
+		}
+		
+		#placesList .item .marker_3 {
+			background-position: 0 -102px
+		}
+		
+		#placesList .item .marker_4 {
+			background-position: 0 -148px;
+		}
+		
+		#placesList .item .marker_5 {
+			background-position: 0 -194px;
+		}
+		
+		#placesList .item .marker_6 {
+			background-position: 0 -240px;
+		}
+		
+		#placesList .item .marker_7 {
+			background-position: 0 -286px;
+		}
+		
+		#placesList .item .marker_8 {
+			background-position: 0 -332px;
+		}
+		
+		#placesList .item .marker_9 {
+			background-position: 0 -378px;
+		}
+		
+		#placesList .item .marker_10 {
+			background-position: 0 -423px;
+		}
+		
+		#placesList .item .marker_11 {
+			background-position: 0 -470px;
+		}
+		
+		#placesList .item .marker_12 {
+			background-position: 0 -516px;
+		}
+		
+		#placesList .item .marker_13 {
+			background-position: 0 -562px;
+		}
+		
+		#placesList .item .marker_14 {
+			background-position: 0 -608px;
+		}
+		
+		#placesList .item .marker_15 {
+			background-position: 0 -654px;
+		}
+		
+		#pagination {
+			margin: 10px auto;
+			text-align: center;
+		}
+		
+		#pagination a {
+			display: inline-block;
+			margin-right: 10px;
+		}
+		
+		#pagination .on {
+			font-weight: bold;
+			cursor: default;
+			color: #777;
+		}
+		
+		.colnp {
+			padding-right: 0;
+		}
+		
+		/* datepicker 버튼 색 */
+		.btn-outline-warning {
+		    color: #F44336 !important;
+		    background-color: #fff;
+		    background-image: none;
+		    border-color: #ed433e !important
+	}
+	</style>
+	<!-- 카카오맵 css 추가 종료 -->
+
+	<div class="row">
+		<!-- 첫번쨰 col -->
+		<div class="col-3">
+			<div class="card text-center" data-select2-id="6">
+				<div class="card-title">
+					<div class="card-title-left">
+						<h4 class="card-title-text">여행 계획 설정</h4>
+					</div>
+				</div>
+				<div class="card-body" data-select2-id="5">
+					<form id="addPlanForm" th:action="@{/plan/planInsert}"
+						method="post">
+						<div class="form-group">
+							<label for="memberId"> 등록자 아이디 </label> <input
+								type="text" class="form-control" id="memberId" th:value="${session.SID}"
+								name="memberId" readonly="readonly" required="">
+						</div>
+						<div class="form-group">
+							<label for="planName">여행 이름</label> <input type="text"
+								class="form-control" id="planName" name="planName" placeholder="예)신라시대 2박3일 여행" required="">
+						</div>
+						<div class="form-group">
+							<label for="planLocation">여행 지역</label> <input type="text"
+								class="form-control inputwt" id="planLocation" placeholder="예)경주"
+								name="planLocation">
+						</div>
+						<div class="form-group">
+							<label for="planMaterials">여행 준비물</label> <input type="text"
+								class="form-control" id="planMaterials" name="planMaterials" placeholder="예)현금, 운동화, 카메라"
+								required="">
+						</div>
+						<div class="form-group">
+							<label for="startDate"> 여행 시작 </label>
+							<div class="input-group mb-3">
+								<input id="startDate" type="text" class="form-control input-text" name="startDate">
+								<div class="input-group-append">
+									<button class="btn btn-outline-warning btn-lg" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="endDate"> 여행 종료</label>
+							<div class="input-group mb-3">
+								<input id="endDate" type="text" class="form-control input-text" name="endDate">
+								<div class="input-group-append">
+									<button class="btn btn-outline-warning btn-lg" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="planDays">여행 일수</label> <input type="text"
+								class="form-control" id="planDays" name="planDays" placeholder="예)1일차"
+								required="" readonly>
+						</div>
+						<div class="form-group">
+							<label for="soloParty">여행 인원수 </label> <input type="number"
+								class="form-control" id="soloParty" name="soloParty" required="" placeholder="예) 5">
+						</div>
+						<div class="form-group">
+							<label for="planOneDaysExpenses">1일 경비</label> <input type="number"
+								class="form-control" id="planOneDaysExpenses" name="planOneDaysExpenses" placeholder="예) 20 -> 만원단위"
+								required="">
+						</div>
+						<div class="form-group">
+							<label for="planExpenses">여행 총 경비</label> <input type="text"
+								class="form-control" id="planExpenses" name="planExpenses" placeholder="예) 20 -> 만원단위"
+								required="" readonly>
+						</div>
+						<button type="button" id="addPlanBtn" class="btn btn-primary">등록</button>
+						<button type="button" class="btn btn-danger">취소</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 두번째 col -->
+		<!-- 카카오맵 시작 -->
+		<div class="col-7">
+			<div class="map_wrap">
+				<div id="map" style="width: 100%; height: 800px; position: relative; overflow: hidden;"></div>
+				<div id="menu_wrap" class="bg_white">
+					<div class="option">
+						<div>
+							<form onsubmit="searchPlaces(); return false;">
+								키워드 : <input type="text" value="전주" id="keyword" size="15">
+								<button type="submit">검색하기</button>
+							</form>
+						</div>
+					</div>
+					<hr>
+					<ul id="placesList"></ul>
+					<div id="pagination"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 카카오맵 종료 -->
+		
+		
+		<!-- 세번째 col -->
+		<div class="col-2">
+			<div class="card">
+				<div class="card-body">
+					<div class="tab">
+						<!-- 내비 이름 시작 -->
+						<ul class="nav nav-pills" id="myTab-02" role="tablist">
+							<!--  내비 이름 추천 숙박 시작-->
+							<li class="nav-item"><a class="nav-link active"
+								id="home-tab-01" data-toggle="tab" href="#home-01" role="tab"
+								aria-controls="home" aria-selected="true"> <i
+									class="fa fa-home"></i>
+							</a></li>
+							<!--  내비 이름 추천 숙박 종료-->
+							
+							<!-- 내비 이름 추천 코스 시작-->
+							<li class="nav-item"><a class="nav-link" id="profile-tab-01"
+								data-toggle="tab" href="#profile-01" role="tab"
+								aria-controls="profile" aria-selected="false"><i
+									class="fa fa-user-o"></i></a></li>
+							<!-- 내비 이름 추천 코스 종료-->
+						</ul>
+						<!-- 내비 이름 종료 -->
+						
+						<div class="tab-content" id="myTabContent-02">
+							<!-- 추천 숙박 -->
+							<div class="tab-pane fade active show" id="home-01"
+								role="tabpanel" aria-labelledby="home-tab-01">
+								<!-- 추천 숙박 검색 시작 -->
+								<h4 class="text-center">추천숙박</h4>
+								<div class="input-group mb-3">
+									<input type="text" class="form-control"
+										aria-describedby="button-addon2">
+									<button class="btn" type="button" id="button-addon2">검색</button>
+								</div>
+								<!-- 추천 숙박 검색 종료 -->
+								<!-- 추천 숙박 리스트 시작-->
+								<ul style="list-style: none; padding-left: 0px; margin:5px; overflow: hidden;">
+									<li>
+										<div class="row border" th:if="${not #lists.isEmpty(accommodationList)}"
+					th:each="l : ${accommodationList}">
+											<div class="col-5 colnp">
+												<img style="padding:10px;" class="img-fluid " th:src="@{${#strings.isEmpty(l.ldgImagePath) ? '/images/heritage/서울 숭례문.jpg': '/' + #strings.replace(l.ldgImagePath,'\','/')}}" alt="">
+											</div>
+											<div class="col-7  pt-3">
+												<a th:href="@{/accommodation/acoommodationInfo(ldgCode=${l.ldgCode})}"
+									th:text="${l.ldgName}"> </a>
+												<p th:text="${l.ldgType}"></p>
+											</div>
+										</div>
+									</li>
+								</ul>
+								<!-- 추천 숙박 리스트 종료 -->
+							</div>
+							<!-- 추천 숙박 종료 -->
+							<!-- 추천 코스 -->
+							<div class="tab-pane fade" id="profile-01" role="tabpanel"
+								aria-labelledby="profile-tab-01">
+								<!-- 추천 코스 검색 시작 -->
+								<h4 class="text-center">추천코스</h4>
+								<div class="input-group mb-3">
+									<input type="text" class="form-control"
+										aria-describedby="button-addon2">
+									<button class="btn" type="button" id="button-addon2">검색</button>
+								</div>
+								<!-- 추천 코스 검색 종료 -->
+								<!-- 추천 코스 리스트 시작-->
+								<ul style="list-style: none; padding-left: 0px; margin:5px; overflow: hidden;">
+									<li>
+										<div class="row border" th:if="${not #lists.isEmpty(cosHistory)}"
+					th:each="c : ${cosHistory}">
+											<div class="col-5 colnp">
+												<img style="padding:10px;" class="img-fluid " th:src="@{/images/traShare/cos.png}">
+											</div>
+											<div class="col-7 pt-3">
+												<a href="#" th:text="${c.cosName}"> </a>
+												<br>
+												<br>
+												<p th:text="'1. ' + ${c.cosArea1} + ' 2. ' + ${c.cosArea2}"></p>
+											</div>
+										</div>
+									</li>
+								</ul>
+								<!-- 추천 코스 리스트 종료 -->
+							</div>
+							<!-- 추천 코스 종료 -->
+						</div>
+					</div>
+				</div>
+
+		</div>
+	</div>
+</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7cec08e17fcfb480dd452f2d9dd9df4c&libraries=services"></script>
+	<!-- 카카오맵 자바스크립트 시작 -->
+	
+	<script>
+		// 마커를 담을 배열입니다
+		var markers = [];
+
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		mapOption = {
+			center : new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+			level : 3
+		// 지도의 확대 레벨
+		};
+
+		// 지도를 생성합니다    
+		var map = new kakao.maps.Map(mapContainer, mapOption);
+
+		// 장소 검색 객체를 생성합니다
+		var ps = new kakao.maps.services.Places();
+
+		// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+		var infowindow = new kakao.maps.InfoWindow({
+			zIndex : 1
+		});
+
+		// 키워드로 장소를 검색합니다
+		searchPlaces();
+
+		// 키워드 검색을 요청하는 함수입니다
+		function searchPlaces() {
+
+			var keyword = document.getElementById('keyword').value;
+
+			if (!keyword.replace(/^\s+|\s+$/g, '')) {
+				alert('키워드를 입력해주세요!');
+				return false;
+			}
+
+			// 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+			ps.keywordSearch(keyword, placesSearchCB);
+		}
+
+		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+		function placesSearchCB(data, status, pagination) {
+			if (status === kakao.maps.services.Status.OK) {
+
+				// 정상적으로 검색이 완료됐으면
+				// 검색 목록과 마커를 표출합니다
+				displayPlaces(data);
+
+				// 페이지 번호를 표출합니다
+				displayPagination(pagination);
+
+			} else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+
+				alert('검색 결과가 존재하지 않습니다.');
+				return;
+
+			} else if (status === kakao.maps.services.Status.ERROR) {
+
+				alert('검색 결과 중 오류가 발생했습니다.');
+				return;
+
+			}
+		}
+
+		// 검색 결과 목록과 마커를 표출하는 함수입니다
+		function displayPlaces(places) {
+
+			var listEl = document.getElementById('placesList'), menuEl = document
+					.getElementById('menu_wrap'), fragment = document
+					.createDocumentFragment(), bounds = new kakao.maps.LatLngBounds(), listStr = '';
+
+			// 검색 결과 목록에 추가된 항목들을 제거합니다
+			removeAllChildNods(listEl);
+
+			// 지도에 표시되고 있는 마커를 제거합니다
+			removeMarker();
+
+			for (var i = 0; i < places.length; i++) {
+
+				// 마커를 생성하고 지도에 표시합니다
+				var placePosition = new kakao.maps.LatLng(places[i].y,
+						places[i].x), marker = addMarker(placePosition, i), itemEl = getListItem(
+						i, places[i]); // 검색 결과 항목 Element를 생성합니다
+
+				// 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+				// LatLngBounds 객체에 좌표를 추가합니다
+				bounds.extend(placePosition);
+
+				// 마커와 검색결과 항목에 mouseover 했을때
+				// 해당 장소에 인포윈도우에 장소명을 표시합니다
+				// mouseout 했을 때는 인포윈도우를 닫습니다
+				(function(marker, title) {
+					kakao.maps.event.addListener(marker, 'mouseover',
+							function() {
+								displayInfowindow(marker, title);
+							});
+
+					kakao.maps.event.addListener(marker, 'mouseout',
+							function() {
+								infowindow.close();
+							});
+
+					itemEl.onmouseover = function() {
+						displayInfowindow(marker, title);
+					};
+
+					itemEl.onmouseout = function() {
+						infowindow.close();
+					};
+				})(marker, places[i].place_name);
+
+				fragment.appendChild(itemEl);
+			}
+
+			// 검색결과 항목들을 검색결과 목록 Element에 추가합니다
+			listEl.appendChild(fragment);
+			menuEl.scrollTop = 0;
+
+			// 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+			map.setBounds(bounds);
+		}
+
+		// 검색결과 항목을 Element로 반환하는 함수입니다
+		function getListItem(index, places) {
+
+			var el = document.createElement('li'), itemStr = '<span class="markerbg marker_'
+					+ (index + 1)
+					+ '"></span>'
+					+ '<div class="info">'
+					+ '   <h5>' + places.place_name + '</h5>';
+
+			if (places.road_address_name) {
+				itemStr += '    <span>' + places.road_address_name + '</span>'
+						+ '   <span class="jibun gray">' + places.address_name
+						+ '</span>';
+			} else {
+				itemStr += '    <span>' + places.address_name + '</span>';
+			}
+
+			itemStr += '  <span class="tel">' + places.phone + '</span>'
+					+ '</div>';
+
+			el.innerHTML = itemStr;
+			el.className = 'item';
+
+			return el;
+		}
+
+		// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+		function addMarker(position, idx, title) {
+			var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+			imageSize = new kakao.maps.Size(36, 37), // 마커 이미지의 크기
+			imgOptions = {
+				spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+				spriteOrigin : new kakao.maps.Point(0, (idx * 46) + 10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+				offset : new kakao.maps.Point(13, 37)
+			// 마커 좌표에 일치시킬 이미지 내에서의 좌표
+			}, markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize,
+					imgOptions), marker = new kakao.maps.Marker({
+				position : position, // 마커의 위치
+				image : markerImage
+			});
+
+			marker.setMap(map); // 지도 위에 마커를 표출합니다
+			markers.push(marker); // 배열에 생성된 마커를 추가합니다
+
+			return marker;
+		}
+
+		// 지도 위에 표시되고 있는 마커를 모두 제거합니다
+		function removeMarker() {
+			for (var i = 0; i < markers.length; i++) {
+				markers[i].setMap(null);
+			}
+			markers = [];
+		}
+
+		// 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
+		function displayPagination(pagination) {
+			var paginationEl = document.getElementById('pagination'), fragment = document
+					.createDocumentFragment(), i;
+
+			// 기존에 추가된 페이지번호를 삭제합니다
+			while (paginationEl.hasChildNodes()) {
+				paginationEl.removeChild(paginationEl.lastChild);
+			}
+
+			for (i = 1; i <= pagination.last; i++) {
+				var el = document.createElement('a');
+				el.href = "#";
+				el.innerHTML = i;
+
+				if (i === pagination.current) {
+					el.className = 'on';
+				} else {
+					el.onclick = (function(i) {
+						return function() {
+							pagination.gotoPage(i);
+						}
+					})(i);
+				}
+
+				fragment.appendChild(el);
+			}
+			paginationEl.appendChild(fragment);
+		}
+
+		// 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
+		// 인포윈도우에 장소명을 표시합니다
+		function displayInfowindow(marker, title) {
+			var content = '<div style="padding:5px;z-index:1;">' + title
+					+ '</div>';
+
+			infowindow.setContent(content);
+			infowindow.open(map, marker);
+		}
+
+		// 검색결과 목록의 자식 Element를 제거하는 함수입니다
+		function removeAllChildNods(el) {
+			while (el.hasChildNodes()) {
+				el.removeChild(el.lastChild);
+			}
+		}
+	</script>
+	<!-- 카카오맵 자바스크립트 종료 -->
+	
+	<!-- 등록 버튼 자바스크립트 시작 -->
+	<script type="text/javascript" th:inline="javascript">
+		$(function(){
+			/*<![CDATA[*/
+		    var sessionLevel = [[${session.SLEVEL}]];
+		    /*]]>*/
+			
+			function validationCheck(data){
+				if(typeof data == 'undefined' || data == '' || data == null){
+					return false;
+				}
+				return true;
+		}
+		    
+		$('#addPlanBtn').click(function() {
+
+			if(sessionLevel != '일반회원' && sessionLevel != '관리자'){
+				alert('회원과 관리자만 여행 일정등록이 가능합니다')
+				return false;
+			}
+			var isSubmit = true;
+			var inputObj = $('#addPlanForm').find('input');
+
+			$.each(inputObj, function() {
+				var inputId = $(this).attr('id');
+				var inputLabel = $('label[for="' + inputId + '"]').text();
+				var inputData = $(this).val();
+				var result = validationCheck(inputData);
+
+				// 사용자가 입력하지 않은 경우
+				if(!result){
+					alert(inputLabel + '을 입력해주세요');
+					$(this).focus();
+					isSubmit = false;
+					return false;
+				}
+			});
+			
+
+			if (isSubmit) $('#addPlanForm').submit();
+			});
+		});
+	</script>
+	<!-- 등록 버튼 자바스크립트 종료 -->
+	<script th:src="@{/js/kmsJs/datepickerKmsV2.js}"></script>
+	<!-- 출발 날짜 datepciker 자바스크립트 시작 -->
+	<script>
+		$(document).ready(function() {
+			
+			var dateDiffFn = function(){
+				var startDate = new Date($("#startDate").val());
+				var endDate = new Date($("#endDate").val());
+				var diff = Math.abs((endDate - startDate) / 1000 / 60 / 60 / 24);
+				//console.log(startDate, endDate);
+				$('#planDays').val(diff);
+				console.log(diff);
+			}
+			
+			$('#soloParty, #planOneDaysExpenses').keyup(function(){
+				var planDays = Number($('#planDays').val());
+				var soloParty = Number($('#soloParty').val());
+				var planOneDaysExpenses = Number($('#planOneDaysExpenses').val());
+				console.log(planDays, soloParty, planOneDaysExpenses);
+				$('#planExpenses').val(planDays * soloParty * planOneDaysExpenses +"만원")
+			})
+			
+			$("#startDate").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "Y/m/d",
+				lang : "ko",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold',
+				onChange: dateDiffFn
+			});
+		
+	//출발 날짜 datepciker 자바스크립트 종료
+	//도착 날짜 datepciker 자바스크립트 시작
+		
+
+			$("#endDate").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "Y/m/d",
+				lang : "ko",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold',
+				onChange: dateDiffFn
+			});
+		});
+	</script>
+	<!-- 도착 날짜 datepciker 자바스크립트 종료 -->
+</th:block>
+</html>

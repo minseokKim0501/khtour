@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2>문화재 정보 수정</h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a
+				th:href="@{/heritage/heritageListByItem}">문화재 검색 리스트</a></li>
+			<li class="breadcrumb-item active" aria-current="page">문화재 정보 수정</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+	<div class="row justify-content-center">
+		<div class="col-12 col-la-10 col-xl-7">
+			<div class="card">
+				<div class="card-title">
+					<div class="card-title-left">
+						<h4 class="card-title-text">문화재 정보 수정</h4>
+					</div>
+				</div>
+				<div class="card-body">
+					<!-- 문화재 수정 폼 시작 -->
+					<form th:action="@{/heritage/modifyHeritage}" method="post">
+
+						<input type="hidden" class="form-control" id="heritageCode"
+							name="heritageCode" th:value="${heritage.heritageCode}">
+
+						<div class="form-group">
+							<label for="heritageName"> 문화재 명 </label> <input type="text"
+								class="form-control" id="heritageName" name="heritageName"
+								th:value="${heritage.heritageName}">
+						</div>
+						<div class="form-group">
+							<label for="heritageCategory"> 문화재 대분류 </label>
+								<div class="input-group">
+									<select class="custom-select" name="heritageCategory" onchange="change(this.selectedIndex);" th:value="${heritage.heritageCategory}"> 
+										<option th:selected="${heritage.heritageCategory=='전체'}">:: 선택 :: </option>
+										<option th:selected="${heritage.heritageCategory=='국가등록문화재'}">국보</option>
+										<option th:selected="${heritage.heritageCategory=='국보'}">국보</option>
+										<option th:selected="${heritage.heritageCategory=='명승'}">명승</option>
+										<option th:selected="${heritage.heritageCategory=='문화재 자료'}">문화재 자료</option>
+										<option th:selected="${heritage.heritageCategory=='보물'}">보물</option>
+										<option th:selected="${heritage.heritageCategory=='사적'}">사적</option>
+										<option th:selected="${heritage.heritageCategory=='신문'}">신문</option>
+										<option th:selected="${heritage.heritageCategory=='종이'}">종이</option>
+
+									</select>
+								</div>
+						</div>
+						<div class="form-group">
+							<label for="heritageSubName"> 문화재 한문명 </label> <input type="text"
+								class="form-control" id="heritageSubName" name="heritageSubName"
+								th:value="${heritage.heritageSubName}">
+						</div>
+						<div class="form-group">
+							<label for="heritageLocation"> 문화재 소재지 </label> <input
+								type="text" class="form-control" id="heritageLocation"
+								name="heritageLocation" th:value="${heritage.heritageLocation}">
+						</div>
+						<div class="form-group">
+							<label for="heritageManager"> 문화재 관리자 </label> <input type="text"
+								class="form-control" id="heritageManager" name="heritageManager"
+								th:value="${heritage.heritageManager}">
+						</div>
+						<div class="form-group">
+							<label for="heritageOwner"> 문화재 소유자 </label> <input type="text"
+								class="form-control" id="heritageOwner" name="heritageOwner"
+								th:value="${heritage.heritageOwner}">
+						</div>
+						<div class="form-group">
+							<label for="heritageEra"> 문화재 시대명 </label> <input type="text"
+								class="form-control" id="heritageEra" name="heritageEra"
+								th:value="${heritage.heritageEra}">
+						</div>
+						<div class="form-group">
+							<label for="heritageArea"> 문화재 수량/면적 </label> <input type="text"
+								class="form-control" id="heritageArea" name="heritageArea"
+								th:value="${heritage.heritageArea}">
+						</div>
+						<div class="form-group">
+							<label for="heritageDesignation">문화재 지정일</label> <input
+								type="text" class="date form-control" id="heritageDesignation"
+								name="heritageDesignation" maxlength="10"
+								th:value="${heritage.heritageDesignation}">
+						</div>
+						<div class="form-group">
+							<label for="heritageClassification">중 분류 </label> <input
+								type="text" class="form-control" id="heritageClassification"
+								name="heritageClassification"
+								th:value="${heritage.heritageClassification}">
+						</div>
+						<div class="form-group">
+							<label for="heritageImage">이미지 선택</label> <input type="file"
+								id="heritageImage" class="form-control" name="heritageImage">
+						</div>
+						<div class="form-group">
+							<label for="heritageDetail">문화재 상세 설명 문화재 설명</label>
+							<textarea class="form-control" id="heritageDetail"
+								name="heritageDetail" rows="15"
+								th:text="${heritage.heritageDetail}"></textarea>
+						</div>
+
+						<button type="submit" class="btn btn-primary">수정완료</button>
+						<a type="button" class="btn btn-danger"
+							th:href="@{/heritage/heritageListByItem}">취소</a>
+					</form>
+					<!-- 문화재 수정 폼 종료 -->
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+
+<!-- javascript 삽입 시작 -->
+<th:block layout:fragment="customBodyScript">
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<!-- select List -->
+	<script th:src="@{/js/bootstrap-duallistbox/jquery.bootstrap-duallistbox.min.js}"></script>
+</th:block>
+<!-- javascript 삽입 종료 -->
+</html>

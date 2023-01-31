@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   <th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   </th:block>
+   <th:block layout:fragment="contentsTitle">
+      
+   </th:block>
+
+   <th:block layout:fragment="customContents">   
+      <div class="card">
+		<div class="card-title">
+			<div class="card-title-left">
+				<h4 class="card-title-text" _msthash="1928459" _msttexthash="45580314">회원 정보</h4>
+			</div>
+		</div>
+		<div class="card-body">
+			<form class="cmxform" id="signupForm" method="get"
+				novalidate="novalidate">
+				<div class="form-group">
+					<label for="name" _msthash="560183" _msttexthash="21733608">이름</label>
+					<input id="name" class="form-control" name="name" type="text">
+				</div>
+				<div class="form-group">
+					<label for="gender" _msthash="560430" _msttexthash="9203883">성별</label>
+					<select class="custom-select">
+						  <option selected="" _msthash="2451059" _msttexthash="390026">::성별 선택::</option>
+						  <option value="남" _msthash="2451241" _msttexthash="30446">남</option>
+						  <option value="여" _msthash="2451423" _msttexthash="33007">여</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="username" _msthash="560677" _msttexthash="29184064">닉네임</label>
+					<input id="username" class="form-control" name="username" type="text">
+				</div>
+				<div class="form-group">
+					<label for="password" _msthash="560924" _msttexthash="10300316">암호</label>
+					<input id="password" class="form-control" name="password" type="password">
+				</div>
+				<div class="form-group">
+					<label for="confirm_password" _msthash="561171" _msttexthash="23358309">암호 확인</label> 
+					<input id="confirm_password" class="form-control" name="confirm_password" type="password">
+				</div>
+				<div class="form-group">
+					<label for="email" _msthash="561418" _msttexthash="15582216">이메일</label>
+					<input id="email1" class="form-control" name="email" type="email">
+				</div>
+				<div class="custom-control custom-checkbox form-group">
+					<input type="checkbox" class="custom-control-input" id="agree" name="agree"> 
+					<label class="custom-control-label" for="agree" _msthash="562003" _msttexthash="125990397">이벤트 수신에 동의합니다</label>
+				</div>
+				<div class="custom-control custom-checkbox form-group">
+					<input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter"> 
+					<label class="custom-control-label" for="newsletter" _msthash="562250" _msttexthash="82049695">뉴스레터를 받고 싶습니다.</label>
+				</div>
+				<div class="form-group">
+					<input class="submit btn btn-primary" type="submit" value="수정하기" _mstvalue="9814740">
+				</div>
+			</form>
+		</div>
+	</div>
+   </th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+   </th:block>
+</html>

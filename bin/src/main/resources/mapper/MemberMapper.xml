@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.MemberMapper">
+
+	<select id="getMemberList" resultType="Member">
+		SELECT
+			 m.member_id			AS memberId
+			,m.point_level			AS memberPointLevel
+			,m.total_point_code		AS memberTotalPointCode
+			,m.total_point_used		AS memberTotalPointUsed
+			,m.usable_point			AS memberUsablePoint
+			,m.member_pw 			AS memberPw
+			,m.member_status		AS memberStatus
+			,m.member_level			AS memberLevel
+			,m.member_name			AS memberName
+			,m.contact				AS memberContact
+			,m.birthday				AS memberBirthday
+			,m.email				AS memberEmail
+			,m.reg_time				AS memberRegTime
+			,m.country				AS memberCountry
+			,m.about				AS memberAbout
+			,m.avatar_image			AS memberAvatarImage
+			,m.banner_image			AS memberBannerImage
+		FROM	
+			tb_member AS m;
+	</select>
+
+</mapper>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default2}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+
+<th:block layout:fragment="customScript">
+	<!-- <script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		var status = [[${status}]];
+		/*]]>*/
+
+	</script> -->
+
+	<script>
+
+	$(function() {
+		$(document).ready(function(){
+			var ruleCode = $("#ruleListSelect").val();
+			$.ajax({
+				url : '/getRuleByRuleCode',
+				type : 'post',
+				data : {
+					'ruleCode' : ruleCode
+				},
+				dataType : 'json',
+				success : function(data) {	
+						$('#titleRuleModal').val(data.title);							
+						$('#detailRuleModal').val(data.detail);							
+					}	
+			});
+			var tagCode = $("#tagListSelect").val();
+			$.ajax({
+				url : '/getTagByTagCode',
+				type : 'post',
+				data : {
+					'tagCode' : tagCode
+				},
+				dataType : 'json',
+				success : function(data) {	
+						$('#tagNameModal').val(data.tagName);							
+						$('#tagColorModal').val(data.tagColor);							
+					}	
+			});
+			
+		});
+		 $("#ruleListSelect").on('change', function(e) {
+			var ruleCode = $("#ruleListSelect").val();
+				$.ajax({
+					url : '/getRuleByRuleCode',
+					type : 'post',
+					data : {
+						'ruleCode' : ruleCode
+					},
+					dataType : 'json',
+					success : function(data) {	
+							$('#titleRuleModal').val(data.title);							
+							$('#detailRuleModal').val(data.detail);							
+						}	
+				});
+			}); 
+		 $("#tagListSelect").on('change', function(e) {
+				var tagCode = $("#tagListSelect").val();
+					$.ajax({
+						url : '/getTagByTagCode',
+						type : 'post',
+						data : {
+							'tagCode' : tagCode
+						},
+						dataType : 'json',
+						success : function(data) {	
+								$('#tagNameModal').val(data.tagName);							
+								$('#tagColorModal').val(data.tagColor);							
+							}	
+				});
+		}); 
+		
+		
+		$(".upVote").on("click",function(){
+			var postCode = $(this).attr('data-postCode');
+			var resultCnt = $(this).parent().find('#resultCnt');
+			var upVote = $(this);
+			var downVote = $(this).parent().find('.downVote');
+	       			$.ajax({
+						url : '/likesDislikesCheck',
+						type : 'post',
+						data : {
+							'postCode' : postCode
+						},
+						dataType : 'text',
+						success : function(data) {
+							console.log(data);
+							 if(data=='available')
+							{
+								 $.ajax({
+										url : '/addLikes',
+										type : 'post',
+										data : {
+											'postCode' : postCode
+										},
+										dataType : 'text',
+										success : function(data1) {
+											resultCnt.text(data1);	
+											upVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-success pb-5"></i>');
+											
+										}
+								 }); 
+								
+							}
+							 else if(data=='dislike')
+							{
+								 $.ajax({
+										url : '/updateLikeDislike',
+										type : 'post',
+										data : {
+											'postCode' : postCode,
+											'likeDislike' : 'dislike'
+										},
+										dataType : 'text',
+										success : function(data2) {
+											resultCnt.text(data2);	
+											upVote.empty();
+											downVote.empty();
+											upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-success pb-5"></i>');
+											downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-white"></i>');
+										}
+								 }); 
+								
+							}
+						}
+					}); 
+					
+	        
+		})
+	});
+	$(function() {
+		$(".downVote").on("click",function(){
+			var postCode = $(this).attr('data-postCode');
+			var resultCnt = $(this).parent().find('#resultCnt');
+			var downVote = $(this);
+			var upVote = $(this).parent().find('.upVote');
+	       	console.log(postCode);
+			$.ajax({
+				url : '/likesDislikesCheck',
+				type : 'post',
+				data : {
+					'postCode' : postCode
+				},
+				dataType : 'text',
+				success : function(data) {
+					console.log(data);
+					 if(data=='available')
+					{
+						 $.ajax({
+								url : '/addDislikes',
+								type : 'post',
+								data : {
+									'postCode' : postCode
+								},
+								dataType : 'text',
+								success : function(data1) {
+									resultCnt.text(data1);	
+									downVote.empty();
+									downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i>');
+								}
+						 }); 
+						
+					}
+					 else if(data=='like')
+					{
+						 $.ajax({
+								url : '/updateLikeDislike',
+								type : 'post',
+								data : {
+									'postCode' : postCode,
+									'likeDislike' : 'like'
+								},
+								dataType : 'text',
+								success : function(data2) {
+									resultCnt.text(data2);	
+									downVote.empty();
+									upVote.empty();
+									upVote.append('<i class="la la-caret-up d-flex la-3x justify-content-center text-white pb-5"></i>');
+									downVote.append('<i class="la la-caret-down d-flex la-3x justify-content-center text-danger"></i>');
+								}
+						 }); 
+							 
+					}
+				}
+			}); 
+	        
+		})
+	});
+ 
+	</script>
+</th:block>
+
+
+
+
+<th:block layout:fragment="customContents">
+	<div class="row justify-content-center">
+	<div class="card" style="width:1000px">
+	<div class="card bg-primary">
+		<div class="card-body text-center pb-2 pt-2">
+			<h2 th:if="${isAdmin=='true'}" class="mt-2 mb-0 bt-0 text-white">[관리자로그인] [[${community.commName}]] 커뮤니티</h2>
+			<h2 th:if="not ${isAdmin=='true'}" class="mb-0 mt-2 text-white " th:text="${community.commName} + ' 커뮤니티'"></h2>
+			<p  class="mb-0 bt-0 text-white" th:text="${status}"></p>	
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card">
+			<div class="card-header bg-primary pb-1">
+				<h5 class="text-white">인기 포스트</h5>
+			</div>
+				<div class="card-body text-center pt-3 pb-3">
+					<a th:href="@{/commPage(order='hot',commCode=${community.commCode})}" class="btn btn-primary btn-sm mr-5 pl-4 pr-4" role="button" aria-pressed="true"><i class="fa fa-heart-o"></i>HOT</a> 
+					<a th:href="@{/commPage(order='new',commCode=${community.commCode})}" class="btn btn-primary btn-sm mr-5 ml-5 pl-4 pr-4" role="button" aria-pressed="true"><i class="fa fa-heart-o"></i>NEW</a> 
+					<a th:href="@{/commPage(order='top',commCode=${community.commCode})}" class="btn btn-primary btn-sm ml-5 pl-4 pr-4" role="button" aria-pressed="true"><i class="fa fa-heart-o"></i>TOP</a> 
+				</div>
+			</div>
+			<div th:replace="community/singlePost :: singlePost"></div>
+
+		</div>
+
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-header bg-primary">
+					<h5 class="card-title text-white mb-0">About Community</h5>
+				</div>
+
+				<div class="card-body m-0">
+					<table class="table">
+						<thead>
+							<tr>
+								<th colspan="2">
+									<div class="card-title" th:text="${community.commName}"></div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td colspan="2"><p class="card-text" th:text="${community.commDesc}"></p></td>
+							</tr>
+							<tr>
+								<td><p class="card-text">회원수</p></td>
+								<td><p class="card-text" th:text="${community.memberCnt}"></p></td>
+							</tr>
+							<tr>
+								<td><p class="card-text">온라인</p></td>
+								<td><p class="card-text" th:text="${community.onlineMemberCnt}"></p></td>
+							</tr>
+							<tr>
+								<td><p class="card-text">관리자</p></td>
+								<td><p class="card-text" th:text="${community.memberId}"></p></td>
+							</tr>
+							<tr>
+								<td><p class="card-text">생성날짜</p></td>
+								<td><p class="card-text" th:text="${community.regDate}"></p></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="card-foot p-2 text-center border-top ">
+					<a th:if="${isAdmin=='false'}" th:href="@{/addCommMemberReg(memberId=${session.SID},commCode=${community.commCode})}" class="btn btn-primary btn-sm" role="button" aria-pressed="true">커뮤니티 가입</a> 
+					<a th:if="${isAdmin=='true'}" th:href="@{/updateCommunity(commCode=${community.commCode})}" class="btn btn-primary btn-sm" role="button" aria-pressed="true">커뮤니티 수정</a> 
+					<button type="button" class="btn btn-primary text-white btn-sm" data-toggle="modal" data-target="#deleteCommunityModal">커뮤니티 삭제  </button>
+					<a th:href="@{/createPost(commCode=${community.commCode},memberId=${session.SID})}" class="btn btn-primary active btn-sm" role="button" aria-pressed="true">포스트 만들기</a>
+				</div>
+			</div>
+			<div class="card">
+            <div class="card-header bg-primary">
+               <h5 class="card-title text-white mb-0">커뮤니티 규칙</h5>
+            </div>
+            <div class="card-body m-0">
+               <div class="accordion accordion-box" id="accordionExample">
+                  <div class="card" th:if="${not #lists.isEmpty(ruleList)}" th:each="r,index: ${ruleList}">
+                     <div class="card-header" id="headingTwo-02">
+                        <div class="accordion-title collapsed p-1 bg-white" data-toggle="collapse" th:attr="data-target='#collapseTwo-' + ${index.index}">  
+                           <p class="mb-0 text-dark" th:text="'규칙'+ ${index.index+1} +': ' + ${r.title}">
+                              <i class="zmdi zmdi-help-outline mr-3"></i>
+                           </p>
+                        </div>
+                     </div>
+                     <div th:id="'collapseTwo-'+${index.index}" class="collapse"
+                        aria-labelledby="headingTwo-01" data-parent="#accordionExample">
+                        <div class="card-body bg-primary">
+                           <p class="text-white" th:text="${r.detail}"></p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="card-foot p-2 text-center border-top" th:if="${isAdmin=='true'}">
+              		<button type="button" class="btn btn-primary text-white btn-sm" data-toggle="modal" data-target="#addRuleModal">규칙 추가  </button>
+              		<button type="button" class="btn btn-primary text-white btn-sm" data-toggle="modal" data-target="#updateRuleModal">규칙 변경  </button>
+              		<button type="button" class="btn btn-primary text-white btn-sm" data-toggle="modal" data-target="#deleteRuleModal">규칙 삭제  </button>
+				</div> 
+         </div>
+			<div class="card">
+				<div class="card-header bg-primary  pb-0">
+					<h5 class="card-title text-white">커뮤니티 테그</h5>
+				</div>
+				<div class="card-body m-0">
+
+					<th:block th:if="${not #lists.isEmpty(tagList)}" th:each="r: ${tagList}">
+						<a th:href="@{/commPage(tagCode=${r.tagCode},commCode=${r.commCode})}" role="button" th:class="'btn '+'btn-sm pull-left '+'m-1 '+'btn-'+ ${r.tagColor}" th:text="${r.tagName}"></a>
+					</th:block>
+
+				</div>
+				<div class="card-foot p-2 text-center border-top" th:if="${isAdmin=='true'}">
+					<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addTagModal">테그 추가</button>
+					<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateTagModal">테그 수정</button>
+					<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#deleteTagModal">테그 삭제</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="addTagModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">태그추가</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/addTag}">
+						<div class="form-group">
+							<input type="hidden" name="commCode" id="commCode" class="form-control" th:value="${community.commCode}"></input>
+							<input type="hidden"  th:value="${session.SID}"  name="memberId" />
+						</div>
+						<div class="form-group">
+							<label for="tagName">태그이름</label> 
+							<input id="tagName" name="tagName" type="text" class="form-control" required></input>	
+						</div>
+						
+	
+						<div class="form-group">
+							<label for="tagColor">태그 색상</label> <select class="form-control"
+								id="tagColor" name="tagColor">
+								<option  th:value="success">초록색</option>
+								<option  th:value="warning">노랑색</option>
+								<option  th:value="dark">검은색</option>
+								<option  th:value="light">회색</option>
+								<option  th:value="danger">빨강색</option>
+								<option  th:value="primary">갈색</option>
+							</select>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">태그등록</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="updateTagModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">태그수정</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/updateTag}">
+					
+					
+						<div class="form-group pb-4 border-bottom">
+							<label for="tagListSelect">수정할 테그</label> 
+							<select class="form-control" id="tagListSelect" name="tagCode">
+								<option th:value="${tl.tagCode}" th:text="${tl.tagName}" th:each="tl: ${tagList}" />
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="commCode" id="commCode" class="form-control" th:value="${community.commCode}"></input>
+						</div>
+						<div class="form-group">
+							<label for="tagNameModal">태그이름</label> 
+							<input id="tagNameModal" name="tagName" type="text" class="form-control" required></input>	
+						</div>
+						<div class="form-group">
+							<label for="tagColorModal">태그 색상</label> <select class="form-control"
+								id="tagColorModal" name="tagColor">
+								<option  th:value="success">초록색</option>
+								<option  th:value="warning">노랑색</option>
+								<option  th:value="dark">검은색</option>
+								<option  th:value="light">회색</option>
+								<option  th:value="danger">빨강색</option>
+								<option  th:value="primary">갈색</option>
+							</select>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">태그변경</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="deleteTagModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">태그삭제</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/deleteTag}">
+						<div class="form-group pb-4 border-bottom">
+							<label for="tagListSelect">삭제할 테그</label> 
+							<select class="form-control" id="tagListSelect" name="tagCode">
+								<option th:value="${tl.tagCode}" th:text="${tl.tagName}" th:each="tl: ${tagList}" />
+							</select>
+							<p class="text-danger mt-4">테그 삭제시 테그에 해당하는 모든 포스트도 삭제됩니다.</p>
+							<input type="hidden" name="commCode" id="commCode" class="form-control" th:value="${community.commCode}"></input>
+						</div>
+
+						<button type="submit" class="btn btn-primary pull-right">태그삭제</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="addRuleModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">규칙등록</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/addRule}">
+						<div class="form-group">
+							<input type="hidden" name="commCode" id="commCode" class="form-control" th:value="${community.commCode}"></input>
+							<input type="hidden"  th:value="${session.SID}"  name="memberId" />
+						</div>
+						<div class="form-group">
+							<label for="title">규칙 재목</label> 
+							<input id="title" name="title" type="text" class="form-control" required ></input>
+						</div>
+						
+
+						<div class="form-group">
+							<label for="detail">추가설명</label>
+							<textarea id="detail" name="detail" class="form-control" rows="10" required></textarea>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">등록</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+		<div class="modal fade" id="updateRuleModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">규칙변경</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/updateRule}">
+					
+						<div class="form-group pb-4 border-bottom">
+							<label for="ruleListSelect">수정할 규칙</label> 
+							<select class="form-control" id="ruleListSelect" name="ruleCode">
+								<option th:value="${rl.ruleCode}" th:text="${rl.title}" th:each="rl: ${ruleList}" />
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="commCode" id="commCode" class="form-control" th:value="${community.commCode}"></input>
+						</div>
+						<div class="form-group">
+							<label for="titleRuleModal">규칙 재목</label> 
+							<input id="titleRuleModal" name="title" type="text" class="form-control" required ></input>
+						</div>
+						
+
+						<div class="form-group">
+							<label for="detailRuleModal">추가설명</label>
+							<textarea id="detailRuleModal" name="detail" class="form-control" rows="10" required></textarea>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">변경</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="deleteRuleModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">규칙 삭제</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/deleteRule}">
+					
+						<div class="form-group pb-4 border-bottom">
+							<label for="ruleListSelect">삭제할 규칙</label> 
+							<select class="form-control" id="ruleListSelect" name="ruleCode">
+								<option th:value="${rl.ruleCode}" th:text="${rl.title}" th:each="rl: ${ruleList}" />
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="commCode" id="commCode" class="form-control" th:value="${community.commCode}"></input>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">삭제</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="deleteCommunityModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">커뮤니티 삭제</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-5">
+					<form class="cmxform" method="post" th:action="@{/deleteCommunity}">
+						<div class="form-group pb-4 border-bottom">
+							<h4 class="text-danger mt-4">정말 삭제 하시겠습니까?</h4>
+							<input type="hidden" name="commCode" id="commCode" class="form-control" th:value="${community.commCode}"></input>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">커뮤니티 삭제</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+
+</th:block>
+
+
+
+
+
+
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

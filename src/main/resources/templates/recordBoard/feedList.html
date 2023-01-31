@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+<link th:href="@{https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/datedropper.css}" rel="stylesheet">
+	<style>
+@import url(https://unpkg.com/@webpixels/css@1.1/dist/index.css);
+/* datedrapper 버튼 색 */
+.btn-outline-warning {
+    color: #F44336 !important;
+    background-color: #fff;
+    background-image: none;
+    border-color: #ed433e !important
+}
+.postbgimg img {
+	width: 100%;
+	height: 274px;
+}
+</style>
+	<!-- 페이지 타이틀 시작 -->
+	<div class="row">
+		<div class="col-12">
+			<h2>포스트 상세 페이지</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a
+						th:href="@{/traShare/traShareList}">여행일정 공유 게시판</a></li>
+					<li class="breadcrumb-item active" aria-current="page">포스트 상세</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<!-- 배경 이미지 시작 -->
+	<div class="row">
+		<div class="postbgimg" style="opacity: 0.9;">
+			<img th:src="@{/images/traShare/back2.jpg}" alt="...">
+		</div>
+	</div>
+	<!-- 배경 이미지 종료 -->
+	<div class="row user-profile mb-4">
+		<div class="col-12 col-md-4 col-lg-3">
+			<!-- 작성자 정보 및 피드 등록 카드 시작 -->
+			<div class="card">
+				<div class="card-title">
+					<div class="text" style="font-size:20px;"><strong>작성자 정보</strong></div>
+				</div>
+				<hr class="my-2">
+				<div class="card-body">
+					<div class="d-flex justify-content-center">
+						<a href="#">
+							<img class="rounded-circle" style="width: 150px;" alt="..." th:src="@{/images/heritage/member.jpg}">
+						</a>
+					</div>
+					<div class="my-6">
+						<!-- 유저 정보 입력 -->
+						<a href="#" class="d-block text-center h5" style="font-size: 20px;" th:text=${recordBoard.member.memberName}></a>
+						<div class="pt-5 " th:text="'등록자 아이디 :' + ${recordBoard.memberId}"></div>
+						<hr>
+						<div  th:text="'유저 이름 : ' + ${recordBoard.member.memberUserName}"></div>
+						<hr>
+						<div  th:text="'성별: ' + ${recordBoard.member.memberGender}"></div>
+						<hr>
+						<div  th:text="'생일 : ' + ${recordBoard.member.memberBirthday}"></div>
+						<hr>
+						<div  th:text="'이메일 : '+  ${recordBoard.member.memberEmail}"></div>
+						<hr>
+						<div class="text-center">
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								data-target=".bd-example-modal-lg">
+								<i class="feather icon-plus"></i>피드 등록
+							</button>
+						</div>
+							<!-- 모달 시작 -->
+							<div class="modal fade bd-example-modal-lg" tabindex="-1"
+								role="dialog" aria-labelledby="exampleModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">
+												<i class="feather icon-plus"></i> 상세정보 등록
+											</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body p-5">
+											<form id="addFeedForm" th:action="@{/recordBoard/feedList}"
+												method="post" enctype="multipart/form-data">
+
+												<input type="hidden" name="recordBoardCode"
+													th:value="${param.recordBoardCode}">
+												<div class="form-group">
+													<label for="memberId"> 등록자 아이디 </label> <input type="text"
+														class="form-control" id="memberId"
+														th:value="${session.SID}" name="memberId"
+														readonly="readonly" required="">
+												</div>
+
+												<div class="form-group">
+													<label for="feedTitle">피드 제목</label> <input type="text"
+														class="form-control" name="feedTitle" id=""
+														placeholder="피드 제목을 입력해주세요." required="">
+												</div>
+
+												<div class="form-group">
+													<label for="feedPlanDays">피드 날짜 </label>
+														<div class="input-group mb-3">
+															<input name="feedPlanDays" id="feedPlanDays" type="text" class="form-control input-text">
+															<div class="input-group-append">
+																<button class="btn btn-outline-warning btn-lg" type="button">
+																	<i class="fa fa-calendar"></i>
+																</button>
+															</div>
+														</div>
+												</div>
+												<div class="form-group">
+													<label for="feedTime">일차 </label>
+													<div class="input-group">
+													<input type="text" placeholder="예) 4 Days"
+														id="feedPlanDays" class="form-control" name="feedPlanDays"
+														required="">
+													</div>
+												</div>
+												<div class="form-group">
+													<label for="feedImage">이미지 선택</label> <input type="file"
+														id="feedImage" class="form-control" name="feedImageFiles"
+														required="">
+												</div>
+												<div class="form-group">
+													<label for="feedContent">피드 내용</label>
+													<textarea class="form-control" id="heritageDetail"
+														name="feedContent" rows="3" required=""></textarea>
+												</div>
+
+												<button type="button"
+													th:if="${session.SID != recordBoard.memberId}"
+													onclick="alert('게시글 작성자만 정보를 등록 할 수 있습니다.')"
+													class="btn btn-primary">등록</button>
+												<button type="button" id="addFeedBtn"
+													th:unless="${session.SID != recordBoard.memberId}"
+													class="btn btn-primary">등록</button>
+												<button type="button" class="btn btn-danger"
+													data-dismiss="modal">취소</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 모달 끝 -->
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+		<div class="col-12 col-md-8 col-lg-9">
+			<!-- 여행 게시글 시작 -->
+			<div class="card">
+				<div class="card-title">
+					<span th:text="${recordBoard.member.memberName} + ' 님의 게시글'" style="font-size:20px;	"></span>
+				</div>
+				<hr class="my-2">
+					<div class="card-body">
+						<h1 class="mb-8" th:text="${recordBoard.recordBoardName}"></h1>
+						<p th:text="${recordBoard.content}"></p>
+					</div>
+						<!-- 여행 게시글 댓글, 관리 -->
+						<div class="card-footer mb-4 pt-8">
+							<hr class="my-2" style="font-size:14px;">
+							<p class="pt-4"  style="font-size:14px;"
+								th:text="'여행 시작일 : ' + ${recordBoard.startDate} + ' | ' + '여행 종료일 : ' + ${recordBoard.endDate} + ' | ' + '여행 스타일  : ' + ${recordBoard.travelStyle}"></p>
+							<p  style="font-size:14px;"
+								th:text="'게시글 등록 날짜 : ' + ${recordBoard.regDate} + ' | ' + '조회수 : ' + ${recordBoard.views}"></p>
+								<div class="d-flex flex-column comment-section" id="myGroup">
+									<div class="p-2">
+										<div class="d-flex flex-row fs-12">
+											<div class="like p-2 cursor action-collapse"  style="font-size:14px;"
+												data-toggle="collapse" aria-expanded="true"
+												aria-controls="collapse-1" href="#collapse-1">
+												<i class="fa fa-commenting-o"></i><span class="ml-1">댓글</span>
+											</div>
+											<div class="like p-2 cursor action-collapse"  style="font-size:14px;"
+												data-toggle="collapse" aria-expanded="true"
+												aria-controls="collapse-2" href="#collapse-2">
+												<i class="fa fa-share"></i><span class="ml-1">관리</span>
+											</div>
+										</div>
+									</div>
+									<!-- 여행 게시글 댓글 시작 -->
+									<div id="collapse-1" class="p-2 collapse" data-parent="#myGroup">
+											<div class="d-flex flex-row align-items-start" >
+												<img class="rounded-circle"
+													th:src="@{/images/heritage/member.jpg}" width="40">
+												<textarea class="form-control ml-1 shadow-none textarea"
+													name="content" id="recordBoardContent"></textarea>
+												<input type="hidden" name="recordBoardCode"
+													th:value="${param.recordBoardCode}" id="recordBoardCode"> <input
+													type="hidden" name="memberId" th:value="${session.SID}"  id="recordBoardMemberId">
+											</div>
+											<div class="mt-2 text-right">
+												<button class="btn btn-primary btn-sm shadow-none"
+													id="addCommentBtn" type="button">작성완료</button>
+											</div>
+										
+										<div id="commentInsert" th:replace="/recordBoard/recordBoardComment.html :: fragment-commentInsert"></div>
+									</div>
+									<!-- 여행 게시글 댓글 종료 -->
+									<!-- 여행 게시글 관리 시작 -->
+									<div id="collapse-2" class="p-2 collapse" data-parent="#myGroup">
+										<div class="d-flex flex-row align-items-start">
+											<a class="btn btn-primary btn-icon btn-sm mb-1 mr-2 mb-1"
+												th:if="${session.SID != recordBoard.memberId}"
+												onclick="alert('게시글 작성자만 정보를 수정,삭제할 수 있습니다.')">
+												<i class="la la-edit"></i>
+											</a> <a th:unless="${session.SID != recordBoard.memberId}"
+												class="btn btn-primary btn-icon btn-sm mb-1 mr-2 mb-1"
+												th:href="@{/recordBoard/recordBoardModify(recordBoardCode=${recordBoard.recordBoardCode})}">
+												<i class="la la-edit"></i>
+											</a>
+											<button th:unless="${session.SID != recordBoard.memberId}"
+												class="btn btn-danger btn-icon btn-sm mb-1"
+												th:data-recordBoardCd="${recordBoard.recordBoardCode}"
+												id="swal-delete-recordBoard">
+												<i class="fa fa-trash-o"></i>
+											</button>
+										</div>
+									</div>
+									<!-- 여행 게시글 관리 종료 -->
+								</div>
+						</div>
+			</div>
+			<!-- 피드 목록 시작 -->
+			<div class="card">
+				<div class="card-title">
+					<div class="card-title-left">
+						<h4 class="card-title-text"
+							th:text="피드"></h4>
+					</div>
+				</div>
+				<hr class="my-2">
+				<div class="card-body">
+					<ul class="timeline-left">
+						<li th:if="${not #lists.isEmpty(feedList)}"
+							th:each="f: ${feedList}">
+							<h3 th:text="${f.feedPlanDays}"></h3>
+								<div class="text pt-2" th:text="${f.regDate}"></div>
+									<div class="icon bg-primary">
+										<i class="zmdi zmdi-camera"></i>
+									</div>
+										<div class="info">
+										<div class="text pb-4" style="font-size:25px; color:black;" th:text="${f.feedTitle}"></div>
+											<div class="embed-responsive embed-responsive-16by9">
+												<img
+													th:src="@{${#strings.isEmpty(f.feedImagePath) ? '/images/traShare/여행이미지1.gif': '/' + #strings.replace(f.feedImagePath,'\','/')}}"
+													class="img-fluid embed-responsive-item" alt="...">
+											</div>
+											<div class="pt-3 pb-3" style="color: #AD8B73;">KOREA HERITAGETOUR (T)</div>
+											<div>
+												<p style="font-size: 18px; color:black;" th:text="${f.feedContent}"></p>
+												<div class="float-end pb-3">
+													<a><span>수정</span></a> <a th:href="@{/recordBoard/feedRemove(feedCode=${f.feedCode}, recordBoardCode=${recordBoard.recordBoardCode})}"><span style="margin-left: 5px;">삭제</span></a>
+												</div>
+											</div>
+										</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- 피드 목록 종료 -->
+		</div>
+	</div>
+
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- delbtn -->
+	<script th:src="@{/js/sweetalert2/sweetalert2.min.js}"
+		aria-hidden="true"></script>
+	<script th:src="@{/js/sweetalert2/sweetalert2-custom.js}"
+		aria-hidden="true"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- 등록 버튼 자바스크립트 -->
+	<script type="text/javascript" th:inline="javascript">
+	$('#addCommentBtn').click(function(){
+		var
+		 recordBoardCode = $('#recordBoardCode').attr('value')
+		,content = $('#recordBoardContent').val()
+		,memberId = $('#recordBoardMemberId').attr('value');
+		
+		console.log(recordBoardCode);
+		console.log(content);
+		console.log(memberId);
+		
+	
+			 $.ajax({
+					url: '/recordBoard/commentInsert'
+					,type: 'POST'
+					,data: {"recordBoardCode" : recordBoardCode,
+							"content" : content,
+							"memberId" : memberId} 
+					,dataType: 'text'
+					,success: function(data){
+						console.log(data);
+						$('#commentInsert').replaceWith(data);
+						$('#recordBoardContent').val('');
+					}
+				});  
+			});
+	
+		$('.commentDelete').click(function(e){
+			
+			var commentNum = $(e.target).parent().attr('value');
+			var recordBoardCode = $('#recordBoardCode').attr('value')
+			
+			 $.ajax({
+					url: '/recordBoard/commentRemove'
+					,type: 'POST'
+					,data: {"commentNum" : commentNum
+							,"recordBoardCode" : recordBoardCode} 
+					,dataType: 'text'
+					,success: function(data){
+						console.log(data);
+						$('#commentInsert').replaceWith(data);
+					}
+				});   
+			
+			
+		});
+	
+		
+		
+		
+		$(function(){
+			/*<![CDATA[*/
+		    var sessionLevel = [[${session.SLEVEL}]];
+		    /*]]>*/
+			
+			function validationCheck(data){
+				if(typeof data == 'undefined' || data == '' || data == null){
+					return false;
+				}
+				return true;
+		}
+		    
+				$('#addFeedBtn').click(function() {
+					
+					if(sessionLevel != '관리자' && sessionLevel != '일반회원'){
+						alert('회원만 게시글등록이 가능합니다')
+						return false;
+					}
+					
+					var isSubmit = true;
+					var inputObj = $('#addFeedForm').find('input');
+		
+					$.each(inputObj, function() {
+						var inputId = $(this).attr('id');
+						var inputLabel = $('label[for="' + inputId + '"]').text();
+						var inputData = $(this).val();
+						var result = validationCheck(inputData);
+						
+						// 사용자가 입력하지 않은 경우
+						if(!result){
+									alert(inputLabel + '을 입력해주세요');
+									$(this).focus();
+									isSubmit = false;
+									return false;
+						}
+					});
+					console.log('유효여부 폼전송할건지?' + isSubmit )
+					
+					if (isSubmit) $('#addFeedForm').submit();
+				});
+		});	
+	</script>
+	<script>
+		$(function(){
+			$(document).on('click','#swal-delete-recordBoard',function(){
+				var recordBoardCd = $(this).attr('data-recordBoardCd');
+			      const swalWithBootstrapButtons = swal.mixin({
+			          confirmButtonClass: 'btn btn-success',
+			          cancelButtonClass: 'btn btn-danger',
+			          buttonsStyling: false,
+			        });
+
+			        swalWithBootstrapButtons({
+			          title: '정말 삭제 하시겠습니까?',
+			          text: "삭제 클릭시 해당 정보는 복구 할 수 없습니다.",
+			          type: 'warning',
+			          showCancelButton: true,
+			          confirmButtonText: '네',
+			          cancelButtonText: '아니오',
+			          reverseButtons: false
+			        }).then((result) => {
+			          if (result.value) {
+			            swalWithBootstrapButtons(
+			              '삭제완료',
+			              '파일이 안전하게 삭제되었습니다.',
+			              'success'
+			            )
+			            location.href = '/recordBoard/recordBoardRemove?recordBoardCode=' + recordBoardCd;
+			          } else if (
+			            // Read more about handling dismissals
+			            result.dismiss === swal.DismissReason.cancel
+			          ) {
+			            swalWithBootstrapButtons(
+			              '취소',
+			              '사진은 안전하게 보호됩니다.',
+			              'error'
+			            )
+			          }
+			        });
+
+				    			
+			});
+			
+		});
+		
+		
+	</script>
+	<script th:src="@{/js/kmsJs/datepickerKms.js}"></script>
+		<!-- 피드 날짜 datepciker 자바스크립트 시작 -->
+	<script>
+		$(document).ready(function() {
+
+			$("#feedPlanDays").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "d/m/Y",
+				lang : "ko",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold'
+			});
+		});
+	</script>
+	<!-- 출발 날짜 datepciker 자바스크립트 종료 -->
+</th:block>
+</html>

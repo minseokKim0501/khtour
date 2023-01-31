@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<div class="sidebar-panel nicescrollbar sidebar-panel-light mainsidehover" th:fragment="sidebarFragment">
+		<ul class="sidebar-menu">
+			<li class="sidebar-header"> 메뉴 </li>
+			 <li>
+		         <a th:href="@{/mypage/mypage}">
+		           <i class="zmdi zmdi-account"></i><span>마이페이지 (김민석)</span>
+		            <span class="sidebar-badge"></span>
+		         </a>
+	         </li>
+			<li>
+				<a href="#">
+					<i class="la la-bank"></i> <span>문화재 관리 (김민석)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/heritage/heritageListByItem}"><i class="la la-minus"></i> <span> 문화재 리스트 </span> </a></li>
+					<li><a th:href="@{/heritage/heritageListSt}"><i class="la la-minus"></i> <span> 문화재 조회(관리자)</span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-bank"></i> <span>박물관(김문영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:if="${session.SID != null && session.SLEVEL == '관리자'}" th:href="@{/mus/musInsert}"><i class="la la-minus"></i> <span> 박물관 등록(관리자)</span> </a></li>
+					<li><a th:href="@{/mus/musList}"><i class="la la-minus"></i> <span>박물관 조회 및 수정</span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-camera-retro"></i> <span>전시회 (김문영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/exhib/exhibBoardList}"><i class="la la-minus"></i> <span> 전시회 </span> </a></li>
+					<li><a th:if="${session.SID != null && session.SLEVEL == '관리자'}" th:href="@{/exhib/exhibInsert}"><i class="la la-minus"></i> <span> 전시회 등록(관리자) </span> </a></li>
+					<li><a th:href="@{/exhib/exhibList}"><i class="la la-minus"></i> <span> 전시회 조회 및 수정(관리자) </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-map"></i> <span>코스(김문영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/cos/cosBoardList}"><i class="la la-minus"></i> <span>코스</span> </a></li>
+					<li><a th:if="${session.SID != null && session.SLEVEL == '관리자'}" th:href="@{/cos/cosInsert}"><i class="la la-minus"></i> <span>코스 등록(관리자)</span> </a></li>
+					<li><a th:href="@{/cos/cosList}"><i class="la la-minus"></i> <span>코스  조회 및 수정(관리자)</span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-twitter-square"></i> <span> 여행기록 게시글 공유 (김민석) </span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/recordBoard/recordBoardList}"><i class="la la-minus"></i> <span> 여행기록 게시글 리스트 </span> </a></li>
+					<li><a th:href="@{/recordBoard/recordBoardListSt}"><i class="la la-minus"></i> <span> 여행기록 게시글 리스트(관리자)</span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">
+					<i class="la la-calendar"></i> <span> 여행 일정 관리(김민석) </span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/plan/planInsert}"><i class="la la-minus"></i> <span> 여행 일정 만들기 </span> </a></li>
+					<li><a th:href="@{/plan/planListSt}"><i class="la la-minus"></i> <span> 여행 일정 리스트(관리자) </span> </a></li>
+				</ul>
+			</li>
+			<li>
+	            <a href="#">
+	               	<i class="fa fa-home"></i> <span>숙박업소 관리 (안창현)</span> <i class="la la-angle-right down-arrow"></i>
+	            </a>
+	            <ul class="sidebar-submenu">
+	               	<li><a th:href="@{/accommodation/accommodationList}"><i class="la la-minus"></i> <span> 숙박업소 리스트</span> </a></li>
+	               	<li><a th:if="${session.SID != null && session.SLEVEL == '관리자'}" th:href="@{/accommodation/accommodationListSt}"><i class="la la-minus"></i> <span> 숙박업소 상세관리(관리자)</span> </a></li>
+	               	<li><a th:if="${session.SID != null && session.SLEVEL == '관리자'}" th:href="@{/room/roomListSt}"><i class="la la-minus"></i> <span>객실정보 상세관리(관리자) </span> </a></li>
+	            </ul>
+         	</li>
+        	<li>
+	            <a href="#">
+	               <i class="fa fa-edit"></i> <span> 1:1 문의게시판 (안창현)</span> <i class="la la-angle-right down-arrow"></i>
+	            </a>
+	            <ul class="sidebar-submenu">
+	               <li><a th:href="@{/board/boardList}"><i class="la la-minus"></i> <span>1:1문의 관리</span> </a></li>
+	            </ul>
+        	 </li>
+        	 <li>
+		         <a th:href="@{/commDashboard}">
+		            <i class="la la-wechat"></i><span>커뮤니티 (한경수)</span>
+		            <span class="sidebar-badge"></span>
+		         </a>
+	         </li>
+	         <li>
+				<a href="#">
+					<i class="feather icon-users"></i> <span>회원 관리 (이민영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/member/memberInsert}" th:if="${session.SID == null}"><i class="la la-minus"></i> <span> 회원 가입 </span> </a></li>
+					<li><a th:href="@{/member/memberModify}" th:unless="${session.SID == null}"><i class="la la-minus"></i> <span> 회원 정보 수정 </span> </a></li>
+					<li><a th:href="@{/member/memberList}" th:unless="${session.SID == null && session.SLEVEL != '관리자'}"><i class="la la-minus"></i> <span> 회원 정보 조회 </span> </a></li>
+				</ul>
+			</li>
+	        <li>
+				<a href="#">
+					<i class="feather icon-dollar-sign"></i> <span>결제 관리 (이민영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/payment/payDetail}" th:unless="${session.SID == null && session.SLEVEL != '관리자'}"><i class="la la-minus"></i> <span> 결제 정보 </span> </a></li>
+				</ul>
+			</li>
+	        <li>
+				<a href="#">
+					<i class="feather icon-dollar-sign"></i> <span>환불 관리 (이민영)</span> <span class="sidebar-badge"></span> <i class="la la-angle-right down-arrow"></i>
+				</a>
+				<ul class="sidebar-submenu">
+					<li><a th:href="@{/refund/refundList}" th:unless="${session.SID == null && session.SLEVEL != '관리자'}"><i class="la la-minus"></i> <span> 환불 신청 내역 </span> </a></li>
+					<li><a th:href="@{/refund/refundDetail}" th:unless="${session.SID == null && session.SLEVEL != '관리자'}"><i class="la la-minus"></i> <span> 환불 정보 </span> </a></li>
+				</ul>
+			</li>
+			<li>
+				<a th:href="@{/traWhether/traWhetherList}">
+					<i class="feather icon-sun"></i> <span>지역별 날씨 정보 관리 <br/>(김민석)</span> <span class="sidebar-badge"></span>
+				</a>
+			</li>
+	</ul>
+	</div>
+</html>

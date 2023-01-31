@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<div class="row justify-content-center">
+		<div class="col-12 col-la-12 col-xl-12">
+			<h2>여행 게시글 등록 페이지</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a
+						th:href="@{/recordBoard/recordBoardList}">여행 게시글 공유 리스트</a></li>
+					<li class="breadcrumb-item active" aria-current="page">여행 게시글 등록
+						페이지</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+
+
+<th:block layout:fragment="customContents">
+<link th:href="@{https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/datedropper.css}" rel="stylesheet">
+<style>
+		/* datedrapper 버튼 색 */
+		.btn-outline-warning {
+		    color: #F44336 !important;
+		    background-color: #fff;
+		    background-image: none;
+		    border-color: #ed433e !important
+</style>
+	<div class="row justify-content-center">
+		<div class="col-12 col-la-10 col-xl-7">
+			<div class="card">
+				<div class="card-title">
+					<div class="card-title-left">
+						<h4 class="card-title-text">게시글 기본 정보</h4>
+					</div>
+				</div>
+				<div class="card-body">
+					<!-- 여행 게시글 등록 폼 시작 -->
+					<form id="addRecordBoardForm"
+						th:action="@{/recordBoard/recordBoardInsert}" method="post" enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="memberId"> 등록자 아이디 </label> <input
+								type="text" class="form-control" id="memberId" th:value="${session.SID}"
+								name="memberId" readonly="readonly" required="">
+							</div>
+						<div class="form-group">
+							<label for="recordBoardName">게시글 제목</label> <input type="text"
+								class="form-control" placeholder="게시글 제목을 입력하세요."
+								id="recordBoardName" name="recordBoardName">
+						</div>
+						<div class="form-group">
+							<label for="recordBoardSubName">게시글 부제목</label> <input type="text"
+								class="form-control" placeholder="게시글 부제목을 입력하세요."
+								id="recordBoardSubName" name="recordBoardSubName">
+						</div>
+						<div class="form-group">
+							<label for="content">게시글 내용</label>
+							<textarea class="form-control" rows="3" required="" id="content"
+								name="content"></textarea>
+						</div>
+						<div class="form-group" th:if="not ${#lists.isEmpty(planStatusList)}">
+						
+						<label for="PlanStatus"> 여행 상태 </label>
+						
+						 <select class="form-control"
+							id="planStatusCode" name="planStatusCode">
+							<option value="none">:: 선택 ::</option>
+							<option th:if="${not #lists.isEmpty(planStatusList)}" th:value="${s.planStatusCode}" th:text="${s.planStatusName}" th:each="s: ${planStatusList}">
+							</option>
+						</select>
+					</div>
+						<div class="form-group">
+							<label for="travelStyle">여행 스타일</label> <select
+								class="form-control" id="travelStyle" name="travelStyle">
+								<option value="none">:: 선택 ::</option>
+								<option value="가족과여행">가족과여행</option>
+								<option value="친구와여행">친구와여행</option>
+								<option value="애인과여행">애인과여행</option>
+								<option value="나홀로여행">나홀로여행</option>
+							</select>
+						</div>
+											<div class="form-group">
+							<label for="startDate"> 여행 시작 </label>
+							<div class="input-group mb-3">
+								<input name="startDate" id="startDate" type="text" class="form-control input-text">
+								<div class="input-group-append">
+									<button class="btn btn-outline-warning btn-lg" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="endDate"> 여행 종료</label>
+							<div class="input-group mb-3">
+								<input name="endDate" id="endDate" type="text" class="form-control input-text">
+								<div class="input-group-append">
+									<button class="btn btn-outline-warning btn-lg" type="button">
+										<i class="fa fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="recordBoardImage">이미지 선택</label> <input
+								type="file" id="recordBoardImage" class="form-control"
+								name="recordBoardImageFiles" required="">
+						</div>
+						<div class="form-group text-center">
+						<button type="button" id="addRecordBoardBtn"
+							class="btn btn-primary">등록</button>
+						</div>	
+					</form>
+					<!-- 여행 게시글 등록 폼 종료 -->
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- bootstrap wizard-->
+	<script th:src="@{/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js}"></script>
+	<script th:src="@{/js/jquery-validation/jquery.validate.min.js}"></script>
+
+	<script th:src="@{/js/custom.js}"></script>
+	<script th:src="@{/js/moment.min.js}"></script>
+
+	<!--  datepicker  -->
+	<script th:src="@{/js/datepicker/daterangepicker.js}"></script>
+	<script th:src="@{/js/datepicker/bootstrap-timepicker.js}"></script>
+
+		<!-- 등록 버튼 자바스크립트 시작 -->
+	<script type="text/javascript" th:inline="javascript">
+	$(function(){
+		/*<![CDATA[*/
+	    var sessionLevel = [[${session.SLEVEL}]];
+	    /*]]>*/
+		
+		function validationCheck(data){
+			if(typeof data == 'undefined' || data == '' || data == null){
+				return false;
+			}
+			return true;
+		}
+		$('#addRecordBoardBtn').click(function() {
+
+			if(sessionLevel != '관리자' && sessionLevel != '일반회원'){
+				alert('회원만 게시글등록이 가능합니다')
+				return false;
+			}
+			
+			var isSubmit = true;
+			var inputObj = $('#addRecordBoardForm').find('input');
+
+			$.each(inputObj, function() {
+				var inputId = $(this).attr('id');
+				var inputLabel = $('label[for="' + inputId + '"]').text();
+				var inputData = $(this).val();
+				var result = validationCheck(inputData);
+
+				// 사용자가 입력하지 않은 경우
+				if(!result){
+					alert(inputLabel + '을 입력해주세요');
+					$(this).focus();
+					isSubmit = false;
+					return false;
+				}
+			});
+			
+			console.log('유효여부 폼전송할건지?' + isSubmit )
+
+			if (isSubmit) $('#addRecordBoardForm').submit();
+			});
+		});
+	</script>
+		<!-- 등록 버튼 자바스크립트 종료 -->
+	
+	<!-- 출발 날짜 datepciker 자바스크립트 시작 -->
+	<script>
+		$(document).ready(function() {
+
+			$("#startDate").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "Y/m/d",
+				lang : "ko",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold'
+			});
+		});
+	</script>
+	<!-- 출발 날짜 datepciker 자바스크립트 종료 -->
+	<!-- 도착 날짜 datepciker 자바스크립트 시작 -->
+	<script>
+		$(document).ready(function() {
+
+			$("#endDate").dateDropper({
+				animate : true,
+				init_animation : "fadein",
+				format : "m/d/Y",
+				lang : "en",
+				lock : false,
+				minYear : 1970,
+				yearsRange : 10,
+
+				//CSS PRIOPRIETIES
+				dropPrimaryColor : "#01CEFF",
+				dropTextColor : "#333333",
+				dropBackgroundColor : "#FFFFFF",
+				dropBorder : "1px solid #08C",
+				dropBorderRadius : 8,
+				dropShadow : "0 0 10px 0 rgba(0, 136, 204, 0.45)",
+				dropWidth : 124,
+				dropTextWeight : 'bold'
+			});
+		});
+	</script>
+	<!-- 도착 날짜 datepciker 자바스크립트 종료 -->
+<script th:src="@{/js/kmsJs/datepickerKms.js}"></script>
+</th:block>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>객실정보 등록</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">객실정보 등록</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 col-md-6">
+							<div class="card">
+								<div class="card-title">
+									<div class="card-title-left">
+										<h4 class="card-title-text">객실 정보 입력</h4>
+									</div>
+								</div>
+								<div class="card-body">
+									<form>
+										<div class="form-group">
+											<label for="comName">숙박업소 명</label> <input type="text"
+												class="form-control" id="comName">
+										</div>
+										<div class="form-group">
+											<label for="roomName">객실 상세 이름</label> <input
+												type="text" class="form-control" id="roomName">
+										</div>
+										<div class="form-group">
+											<label for="roomInfo">객실 상세 설명</label> <input type="text"
+												class="form-control" id="roomInfo">
+										</div>
+										<div class="form-group">
+											<label for="roomPersonnel">객실허용 인원 선택</label> <select
+												class="form-control border border-secondary"
+												id="roomPersonnel">
+												<option>기준2명 / 최대2명</option>
+												<option>기준2명 / 최대3명</option>
+												<option>기준2명 / 최대4명</option>
+												<option>기준2명 / 최대6명</option>
+												<option>기준2명 / 최대8명</option>
+												<option>기준2명 / 최대10명</option>
+												<option>기준2명 / 최대12명</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="roomPrice">객실 가격</label> <input type="text"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label for="roomDiscount">객실 할인율</label> <input type="text"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label for="roomDiscountPrice">객실 할인 가격</label> <input type="text"
+												class="form-control">
+										</div>
+										<div class="form-group">
+											<label for="roomImage">객실 이미지 선택</label> <input type="file"
+												class="form-control" id="roomImage">
+										</div>
+										
+									</form>
+								</div>
+							</div>
+						</div>
+					<div class="col-2" style="display: inline-block; float: right;">
+						<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#exampleModal">신규등록</button>
+					</div>
+					<div class="modal fade" id="exampleModal" tabindex="-1"
+						role="dialog" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">최종확인</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<p>등록전에 내용에 문제가 없는지 확인하세요!</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-dismiss="modal">돌아가기</button>
+									<button type="button" class="btn btn-primary">등록하기</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

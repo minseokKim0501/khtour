@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<div class="card">
+		<div class="card-header bg-primary pb-0">
+			<h4 class="card-title text-white">포스트 수정</h4>
+		</div>
+		<div class="card-body">
+			<form class="cmxform" id="form2" method="post" th:action="@{/updatePost}">	
+				<div class="form-group">	
+						<label for="tagCode">등록할 태그</label> 
+						<select class="form-control" id="tagCode" name="tagCode" th:if="${not #lists.isEmpty(tagList)}">
+							<option th:if="${t.tagCode==commPost.tagCode}" th:value="${t.tagCode}" th:text="${t.tagName}" th:each="t: ${tagList}" selected="selected"></option>
+							<option th:if="${t.tagCode!=commPost.tagCode}" th:value="${t.tagCode}" th:text="${t.tagName}" th:each="t: ${tagList}"></option>
+						</select>
+
+				</div>
+				<div class="form-group">
+					<label for="title">제목</label> 
+					<input id="title" class="form-control" name="title" th:value="${commPost.title}">
+					<input type="hidden"  th:value="${commPost.postCode}"  name="postCode" />
+				</div>
+				<div class="form-group">
+					<label for="mainText">본문</label>
+					<textarea id="mainText" name="mainText" class="form-control" rows="10" th:text="${commPost.mainText}"></textarea>
+				</div>
+				 <div class="form-group">
+				
+				</div> 
+					<input class="submit btn btn-primary pull-right" type="submit" value="확인"> 
+					<a href="/commDashboard" class="btn btn-primary active pull-right" role="button" aria-pressed="true">취소</a>	
+			</form>
+		</div>
+	</div>
+
+</th:block>
+<!-- summernote -->
+
+
+<th:block layout:fragment="customBodyScript">
+	<!-- jquery mask -->
+	<script src="js/jquery-validation/jquery.validate.min.js"></script>
+	<!-- select2 -->
+	<script src="js/select2/select2.min.js"></script>
+	<script src="js/summernote/summernote.min.js"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

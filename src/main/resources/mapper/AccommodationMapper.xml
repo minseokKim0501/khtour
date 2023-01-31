@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart42.khtour.mapper.AccommodationMapper">
+
+	<resultMap type="Accommodation" 		id="accommodationResultMap">
+		<id column="ldg_code" 				property="ldgCode" />
+		<result column="ldg_name" 			property="ldgName" />
+		<result column="ldg_type" 			property="ldgType" />
+		<result column="business_number" 	property="businessNumber" />
+		<result column="ldg_addr" 			property="ldgAddr" />
+		<result column="ldg_detail_addr" 	property="ldgDetailAddr" />
+		<result column="ldg_explain1" 		property="ldgExplain1" />
+		<result column="ldg_explain2" 		property="ldgExplain2" />
+		<result column="ldg_explain3" 		property="ldgExplain3" />
+		<result column="ldg_explain4" 		property="ldgExplain4" />
+		<result column="ldg_tel" 			property="ldgTel" />
+		<result column="ldg_phone"			property="ldgPhone" />
+		<result column="ldg_email" 			property="ldgEmail" />
+		<result column="review_cnt" 		property="reviewCnt" />
+		<result column="file_path" 			property="ldgImagePath"/>
+	</resultMap>
+	
+	<select id="fileInfoByFileIdx" resultType="FileDto">
+      SELECT
+          f.file_idx            	AS fileIdx
+         ,f.file_new_name      		AS fileNewName
+         ,f.file_original_name   	AS fileOriginalName
+         ,f.file_path         		AS filePath
+         ,f.file_size         		AS fileSize
+      FROM
+         tb_ldg_information AS l
+         LEFT JOIN 
+         tb_file_control AS fc
+         ON 
+         l.ldg_code = fc.reference_code
+         LEFT JOIN 
+         tb_file AS f   
+         ON 
+         f.file_idx = fc.file_idx
+      WHERE
+         l.ldg_code = #{ldgCode};
+   </select> 
+
+	<!-- 코드에 따른 숙박업소 조회 SQL -->
+	<select id="getLdgByCode" parameterType="String"
+		resultMap="accommodationResultMap">
+		SELECT
+			l.ldg_code
+			,l.ldg_name
+			,l.ldg_type
+			,l.business_number
+			,l.ldg_addr
+			,l.ldg_detail_addr
+			,l.ldg_explain1
+			,l.ldg_explain2
+			,l.ldg_explain3
+			,l.ldg_explain4
+			,l.ldg_tel
+			,l.ldg_phone
+			,l.ldg_email
+			,l.review_cnt
+		FROM
+			tb_ldg_information AS l
+		WHERE
+			ldg_code = #{ldgCode};
+
+	</select>
+
+	<!-- 숙박업소 정보 삭제 SQL -->
+	<delete id="removeAccommodation" parameterType="String">
+		DELETE
+		FROM
+		tb_ldg_information
+		WHERE
+		ldg_code = #{ldgCode};
+	</delete>
+
+	<!-- 숙박업소 등록 SQL -->
+	<insert id="addAccommodation" parameterType="Accommodation">
+	<selectKey resultType="string" keyProperty="ldgCode" order="BEFORE">
+			SELECT sf_new_ldg_code() as ldgCode
+	</selectKey>
+		INSERT INTO
+			 tb_ldg_information
+		( 
+			 ldg_code
+			,ldg_name
+			,ldg_type
+			,business_number
+			,ldg_addr
+			,ldg_detail_addr
+			,ldg_explain1
+			,ldg_explain2
+			,ldg_explain3
+			,ldg_explain4
+			,ldg_tel
+			,ldg_phone
+			,ldg_email
+			,ldg_homepage
+		)
+		VALUES 
+		(
+			 #{ldgCode}
+			,#{ldgName}
+			,#{ldgType}
+			,#{businessNumber}
+			,#{ldgAddr}
+			,#{ldgDetailAddr}
+			,#{ldgExplain1}
+			,#{ldgExplain2}
+			,#{ldgExplain3}
+			,#{ldgExplain4}
+			,#{ldgTel}
+			,#{ldgPhone}
+			,#{ldgEmail}
+			,#{ldgHomepage}
+		);
+	</insert>
+	
+	<!-- 숙박업소 명 중복 체크 -->
+	<select id="isNameCheck" parameterType="String" resultType="boolean">
+		SELECT
+		   IF(COUNT(1) = 1, 0, 1)
+		FROM 
+		   tb_ldg_information AS l
+		WHERE 
+		   l.ldg_name = #{ldgName};
+	</select>
+
+	<!-- 숙박업소 목록 조회 SQL -->
+	<select id="getAccommodationList"
+		resultMap="accommodationResultMap">
+		SELECT
+			l.ldg_code
+			,l.ldg_name
+			,l.ldg_type
+			,l.business_number
+			,l.ldg_addr
+			,l.ldg_detail_addr
+			,l.ldg_explain1
+			,l.ldg_explain2
+			,l.ldg_explain3
+			,l.ldg_explain4
+			,l.ldg_tel
+			,l.ldg_phone
+			,l.ldg_email
+			,l.review_cnt
+			,f.file_path
+		FROM
+			tb_ldg_information AS l
+		LEFT JOIN 
+		   tb_file_control AS fc
+		   ON 
+		   l.ldg_code = fc.reference_code
+		   LEFT JOIN 
+		   tb_file AS f
+		   ON 
+		   fc.file_idx = f.file_idx
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="searchKey != null and searchKey != '' and searchValue != ''">
+				${searchKey} LIKE CONCAT('%', #{searchValue}, '%')
+		 	</if>
+		</trim>
+		ORDER BY l.ldg_code;
+	</select>
+	
+	
+	<select id="getTopAccommodationList" resultMap="accommodationResultMap">
+		SELECT
+			l.ldg_code
+			,l.ldg_name
+			,l.ldg_type
+			,l.business_number
+			,l.ldg_addr
+			,l.ldg_detail_addr
+			,l.ldg_explain1
+			,l.ldg_explain2
+			,l.ldg_explain3
+			,l.ldg_explain4
+			,l.ldg_tel
+			,l.ldg_phone
+			,l.ldg_email
+			,l.review_cnt
+			,f.file_path
+		FROM
+			tb_ldg_information AS l
+		LEFT JOIN 
+		   tb_file_control AS fc
+		   ON 
+		   l.ldg_code = fc.reference_code
+		   LEFT JOIN 
+		   tb_file AS f
+		   ON 
+		   fc.file_idx = f.file_idx
+		ORDER BY 
+			l.review_cnt DESC
+			LIMIT 4;
+	</select>
+
+	<!-- 숙박업소 정보 수정 SQL -->
+	<update id="modifyAccommodation" parameterType="Accommodation">
+		UPDATE tb_ldg_information
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="ldgName != null and ldgName != ''">
+				ldg_name = #{ldgName},
+			</if>
+			<if test="ldgType != null and ldgType != ''">
+				ldg_type = #{ldgType},
+			</if>
+			<if test="businessNumber != null and businessNumber != ''">
+				business_number = #{businessNumber},
+			</if>
+			<if test="ldgAddr != null and ldgAddr != ''">
+				ldg_addr = #{ldgAddr},
+			</if>
+			<if test="ldgDetailAddr != null and ldgDetailAddr != ''">
+				ldg_detail_addr = #{ldgDetailAddr},
+			</if>
+			<if test="ldgExplain1 != null and ldgExplain1 != ''">
+				ldg_explain1 = #{ldgExplain1},
+			</if>
+			<if test="ldgExplain2 != null and ldgExplain2 != ''">
+				ldg_explain2 = #{ldgExplain2},
+			</if>
+			<if test="ldgExplain3 != null and ldgExplain3 != ''">
+				ldg_explain3 = #{ldgExplain3},
+			</if>
+			<if test="ldgExplain4 != null and ldgExplain4 != ''">
+				ldg_explain4 = #{ldgExplain4},
+			</if>
+			<if test="ldgTel != null and ldgTel != ''">
+				ldg_tel = #{ldgTel},
+			</if>
+			<if test="ldgPhone != null and ldgPhone != ''">
+				ldg_phone = #{ldgPhone},
+			</if>
+			<if test="ldgEmail != null and ldgEmail != ''">
+				ldg_email = #{ldgEmail},
+			</if>
+			<if test="ldgHomepage != null and ldgHomepage != ''">
+				ldg_homepage = #{ldgHomepage},
+			</if>
+		</trim>
+		WHERE
+		ldg_code = #{ldgCode};
+	</update>
+
+	<!-- 숙박업소 평균 별점 조회 SQL(서브쿼리) -->
+	<select id="avgGrade" parameterType="String" resultType="String">
+	SELECT
+		(SELECT
+				ROUND(AVG(r.ldg_grade),1)
+			FROM
+				tb_ldg_review AS r
+			WHERE
+				r.ldg_code = i.ldg_code) AS ldg_avg_grade
+	FROM
+		tb_ldg_information AS i
+	WHERE
+		i.ldg_code = #{ldgCode};
+	</select>
+	
+	<!-- 숙박업소 청결도 평균 별점 조회 SQL(서브쿼리) -->
+	<select id="avgCleanliness" parameterType="String" resultType="String">
+	SELECT
+		(SELECT
+				ROUND(AVG(r.ldg_cleanliness),1)
+			FROM
+				tb_ldg_review AS r
+			WHERE
+				r.ldg_code = i.ldg_code) AS ldg_avg_cleanliness
+	FROM
+		tb_ldg_information AS i
+	WHERE
+		i.ldg_code = #{ldgCode};
+	</select>
+	
+	<!-- 숙박업소 친절도 평균 별점 조회 SQL(서브쿼리) -->
+	<select id="avgKindness" parameterType="String" resultType="String">
+	SELECT
+		(SELECT
+				ROUND(AVG(r.ldg_kindness),1)
+			FROM
+				tb_ldg_review AS r
+			WHERE
+				r.ldg_code = i.ldg_code) AS ldg_avg_kindness
+	FROM
+		tb_ldg_information AS i
+	WHERE
+		i.ldg_code = #{ldgCode};
+	</select>
+	
+	<!-- 숙박업소 편의성 평균 별점 조회 SQL(서브쿼리) -->
+	<select id="avgConvenience" parameterType="String" resultType="String">
+	SELECT
+		(SELECT
+				ROUND(AVG(r.ldg_convenience),1)
+			FROM
+				tb_ldg_review AS r
+			WHERE
+				r.ldg_code = i.ldg_code) AS ldg_avg_convenience
+	FROM
+		tb_ldg_information AS i
+	WHERE
+		i.ldg_code = #{ldgCode};
+	</select>
+	
+	<!-- 숙박업소 위치만족도 평균 별점 조회 SQL(서브쿼리) -->
+	<select id="avgLocation" parameterType="String" resultType="String">
+	SELECT
+		(SELECT
+				ROUND(AVG(r.ldg_location),1)
+			FROM
+				tb_ldg_review AS r
+			WHERE
+				r.ldg_code = i.ldg_code) AS ldg_avg_location
+	FROM
+		tb_ldg_information AS i
+	WHERE
+		i.ldg_code = #{ldgCode};
+	</select>
+	
+	<!-- 숙박업소 가격만족도 평균 별점 조회 SQL(서브쿼리) -->
+	<select id="avgPriceSta" parameterType="String" resultType="String">
+	SELECT
+		(SELECT
+				ROUND(AVG(r.ldg_price_sta),1)
+			FROM
+				tb_ldg_review AS r
+			WHERE
+				r.ldg_code = i.ldg_code) AS ldg_avg_price_sta
+	FROM
+		tb_ldg_information AS i
+	WHERE
+		i.ldg_code = #{ldgCode};
+	</select>
+	
+	<!-- 숙박업소 리뷰 개수 + 카운터 SQL -->
+	<update id="addReviewCnt" parameterType="String">
+      UPDATE tb_ldg_information
+         SET
+         review_cnt = review_cnt + 1   
+             
+      WHERE
+         ldg_code = #{ldgCode};   
+   </update>
+   
+	<!-- 숙박업소 리뷰 개수  - 카운터 SQL -->
+	<update id="subtractReviewCnt" parameterType="String">
+      UPDATE tb_ldg_information
+         SET
+         review_cnt = review_cnt - 1   
+             
+      WHERE
+         ldg_code = #{ldgCode};   
+   </update>
+</mapper>

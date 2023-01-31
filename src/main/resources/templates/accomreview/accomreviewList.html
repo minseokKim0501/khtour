@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
+
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<div class="row">
+		<div class="col">
+			<h2>후기 상세 관리</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">후기 관리 및
+						조회</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</th:block>
+<th:block layout:fragment="customContents">
+	<style>
+.ReviewContentsBox {
+	display: flex;
+	position: relative;
+	align-items: center;
+	padding: 0px;
+	padding-left: 18.577px;
+}
+
+.ReviewIcon {
+	width: 3.8rem;
+	height: 3.8rem;
+	display: inline-block;
+	margin-right: 1.4rem;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.ReviewRoomName::before {
+	content: "|";
+	border: none;
+	border-right: 1px;
+	height: 1rem;
+	margin: 0 0.6rem;
+	display: inline-block;
+}
+
+.ReviewContentsBox-ReviewContent {
+	font-size: 15px;
+	line-height: normal;
+	overflow: hidden;
+	position: relative;
+	color: #616161;
+	white-space: nowrap;
+	word-break: break-all;
+	padding-right: 18.577px;
+	padding-left: 18.577px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.feather {
+	color: #FFB900;
+	font-size: 20px;
+}
+
+.feather-on {
+	color: #FFB900;
+	font-size: 20px;
+}
+
+.feather-off {
+	color: #f0f1f6;
+	font-size: 20px;
+}
+
+.card .card-footer {
+	padding: 0.5rem 0;
+}
+
+.star {
+	font-size: 1.0rem;
+	line-height: 1.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.form-review {
+	height: calc(2em + 1px);
+	border-radius: 100px;
+	padding: 0.775rem 3rem 0.775rem 1.2rem;
+	border-color: #e5e5e5;
+	transition: all 0.5s ease-in-out;
+}
+
+.border-secondary {
+	border-color: #6c7d7b00 !important;
+}
+
+.br-theme-fontawesome-stars .br-widget {
+	height: auto;
+	white-space: nowrap;
+}
+
+.br-theme-fontawesome-stars .br-widget a:after {
+	font-size: 30px;
+	content: '\f005';
+	color: #f0f1f6;
+}
+
+.br-theme-fontawesome-stars .br-widget a.br-selected:after {
+	color: #ffea04;
+}
+
+.modal-sm {
+	max-width: 400px;
+}
+
+.addReview {
+	display: flex;
+	justify-content: flex-end;
+	padding-right: 0px;
+}
+
+.addReview:hover {
+	color: blue;
+}
+.filebox input[type="file"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.filebox label {
+	display: inline-block;
+	padding: 0.7rem 0.75rem;
+	color: #53cad8;
+	font-size: inherit;
+	line-height: normal;
+	vertical-align: middle;
+	background-color: #f8f9fa;
+	cursor: pointer;
+	border: 1px solid #53cad8;
+	border-bottom-color: #53cad8;
+	border-radius: .25em;
+}
+
+/* named upload */
+.filebox .upload-name {
+	display: inline-block;
+	padding: 0.7em 3.75rem; /* label의 패딩값과 일치 */
+	font-size: inherit;
+	font-family: inherit;
+	line-height: normal;
+	vertical-align: middle;
+	background-color: #f5f5f5;
+	border: 1px solid #ebebeb;
+	border-bottom-color: #e2e2e2;
+	border-radius: .25em;
+	-webkit-appearance: none; /* 네이티브 외형 감추기 */
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.filebox input[type="file"] { /* 파일 필드 숨기기 */
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.filebox .upload-display { /* 이미지가 표시될 지역 */
+	margin-bottom: 5px;
+}
+
+@media ( min-width : 768px) {
+	.filebox .upload-display {
+		display: inline-block;
+		margin-right: 5px;
+		margin-bottom: 0;
+	}
+}
+
+.filebox .upload-thumb-wrap { /* 추가될 이미지를 감싸는 요소 */
+	display: inline-block;
+	width: 73px;
+	padding: 2px;
+	vertical-align: middle;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+.filebox .upload-display img { /* 추가될 이미지 */
+	display: block;
+	max-width: 100%;
+	width: 100% \9;
+	height: auto;
+}
+</style>
+	<!-- 호텔에 대한 리뷰 표시 영역 -->
+	<div class="roomInfo col-lg-12 col-md-12 col-sm-12" style="padding: 0;">
+		<div class="card">
+			<div class="card-body" style="padding-bottom: 0;">
+				<div>
+					<div>
+						<a type="button" style="padding: 10px; padding-left: 0px;"
+							onclick="history.back(-1)">돌아가기</a>
+					</div>
+					<h2 style="display: inline; float: left;">후기</h2>
+					<span style="display: inline-block; float: left; font-size: 20px;">([[${accommodation.reviewCnt}]]개)</span>
+					<a type="button" class="btn addReview" data-toggle="modal"
+						data-target=".bd-example-modal-sm">리뷰작성하기</a>
+
+
+					<!-- 리뷰작성 모달 창 실행 -->
+					<form id="addReviewForm"
+						th:action="@{/accomreview/accomreviewList}" method="post">
+						<div class="modal fade bd-example-modal-sm" tabindex="-1"
+							role="dialog" aria-labelledby="myLargeModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content" style="margin: 0 auto;">
+									<div class="modal-header"
+										style="display: inline-block; text-align: center;">
+										<h5 class="modal-title" id="exampleModalLabel">리뷰등록</h5>
+									</div>
+									<div class="modal-body">
+										<input type="hidden" class="form-control" name="ldgCode"
+											th:value="${ldgCode}" readonly="readonly"> <input
+											type="hidden" class="form-control" name="memberId"
+											th:value="${session.SID}">
+										<div class="panel-hedding" style="text-align: center;">
+											<p>숙소에 대한 별점을 주세요!</p>
+											<select class="rating-fontawesome" name="ldgGrade"
+												autocomplete="off">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</div>
+										<div class="card-footer"></div>
+										<div class="panel-hedding" style="text-align: center;">
+											<p>청결도에 대한 별점을 주세요!</p>
+											<select class="rating-fontawesome" name="ldgCleanliness"
+												autocomplete="off">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</div>
+										<div class="card-footer"></div>
+										<div class="panel-hedding" style="text-align: center;">
+											<p>친절도에 대한 별점을 주세요!</p>
+											<select class="rating-fontawesome" name="ldgKindness"
+												autocomplete="off">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</div>
+										<div class="card-footer"></div>
+										<div class="panel-hedding" style="text-align: center;">
+											<p>편의성에 대한 별점을 주세요!</p>
+											<select class="rating-fontawesome" name="ldgConvenience"
+												autocomplete="off">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</div>
+										<div class="card-footer"></div>
+										<div class="panel-hedding" style="text-align: center;">
+											<p>가격만족도에 대한 별점을 주세요!</p>
+											<select class="rating-fontawesome" name="ldgPriceSta"
+												autocomplete="off">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</div>
+										<div class="card-footer"></div>
+										<div class="panel-hedding" style="text-align: center;">
+											<p>위치만족도에 대한 별점을 주세요!</p>
+											<select class="rating-fontawesome" name="ldgLocation"
+												autocomplete="off">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</div>
+										<div class="card-footer"></div>
+										<div class="modal-footer">
+											<textarea class="form-control"
+												id="exampleFormControlTextarea1" rows="3"
+												name="reviewContents"></textarea>
+										</div>
+										<label class="form-group col-12 col-md-12 col-lg-12"
+											style="margin-top: 0.5rem">숙박업체 대표사진등록</label>
+										<div class="filebox preview-image col-12 col-md-12 col-lg-12"
+											style="margin-bottom: 1rem;">
+											<input class="upload-name" value="파일선택" disabled="disabled">
+											<label for="ldgImg" style="margin-bottom: 0;">업로드</label> <input
+												multiple="multiple" type="file" id="ldgImg"
+												class="upload-hidden" name="accommodationImageFiles">
+										</div>
+										<div class="modal-footer">
+											<a type="button" data-dismiss="modal">등록취소</a> <a
+												type="button" id="addReviewBtn">등록하기</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- 리뷰작성 모달창 끝 -->
+
+				</div>
+			</div>
+			<div style="display: flex; justify-content: space-between;">
+				<div class="col-6 col-md-4 col-lg-4"
+					style="padding: 18.577px; padding-right: 0; padding-bottom: 0;">
+					<span><i class="feather icon-star-on"
+						style="font-size: 30px;"></i></span> <span style="font-size: 40px;"
+						th:text="${avgGrade}"></span> <span
+						style="opacity: 0.5; font-size: 20px;">/5</span>
+					<p style="opacity: 0.5;">최근 12개월 누적 평점</p>
+				</div>
+				<div class="col-6 col-md-8 col-lg-8"
+					style="float: right; padding-left: 0;">
+					<ul style="list-style: none; padding-left: 0px;">
+						<li class="star"><span style="padding-right: 0.5rem;">청결도</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+								<div th:if="${not #strings.isEmpty(avgCleanliness)}" class="progress-bar" th:style="'width: ' + ${avgCleanliness}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+								<div th:if="${#strings.isEmpty(avgCleanliness)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div> <span style="padding-left: 0.5rem;" th:text="${avgCleanliness}"></span></li>
+						<li class="star"><span style="padding-right: 0.5rem;">친절도</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+								<div th:if="${not #strings.isEmpty(avgKindness)}" class="progress-bar" th:style="'width: ' + ${avgKindness}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+								<div th:if="${#strings.isEmpty(avgKindness)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div> <span style="padding-left: 0.5rem;" th:text="${avgKindness}"></span></li>
+						<li class="star"><span style="padding-right: 0.5rem;">편의성</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+								<div th:if="${not #strings.isEmpty(avgConvenience)}" class="progress-bar" th:style="'width: ' + ${avgConvenience}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+								<div th:if="${#strings.isEmpty(avgConvenience)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div> <span style="padding-left: 0.5rem;" th:text="${avgConvenience}"></span></li>
+						<li class="star"><span style="padding-right: 0.5rem;">위치만족도</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+								<div th:if="${not #strings.isEmpty(avgLocation)}" class="progress-bar" th:style="'width: ' + ${avgLocation}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+								<div th:if="${#strings.isEmpty(avgLocation)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div> <span style="padding-left: 0.5rem;" th:text="${avgLocation}"></span></li>
+						<li class="star"><span style="padding-right: 0.5rem;">가격만족도</span>
+							<div class="progress progress-h-5" style="width: 5rem;">
+								<div th:if="${not #strings.isEmpty(avgPriceSta)}" class="progress-bar" th:style="'width: ' + ${avgPriceSta}/5*100 + '%; background-color : #FFB900;'" role="progressbar"></div>
+								<div th:if="${#strings.isEmpty(avgPriceSta)}" class="progress-bar bg-warning" style="width: 0%;" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							</div> <span style="padding-left: 0.5rem;" th:text="${avgPriceSta}"></span></li>
+					</ul>
+				</div>
+			</div>
+			<div class="card-footer" style="padding: 0;"></div>
+			<div class="col-12 col-md-12"
+				style="margin: 10px; display: flex; justify-content: space-between;">
+				<select class="form-review border border-secondary"
+					style="padding: 1px;" id="exampleFormControlSelect1">
+					<option>최근 작성순</option>
+					<option>별점 낮은순</option>
+					<option>별점 높은순</option>
+				</select>
+				<div class="custom-control custom-checkbox mb-1"
+					style="padding-right: 20px;">
+					<input type="checkbox" class="custom-control-input"
+						id="photoreview" value="checked"> <label
+						class="custom-control-label" for="photoreview">사진후기만 모아보기</label>
+				</div>
+			</div>
+			<div class="card-footer"></div>
+			<article class="ReviewBox"
+				th:if="${not #lists.isEmpty(accomoReviewList)}"
+				th:each="al,index: ${accomoReviewList}">
+				<div class="ReviewContentsBox">
+					<span class="ReviewIcon"><i class="fa fa-smile-o"
+						style="font-size: 50px; color: #FFB900;"></i></span>
+					<div class="ReviewHeader">
+						<div class="" style="position: relative; display: inline-flex;">
+							<th:block th:each="num : ${#numbers.sequence(1,5)}">
+								<i
+									th:if="${num <= #conversions.convert(al.ldgGrade, 'java.lang.Integer')}"
+									class="feather icon-star-on feather-on"
+									style="font-size: 1.2rem;"></i>
+								<i
+									th:unless="${num <= #conversions.convert(al.ldgGrade, 'java.lang.Integer')}"
+									class="feather icon-star-on feather-off"
+									style="font-size: 1.2rem;"></i>
+							</th:block>
+						</div>
+						<div class="ReviewTime"
+							style="display: inline-block; font-size: 1.2rem;">
+							<span style="font-weight: 100; margin-left: 0.8rem;"></span> <span
+								style="position: absolute; right: 0; line-height: 1.8rem; padding-right: 15px; font-size: 13px; opacity: 0.5;"
+								th:text="${al.reviewTime}"></span>
+						</div>
+						<div class="ReviewNicknameInfo" style="opacity: 0.5;">
+							<span class="memberId" th:text="${al.member.memberUserName}"></span><span
+								class="ReviewRoomName" th:text="${accommodation.ldgName}"></span>
+						</div>
+					</div>
+				</div>
+				<div class="ReviewContentsBox-ReviewContent">
+					<p th:text="${al.reviewContents}" style="margin: 0px;"></p>
+				</div>
+				<div class="review-bottom"
+					style="display: flex; justify-content: flex-end; padding: 0px">
+					<button type="button" id="swal-delete-accomreview"
+						th:unless="${session.SID != al.memberId && session.SLEVEL == '일반회원'}"
+						th:data-ldgReviewCode="${al.ldgReviewCode}"
+						th:data-ldgCode="${accommodation.ldgCode}"
+						class="btn reviewDelete">삭제</button>
+				</div>
+				<div class="card-footer"></div>
+			</article>
+		</div>
+	</div>
+	<!-- 호텔 리뷰 표시 영역 끝 -->
+</th:block>
+<th:block layout:fragment="customBodyScript">
+	<!-- delbtn -->
+	<script th:src="@{/js/sweetalert2/sweetalert2.min.js}"
+		aria-hidden="true"></script>
+	<script th:src="@{/js/sweetalert2/sweetalert2-custom.js}"
+		aria-hidden="true"></script>
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+
+	<!-- summernote -->
+	<script th:src="@{/js/summernote/summernote.min.js}"></script>
+
+	<!-- summernote -->
+	<script th:src="@{/js/simplemde/simplemde.min.js}"></script>
+	<script th:src="@{/js/simplemde/simplemde.js}"></script>
+
+	<!-- rating -->
+	<script th:src="@{/js/rating/jquery.barrating.min.js}"></script>
+
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+
+	<!-- rating custom -->
+	<script th:src="@{/js/rating/rating.js}"></script>
+	<script>
+		$(function() {
+			$('.rating-fontawesome').barrating({
+				theme : 'fontawesome-stars',
+				showSelectedRating : false
+			});
+		});
+	</script>
+	<!-- 등록 버튼 자바스크립트 -->
+	<script type="text/javascript" th:inline="javascript">
+		$('#addReviewBtn').click(function() {
+
+			var isSubmit = true;
+			var inputObj = $('#addReviewForm').find('input');
+
+			$.each(inputObj, function() {
+				var inputId = $(this).attr('id');
+				var inputLabel = $('label[for="' + inputId + '"]').text();
+				var inputData = $(this).val();
+
+				// 사용자가 입력하지 않은 경우
+			});
+
+			if (isSubmit)
+				$('#addReviewForm').submit();
+		});
+	</script>
+	
+	<script>
+   $('.reviewDelete').click(function(e){
+      
+      var ldgReviewCode = $(this).attr('data-ldgReviewCode');
+      var ldgCode = $(this).attr('data-ldgCode');
+      
+       $.ajax({
+            url: '/accomreview/deleteReview'
+            ,type: 'POST'
+            ,data: {"ldgReviewCode" : ldgReviewCode
+                  ,"ldgCode" : ldgCode} 
+            ,dataType: 'text'
+            ,success: function(data){
+               console.log(data);
+               location.href=data;
+            }
+         });   
+   });
+   </script>
+	
+</th:block>
+</html>
+

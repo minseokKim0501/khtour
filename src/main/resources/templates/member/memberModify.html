@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layout/default}">
+   <th:block layout:fragment="customTitle">
+      <title th:text="${title}"></title>
+   </th:block>
+   <th:block layout:fragment="contentsTitle">
+      <div class="row">
+		<div class="col">
+			<h2>회원 정보</h2>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">회원 정보</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+   </th:block>
+
+   <th:block layout:fragment="customContents">   
+      <div class="card">
+		<div class="card-title">
+			<div class="card-title-left">
+				<h4 class="card-title-text">회원 정보</h4>
+			</div>
+		</div>
+		<div class="card-body">
+			<form class="cmxform" id="memberModify" th:action="@{/member/memberModify}" th:unless="${session.SID == null}" method="post" novalidate="novalidate">
+				<div class="form-group">
+					<label for="memberId">아이디</label>
+					<input id="memberId" class="form-control" name="memberId" th:value="${session.SID}" type="text" readonly="readonly">
+				</div>
+				<div class="form-group">
+					<label for="memberPw">암호</label>
+					<input id="memberPw" class="form-control" name="memberPw" type="password">
+				</div>
+				<div class="form-group">
+					<label for="memberPw2">암호 확인</label> 
+					<input id="memberPw2" class="form-control" name="memberPw2" type="password">
+					&nbsp;<span id="pwCheck"></span>
+				</div>
+				<div class="form-group">
+					<label for="memberName">이름</label>
+					<input id="memberName" class="form-control" name="memberName" th:value="${session.SNAME}" type="text" readonly="readonly">
+				</div>
+				<div class="form-group">
+					<label for="memberUserName">닉네임</label>
+					<input id="memberUserName" class="form-control" name="memberUserName" th:value="${session.SUSERNAME}" type="text">
+				</div>
+				<div class="form-group">
+					<label for="memberContact">연락처</label>
+					<input id="memberContact" class="form-control" name="memberContact" th:value="${session.SCONTACT}" type="text">
+				</div>
+				<div class="form-group">
+					<label for="memberEmail">이메일</label>
+					<input id="memberEmail" class="form-control" name="memberEmail" th:value="${session.SEMAIL}" type="email">
+				</div>
+				<div class="custom-control custom-checkbox form-group">
+					<input type="checkbox" class="custom-control-input" id="agree" name="agree"> 
+					<label class="custom-control-label" for="agree">이벤트 수신에 동의합니다</label>
+				</div>
+				<div class="custom-control custom-checkbox form-group">
+					<input type="checkbox" class="custom-control-input" id="newsletter" name="newsletter"> 
+					<label class="custom-control-label" for="newsletter">뉴스레터를 받고 싶습니다.</label>
+				</div>
+				<div class="form-group">
+					<button class="submit btn btn-primary" type="submit" value="">수정하기</button>
+				</div>
+				<!-- <div class="form-group">
+					<button class="submit btn btn-primary" type="button" id="removeBtn">탈퇴하기</button>
+				</div> -->
+				<div th:if="${not #strings.isEmpty(result)}">
+					<p th:text="${result}"></p>
+				</div>
+			</form>
+		</div>
+	</div>
+   </th:block>
+   <th:block layout:fragment="customBodyScript">
+      <!-- PRISM -->
+      <script th:src="@{/js/prism/prism.js}"></script>
+      <!-- custom -->
+      <script th:src="@{/js/custom.js}"></script>
+      <script>
+      		$(function(){
+      			$('#memberPw,#memberPw2').keyup(function () {
+			        var Pw = $("#memberPw").val();
+			        var Pw2 = $("#memberPw2").val();
+			        
+			       if (Pw != "" || Pw2 != "") {
+			            if (Pw == Pw2) {
+			                $("#pwCheck").text("비밀번호가 일치합니다");
+							$("#pwCheck").css("color", "blue"); 
+							$("#pwCheck").css('display', 'inline');
+							$("#memberPw2-error").css('display', 'none');
+						}
+			            if (Pw != Pw2) {
+			            	$("#pwCheck").text("입력하신 비밀번호와 다릅니다");
+							$("#pwCheck").css("color", "red");
+			            	$("#pwCheck").css('display', 'none');	
+			            	$("#memberPw2-error").css('display', 'inline');
+			            }
+			       	}
+			  	
+			      });
+      		});
+      </script>
+      <!-- <script>
+      	$(function(){
+      		$('#removeBtn').click(function(){
+      			var confirmResult = confirm('정말 탈퇴하시겠습니까?');
+      			
+      			if(confirmResult){
+      				$('#removeBtn').submit();
+      			}
+      		});
+      	});
+      </script> -->
+   </th:block>
+</html>

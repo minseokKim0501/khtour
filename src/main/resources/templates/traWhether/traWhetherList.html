@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default3}">
+<th:block layout:fragment="customTitle">
+	<title th:text="${title}"></title>
+</th:block>
+<th:block layout:fragment="contentsTitle">
+	<!-- 페이지 타이틀 시작 -->
+	<h2> 실시간 날씨 정보 업데이트 </h2>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Home</a></li>
+			<li class="breadcrumb-item active" aria-current="page">지역별 날씨 정보
+				검색</li>
+		</ol>
+	</nav>
+	<!-- 페이지 타이틀 종료 -->
+</th:block>
+<th:block layout:fragment="customContents">
+
+<!-- 날씨 정보 card 스타일 시트 시작 -->
+<style>
+	
+	.card0 {
+		width: 94%
+	}
+	
+	.card1 {
+		background-image: linear-gradient(#2196F3, #81D4FA);
+		padding: 30px 20px 30px 50px
+	}
+	
+	.image {
+		width: 300px;
+		height: 300px
+	}
+	
+	.large-font {
+		font-size: 70px;
+		font-family: Arial
+	}
+	
+	.fa-sun-o {
+		font-size: 22px
+	}
+	
+	.card2 {
+		padding: 0px 0px 40px 40px
+	}
+	
+	.card input{
+		padding: 24px 0px 12px 0px !important;
+		width: 80%;
+		box-sizing: border-box;
+		border-bottom: 1px solid #fff !important;
+		border: none !important;
+		font-size: 16px !important;
+	}
+	
+	input:focus {
+		-moz-box-shadow: none !important;
+		-webkit-box-shadow: none !important;
+		box-shadow: none !important;
+		border-bottom: 1px solid #CFD8DC !important;
+		transition:0.2s;
+		outline-width: 0;
+		font-weight: 400
+	}
+	
+	::placeholder {
+		color: #B0BEC5 !important;
+		opacity: 1
+	}
+	
+	:-ms-input-placeholder {
+		color: #B0BEC5 !important
+	}
+	
+	::-ms-input-placeholder {
+		color: #B0BEC5 !important
+	}
+	
+	.fa-search {
+		font-size: 20px;
+		padding: 20px;
+		width: 20%;
+		cursor: pointer
+	}
+	
+	.light-text {
+		color: #B0BEC5
+	}
+	
+	.suggestion:hover {
+		color: #fff;
+		cursor: pointer
+	}
+	
+	.line {
+		height: 1px;
+		background-color: #B0BEC5
+	}
+	.light-text{font-family:'all';font-size:18px;color:#2a2a2a;font-weight:bold;}
+	.ml-auto{font-family:'all';font-size:18px;color:#5d5d5d;font-weight:bold;}
+	@media screen and (max-width: 500px) {
+		.card1 {
+			padding-left: 26px
+		}
+	}
+</style>
+<!-- 날씨 정보 card 스타일 시트 종료 -->
+
+<!-- 메인 콘텐츠 시작 -->
+		<div class="card">
+			<div class="container-fluid px-1 px-sm-3 py-5 mx-auto">
+				<div class="row d-flex justify-content-center">
+					<div class="row card0">
+						<div class="card1 col-lg-8 col-md-7">
+							<div class="text-center">
+								<img class="image mt-5" src="https://i.imgur.com/M8VyA2h.png">
+							</div>
+							<div class="row px-3 mt-3 mb-3" id="whetherData1"></div>
+						</div>
+						<div class="card2 col-lg-4 col-md-5">
+							<div class="row px-3">
+								<input type="text" name="location" id="cityName"
+									placeholder="도시 이름을 적어주세요.(영어)" class="mb-5" style="border:1px solid #555 !important;padding:24px 0px 12px 10px !important">
+								<button type="button" class="fa fa-search mb-5 mr-0 text-center" id="searchCT"></button>
+							</div>
+							<div class="mr-5" id="whetherData2"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<!-- 메인 콘텐츠 종료 -->
+
+
+</th:block>
+<th:block layout:fragment="customBodyScript">
+
+	<!-- 날씨 정보 업데이트 자바스크립트 시작 -->
+	<script type="text/javascript">
+		/* var imgURL = "http://openweathermap.org/img/w/" + resp.weather[0].icon + ".png";
+		 $(".fa whether").attr("src", imgURL); */
+		 
+		var apiURI = "http://api.openweathermap.org/data/2.5/weather?lang=kr&q=jeonju&appid=aff28fafca14a465fb79be67dc3df923";
+		var loaded = false;
+		
+		$(document).ready(function() {
+			if(loaded){
+				return;
+			};	
+				$.ajax({
+					url : apiURI,
+					dataType : "json",
+					type : "GET",
+					async : "false",
+					success : function(resp){ resultHtml(resp); }
+				});
+				loaded=true;
+			  
+			$('#searchCT').click(function(){
+				
+				apiURI = "http://api.openweathermap.org/data/2.5/weather?lang=kr&q=" + $("#cityName").val() + "&appid=aff28fafca14a465fb79be67dc3df923";
+				$.ajax({
+					url : apiURI,
+					dataType : "json",
+					type : "GET",
+					async : "false",
+					success : function(resp){ resultHtml(resp); }		
+				});
+			  });	
+			});
+		function resultHtml(resp) {
+		
+			var html2 = ""
+			html2 += "<div class='row px-3'> <p class='light-text'>구름</p>  <p class='ml-auto'>" + (resp.clouds.all) + "%" + "</p> </div>"
+			html2 += "<div class='row px-3'> <p class='light-text'>현재 습도 </p>  <p class='ml-auto'>" + resp.main.humidity + "%" + "</p> </div>"
+            html2 += "<div class='row px-3'> <p class='light-text'>바람</p>  <p class='ml-auto'>" + resp.wind.speed + "km/h" + "</p> </div>"
+            html2 += "<div class='row px-3'> <p class='light-text'>나라</p>  <p class='ml-auto'>" + resp.sys.country + "</p> </div>"
+            html2 += "<div class='row px-3'> <p class='light-text'>날씨 </p>  <p class='ml-auto'>" + resp.weather[0].main + "</p> </div>"
+            html2 += "<div class='row px-3'> <p class='light-text'>날씨 상세</p>  <p class='ml-auto'>" + resp.weather[0].description + "</p> </div>"
+				console.log("html2");
+			$("#whetherData2").empty();
+			$("#whetherData2").append(html2);	
+			
+			var html3 = ""
+			html3 += "<h1 class='large-font mr-3'>"+ Math.round(resp.main.temp*10- 2731.5)/10 +"&#176" + ";</h1>"
+			html3 += "<div class='d-flex flex-column mr-3'> <h2 class='mt-3 mb-0'>" + resp.name + "</h2></div>"
+			html3 += "<div class='d-flex flex-column text-center'> <small>" + resp.weather[0].main + "</small> </div>"
+			console.log("html3");
+			$("#whetherData1").empty();
+			$("#whetherData1").append(html3);
+		};
+
+	</script>
+	<!-- 날씨 정보 업데이트 자바스크립트 종료 -->
+	
+	<!-- PRISM -->
+	<script th:src="@{/js/prism/prism.js}"></script>
+	<!-- custom -->
+	<script th:src="@{/js/custom.js}"></script>
+</th:block>
+</html>

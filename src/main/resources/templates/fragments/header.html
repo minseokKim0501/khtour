@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header class="header header-fixed header-light mainheaderhover"
+	th:fragment="headerFragment">
+	<div class="header-middle">
+		<div class="logo-color logo-color-light">
+			<div class="logo">
+				<div class="logo-middle">
+					<a th:href="@{/}"><img th:src="@{/images/logo.png}"
+						alt="Logo"></a>
+				</div>
+			</div>
+		</div>
+		<div class="header-topbar">
+		<div class="topbar-left">
+				<a class="side-toggle" href="#!">
+					<i class="la la-bars"></i>	
+				</a>
+			</div>
+			<div class="topbar-right">
+				<ul>
+					<li class="dropdown show user-profile" th:if="${session.SID == null}">
+						<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" 
+						aria-haspopup="true" aria-expanded="false">
+							<div class="profile-info">
+								<a class="btn btn-outline-primary outline-gray" th:href="@{/member/loginMain}"> <i class="la la-power-off"></i>
+									Login
+								</a>
+							</div>
+						</a>
+					</li>
+					<li class="dropdown show user-profile" th:unless="${session.SID == null}"><a
+						class="dropdown-toggle" href="#" role="button"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							로그인 
+							<div class="avatar avatar-sm mr-1">
+								<img class="img-fluid" th:src="@{/images/heritage/member.jpg}" alt="">
+							</div>
+					</a>
+						<div class="dropdown-menu dropdown-menu-right">
+							<div class="profile-pic">
+								<div class="row">
+									<div class="col-12">
+										<div class="profile-name">
+											<h4 th:text="'이름 : ' + ${session.SNAME}"></h4>
+											<hr>
+											<a href="#"  th:text="'아이디 : ' + ${session.SID}"></a>
+											<hr>
+											<a href="#"  th:text="'이메일 : ' + ${session.SEMAIL}"></a>
+											<hr>
+											<a href="#"  th:text="'권한 : '+${session.SLEVEL}"></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="profile-info">
+								 <a class="btn btn-outline-primary outline-gray btn-sm mt-3"
+									th:href="@{/member/logout}"> <i class="la la-power-off"></i> 로그아웃
+								</a>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</header>
+</html>
